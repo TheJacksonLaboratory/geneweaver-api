@@ -1,0 +1,65 @@
+name: 'Test Coverage Definition'
+on:
+  workflow_call:
+    inputs:
+      coverage-module:
+        description: "Module to test coverage for"
+        type: string
+        required: true
+      python-version:
+        description: Python version to set up'
+        default: '3.11'
+        type: string
+      runner-os:
+        description: 'Runner OS'
+        default: 'ubuntu-latest'
+        type: string
+      upload-coverage:
+        description: 'Upload coverage results'
+        default: true
+        type: boolean
+      required-coverage:
+        description: 'Required coverage percentage'
+        default: 100
+        type: string
+      show-test-traceback:
+        description: "Show traceback for failed tests"
+        type: string
+        default: "no"
+jobs:
+  run-tests:
+    runs-on: ${{ inputs.runner-os }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ inputs.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ inputs.python-version }}
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          if [[ "$RUNNER_OS" == "macOS" ]]; then
+            echo "/Users/runner/.local/bin:$PATH" >> $GITHUB_PATH
+          fi
+      - name: Configure Poetry
+        run: poetry config virtualenvs.create false
+      - name: Install dependencies with Poetry
+        run: poetry install
+      - name: Test with pytest
+        run: |
+          poetry run pytest tests \
+          --tb=${{ inputs.show-test-traceback }} \
+          --cov=${{ inputs.coverage-module }} \
+          --cov-report=term \
+          --cov-report=html \
+          --cov-fail-under=${{ inputs.required-coverage }} > coverage_report.txt
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: coverage_report.txt
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report-html
+          path: htmlcov

@@ -1,0 +1,24 @@
+name: 'Lint Code Definition'
+on:
+  workflow_call:
+    inputs:
+      python-version:
+        description: 'Python version to set up'
+        required: true
+        default: '3.9'
+        type: string
+jobs:
+  format-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ inputs.python-version }}
+      - name: Install Black and Ruff
+        run: pip install black ruff
+      - name: Run Ruff Linter
+        run: ruff src/ --fix
+      - name: Run Black Formatter
+        run: black src/

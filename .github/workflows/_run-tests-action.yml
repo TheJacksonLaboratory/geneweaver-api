@@ -1,0 +1,44 @@
+name: 'Python Tests Definition'
+on:
+  workflow_call:
+    inputs:
+      python-version:
+        description: Python version to set up'
+        required: true
+        default: '3.9'
+        type: string
+      runner-os:
+        description: 'Runner OS'
+        required: true
+        default: 'ubuntu-latest'
+        type: string
+      upload-coverage:
+        description: 'Upload coverage results'
+        default: true
+        type: boolean
+      required-coverage:
+        description: 'Required coverage percentage'
+        default: 75
+        type: string
+jobs:
+  run-tests:
+    runs-on: ${{ inputs.runner-os }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ inputs.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ inputs.python-version }}
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          if [[ "$RUNNER_OS" == "macOS" ]]; then
+            echo "/Users/runner/.local/bin:$PATH" >> $GITHUB_PATH
+          fi
+      - name: Configure Poetry
+        run: poetry config virtualenvs.create false
+      - name: Install dependencies with Poetry
+        run: poetry install
+      - name: Test with pytest
+        run: |
+          poetry run pytest tests

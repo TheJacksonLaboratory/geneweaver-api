@@ -1,0 +1,49 @@
+name: Coverage
+on:
+  pull_request:
+    branches:
+      - 'main'
+  push:
+    branches:
+      - 'main'
+jobs:
+  check-coverage:
+    uses: ./.github/workflows/_check-coverage-action.yml
+    with:
+      required-coverage: ${{ vars.REQUIRED_COVERAGE }}
+      coverage-module: "geneweaver.api"
+  comment-coverage-report:
+    needs: [ check-coverage ]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Download coverage report artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: coverage-report
+      - name: Read coverage report
+        id: read-coverage
+        run: |
+          echo "COVERAGE_REPORT<<EOF" >> $GITHUB_ENV
+          cat coverage_report.txt >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+      - name: Find Comment
+        uses: peter-evans/find-comment@v2
+        id: fc
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: 'github-actions[bot]'
+          body-includes: '### Test Coverage Report'
+      - name: Create or update comment
+        uses: peter-evans/create-or-update-comment@v3
+        with:
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          issue-number: ${{ github.event.pull_request.number }}
+          edit-mode: replace
+          body: |
+            ### Test Coverage Report
+            ```
+            ${{ env.COVERAGE_REPORT }}
+            ```
