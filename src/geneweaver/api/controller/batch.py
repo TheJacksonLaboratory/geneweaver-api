@@ -1,8 +1,7 @@
 """API Controller definition for batch processing."""
 from typing import Optional
 
-from fastapi import APIRouter, UploadFile, Security
-
+from fastapi import APIRouter, Security, UploadFile
 from geneweaver.api.core import deps
 from geneweaver.api.schemas.auth import UserInternal
 from geneweaver.api.schemas.batch import BatchResponse

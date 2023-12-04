@@ -1,8 +1,7 @@
 """Namespace for the config class for the Geneweaver API."""
-from typing import Any, Dict, Optional, List
+from typing import Any, Dict, List, Optional, Union
 
 from pydantic import BaseSettings, PostgresDsn, validator
-from geneweaver.db.core.settings_class import Settings
 
 
 class GeneweaverAPIConfig(BaseSettings):
@@ -17,7 +16,10 @@ class GeneweaverAPIConfig(BaseSettings):
     SQLALCHEMY_DATABASE_URI: Optional[PostgresDsn] = None
 
     @validator("SQLALCHEMY_DATABASE_URI", pre=True)
-    def assemble_db_connection(cls, v: Optional[str], values: Dict[str, Any]) -> Any:
+    def assemble_db_connection(
+        cls, v: Optional[str], values: Dict[str, Any]  # noqa: N805
+    ) -> Union[str, PostgresDsn]:
+        """Build the database connection string."""
         if isinstance(v, str):
             return v
         return PostgresDsn.build(
