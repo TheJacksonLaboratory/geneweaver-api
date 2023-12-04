@@ -1,11 +1,15 @@
-from typing import List, Tuple
-from fastapi import UploadFile
+"""Functions for processing batch files.
 
+Most of the functionality for processing batch files is contained in the
+geneweaver.core module. This module contains functions for reading the contents
+of a file and passing those contents to the core module for processing.
+"""
+from typing import List, Tuple
+
+from fastapi import UploadFile
+from geneweaver.api.services.io import read_file_contents
 from geneweaver.core.parse import batch
 from geneweaver.core.schema.messages import SystemMessage, UserMessage
-
-
-from geneweaver.api.services.io import read_file_contents
 
 
 async def process_batch_file(
@@ -38,10 +42,6 @@ async def process_batch_file(
         print(geneset, "\n")
 
     # TODO: Add the genesets to the database
-    # results = [
-    #     batch_geneset_for_user(db, user_id, geneset)
-    #     for geneset in genesets
-    # ]
 
     # TODO: Return the correct values.
     return [10], [], []
