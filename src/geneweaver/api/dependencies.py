@@ -1,4 +1,5 @@
 """Dependency injection capabilities for the GeneWeaver API."""
+# ruff: noqa: B008
 from typing import Generator
 
 import psycopg
@@ -29,5 +30,6 @@ def full_user(
     cursor: Cursor = Depends(cursor),
     user: UserInternal = Depends(auth.get_user_strict),
 ) -> UserInternal:
+    """Get the full user object."""
     user.id = by_sso_id(cursor, user.sso_id)[0]["usr_id"]
     yield user
