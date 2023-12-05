@@ -4,7 +4,7 @@ from unittest.mock import AsyncMock
 import pytest
 from fastapi import UploadFile
 
-from tests.services.parse.batch import const
+from tests.services import const
 
 
 # Create a pytest fixture for the mocked UploadFile
