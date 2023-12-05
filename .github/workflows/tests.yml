@@ -1,0 +1,19 @@
+name: Tests
+on:
+  pull_request:
+    branches:
+      - 'main'
+  push:
+    branches:
+      - 'main'
+jobs:
+  test:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        python-version: ['3.9', '3.10', '3.11']
+    uses: ./.github/workflows/_run-tests-action.yml
+    with:
+      runner-os: ${{ matrix.os }}
+      python-version: ${{ matrix.python-version }}
+      required-coverage: ${{ vars.REQUIRED_COVERAGE }}

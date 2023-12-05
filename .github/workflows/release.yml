@@ -1,0 +1,76 @@
+name: Release to PyPI
+
+on:
+  push:
+    branches:
+      - 'main'
+    paths:
+      - 'pyproject.toml'
+
+permissions:
+  contents: write
+
+jobs:
+  format-lint:
+    uses: ./.github/workflows/_format-lint-action.yml
+    with:
+      python-version: '3.9'
+  test:
+    needs: format-lint
+    uses: ./.github/workflows/_run-tests-action.yml
+    with:
+      python-version: '3.9'
+      runner-os: 'ubuntu-latest'
+      upload-coverage: false
+      required-coverage: ${{ vars.REQUIRED_COVERAGE }}
+  release:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'z
+
+    - name: Install dependencies
+      run: |
+        pip install toml
+
+    - name: Check for version change
+      id: version_check
+      run: |
+        # Extract version from pyproject.toml
+        version=$(python -c "import toml; print(toml.load('pyproject.toml')['tool']['poetry']['version'])")
+        echo "Version=$version"
+        echo "version=$version" >> $GITHUB_OUTPUT
+
+        # Check if this version tag already exists
+        if git rev-parse "v$version" >/dev/null 2>&1; then
+            echo "Version already released"
+            echo "should_release=true" >> $GITHUB_OUTPUT
+        else
+            echo "New version detected"
+            echo "should_release=false" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Determine Release Type
+      id: release_type
+      run: |
+        version=$(python -c "import toml; print(toml.load('pyproject.toml')['tool']['poetry']['version'])")
+        if [[ $version =~ [a-zA-Z] ]]; then
+          echo "Pre-release version detected"
+          echo "prerelease=true" >> $GITHUB_OUTPUT
+        else
+          echo "Full release version detected"
+          echo "prerelease=false" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Install Poetry
+      if: ${{ steps.version_check.outputs.should_release }} == 'true'
+      run: |
+        curl -sSL https://install.python-poetry.org | python3 -
+
+    # TODO: Add deploy to kubernetes step

@@ -1,5 +1,6 @@
 """A module to keep track of injectable dependencies for FastAPI endpoints.
-- https://fastapi.tiangolo.com/tutorial/dependencies/
+
+- https://fastapi.tiangolo.com/tutorial/dependencies/.
 """
 from geneweaver.api.core.config import settings
 from geneweaver.api.core.security import Auth0

@@ -1,0 +1,13 @@
+name: Style
+on:
+  pull_request:
+    branches:
+      - 'main'
+  push:
+    branches:
+      - 'main'
+jobs:
+  format-lint:
+    uses: ./.github/workflows/_format-lint-action.yml
+    with:
+      python-version: '3.9'

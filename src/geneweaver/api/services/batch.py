@@ -1,13 +1,9 @@
 """Service functions for dealing with batch files."""
-from enum import Enum
 from typing import List, Tuple
 
 from fastapi import UploadFile
-
-from geneweaver.core.parse import batch
-
-from geneweaver.api.schemas.batch import BatchUploadGeneset, GenesetValueInput
 from geneweaver.api.schemas.messages import SystemMessage, UserMessage
+from geneweaver.core.parse import batch
 
 
 async def process_batch_file(
@@ -42,7 +38,7 @@ async def process_batch_file(
 
 
 async def read_file_contents(batch_file: UploadFile, encoding: str = "utf-8") -> str:
-    """Reads the contents of an async file and decodes it using a specified encoding.
+    """Read the contents of an async file and decodes it using a specified encoding.
 
     This function uses an asynchronous read operation to get the contents of the
     batch_file, and then decodes those contents from bytes to a string using the

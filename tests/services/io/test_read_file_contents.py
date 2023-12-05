@@ -72,6 +72,7 @@ from geneweaver.api.services import io
     ],
 )
 async def test_read_file_contents(contents, encoding, expected, mock_upload_file):
+    """Test the read_file_contents function."""
     # Set up the mock to return the test contents when read
     mock_upload_file.read.return_value = contents
 

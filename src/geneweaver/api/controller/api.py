@@ -3,13 +3,10 @@
 This file defines the root API for the GeneWeaver API. It is responsible for
 defining the FastAPI application and including all other API routers.
 """
-from fastapi import FastAPI, APIRouter, Security
-
+from fastapi import APIRouter, FastAPI, Security
+from geneweaver.api.controller import batch, genesets
 from geneweaver.api.core import deps
 from geneweaver.api.core.config import settings
-
-from geneweaver.api.controller import batch
-from geneweaver.api.controller import genesets
 
 app = FastAPI(
     title="GeneWeaver API",

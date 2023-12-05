@@ -3,7 +3,7 @@ from fastapi import UploadFile
 
 
 async def read_file_contents(batch_file: UploadFile, encoding: str = "utf-8") -> str:
-    """Reads the contents of an async file and decodes it using a specified encoding.
+    """Read the contents of an async file and decodes it using a specified encoding.
 
     This function uses an asynchronous read operation to get the contents of the
     batch_file, and then decodes those contents from bytes to a string using the
