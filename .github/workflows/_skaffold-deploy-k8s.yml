@@ -36,22 +36,32 @@ jobs:
           skaffold build \
           --default-repo=${{ inputs.default_image_repo }} \
           --file-output=build.json
+      - name: Upload build artifact JSON
+        uses: actions/upload-artifact@v3
+        with:
+          name: Build Artifacts
+          path: build.json
+  deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    needs: build
+    steps:
       - name: Authenticate to Google Cloud
         uses: 'google-github-actions/auth@v2'
         with:
           credentials_json: '${{ secrets.GCLOUD_CLUSTER_SA_KEY }}'
       - name: Get Cluster Credentials
         run: |
+          export USE_GKE_GCLOUD_AUTH_PLUGIN=True
           gcloud container clusters get-credentials ${{ vars.CLUSTER_NAME }} \
           --region ${{ vars.CLUSTER_REGION }} \
           --project ${{ vars.CLUSTER_PROJECT }}
+      - name: Download coverage report artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: Build Artifacts
       - name: Deploy
         run: |
           skaffold deploy \
           --profile ${{ inputs.environment }} \
           --build-artifacts=build.json
-      - name: Upload build artifact JSON
-        uses: actions/upload-artifact@v3
-        with:
-          name: Build Artifacts
-          path: build.json
