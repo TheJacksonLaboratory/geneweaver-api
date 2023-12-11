@@ -22,3 +22,4 @@ jobs:
     with:
       environment: jax-cluster-dev-10--dev
       default_image_repo: "us-east1-docker.pkg.dev/jax-cs-registry/docker-test/geneweaver"
+    secrets: inherit
