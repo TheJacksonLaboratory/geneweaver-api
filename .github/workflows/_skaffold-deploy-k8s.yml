@@ -49,7 +49,7 @@ jobs:
         with:
           credentials_json: '${{ secrets.GCLOUD_CLUSTER_SA_KEY }}'
       - name: Install Gcloud GKE Plugin
-        run: sudo apt-get install google-cloud-sdk-gke-gcloud-auth-plugin
+        run: sudo apt-get update && sudo apt-get install google-cloud-sdk-gke-gcloud-auth-plugin
       - name: Get Cluster Credentials
         run: |
           export USE_GKE_GCLOUD_AUTH_PLUGIN=True
