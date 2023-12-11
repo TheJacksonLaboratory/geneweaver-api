@@ -26,7 +26,7 @@ jobs:
           curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/latest/skaffold-linux-amd64 && \
           sudo install skaffold /usr/local/bin/
       - name: Authenticate to Google Cloud
-        uses: 'google-github-actions/auth@v1'
+        uses: 'google-github-actions/auth@v2'
         with:
           credentials_json: '${{ secrets.GCLOUD_REGISTRY_SA_KEY }}'
       - name: Docker Login
@@ -37,7 +37,7 @@ jobs:
           --default-repo=${{ inputs.default_image_repo }} \
           --file-output=build.json
       - name: Authenticate to Google Cloud
-        uses: 'google-github-actions/auth@v1'
+        uses: 'google-github-actions/auth@v2'
         with:
           credentials_json: '${{ secrets.GCLOUD_CLUSTER_SA_KEY }}'
       - name: Get Cluster Credentials
