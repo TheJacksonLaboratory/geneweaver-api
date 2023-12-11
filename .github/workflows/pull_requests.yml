@@ -21,6 +21,4 @@ jobs:
     uses: ./.github/workflows/_skaffold-deploy-k8s.yml
     with:
       environment: jax-cluster-dev-10--dev
-      cluster_project: ${{ vars.DEV_CLUSTER_PROJECT }}
-      cluster_name: ${{ vars.DEV_CLUSTER_NAME }}
       default_image_repo: "us-east1-docker.pkg.dev/jax-cs-registry/docker-test/geneweaver"
