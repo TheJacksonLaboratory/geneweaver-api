@@ -2,20 +2,8 @@ name: 'Python Tests Definition'
 on:
   workflow_call:
     inputs:
-      cluster_project:
-        description: 'Cluster project'
-        required: true
-        type: string
-      cluster_region:
-        description: 'Cluster region'
-        required: true
-        type: string
-      cluster_name:
-        description: 'Cluster name'
-        required: true
-        type: string
-      deployment_profile:
-        description: 'Deployment profile'
+      environment:
+        description: 'Deployment Environment'
         required: true
         type: string
       default_image_repo:
@@ -26,6 +14,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python 3.9
@@ -53,13 +42,13 @@ jobs:
           credentials_json: '${{ secrets.GCLOUD_CLUSTER_SA_KEY }}'
       - name: Get Cluster Credentials
         run: |
-          gcloud container clusters get-credentials ${{ inputs.cluster_name }} \
-          --region ${{ inputs.cluster_region }} \
-          --project ${{ inputs.cluster_project }}
+          gcloud container clusters get-credentials ${{ vars.CLUSTER_NAME }} \
+          --region ${{ vars.CLUSTER_REGION }} \
+          --project ${{ vars.CLUSTER_PROJECT }}
       - name: Deploy
         run: |
           skaffold deploy \
-          --profile ${{ inputs.deployment_profile }} \
+          --profile ${{ inputs.environment }} \
           --build-artifacts=build.json
       - name: Upload build artifact JSON
         uses: actions/upload-artifact@v3
