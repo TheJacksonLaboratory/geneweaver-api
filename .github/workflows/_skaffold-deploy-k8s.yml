@@ -18,10 +18,6 @@ jobs:
     environment: ${{ inputs.environment }}
     steps:
       - uses: actions/checkout@v3
-      - name: Set up Python 3.9
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.9
       - name: Install Skaffold
         run: |
           curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/latest/skaffold-linux-amd64 && \
@@ -53,6 +49,8 @@ jobs:
         uses: 'google-github-actions/auth@v2'
         with:
           credentials_json: '${{ secrets.GCLOUD_CLUSTER_SA_KEY }}'
+      - name: Install Gcloud GKE Plugin
+        run: gcloud components install gke-gcloud-auth-plugin
       - name: Get Cluster Credentials
         run: |
           export USE_GKE_GCLOUD_AUTH_PLUGIN=True
