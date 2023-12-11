@@ -1,8 +1,8 @@
 """Namespace for the config class for the Geneweaver API."""
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional
 
-from pydantic import BaseSettings, PostgresDsn, validator
 from geneweaver.db.core.settings_class import Settings as DBSettings
+from pydantic import BaseSettings, validator
 
 
 class GeneweaverAPIConfig(BaseSettings):
