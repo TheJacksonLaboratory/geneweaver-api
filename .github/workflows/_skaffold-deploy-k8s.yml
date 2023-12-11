@@ -13,6 +13,7 @@ on:
         default: "us-docker.pkg.dev/jax-cs-registry/docker/geneweaver"
 jobs:
   build:
+    name: Build
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
     steps:
@@ -42,10 +43,12 @@ jobs:
           name: Build Artifacts
           path: build.json
   deploy:
+    name: Deploy
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
     needs: build
     steps:
+      - uses: actions/checkout@v3
       - name: Authenticate to Google Cloud
         uses: 'google-github-actions/auth@v2'
         with:
