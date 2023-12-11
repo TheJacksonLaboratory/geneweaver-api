@@ -2,32 +2,36 @@
 from typing import Any, Dict, List, Optional, Union
 
 from pydantic import BaseSettings, PostgresDsn, validator
+from geneweaver.db.core.settings_class import Settings as DBSettings
 
 
 class GeneweaverAPIConfig(BaseSettings):
     """Config class for the Geneweaver API."""
 
-    API_PREFIX: str = ""
+    LOG_LEVEL: str = "INFO"
 
-    POSTGRES_SERVER: str
-    POSTGRES_USER: str
-    POSTGRES_PASSWORD: str
-    POSTGRES_DB: str
-    SQLALCHEMY_DATABASE_URI: Optional[PostgresDsn] = None
+    API_PREFIX: str = "/api"
 
-    @validator("SQLALCHEMY_DATABASE_URI", pre=True)
-    def assemble_db_connection(
-        cls, v: Optional[str], values: Dict[str, Any]  # noqa: N805
-    ) -> Union[str, PostgresDsn]:
-        """Build the database connection string."""
-        if isinstance(v, str):
+    DB_HOST: str
+    DB_USERNAME: str
+    DB_PASSWORD: str
+    DB_NAME: str
+    DB_PORT: int = 5432
+    DB: Optional[DBSettings] = None
+
+    @validator("DB", pre=True)
+    def assemble_db_settings(
+        cls, v: Optional[DBSettings], values: Dict[str, Any]  # noqa: N805
+    ) -> DBSettings:
+        """Build the database settings."""
+        if isinstance(v, DBSettings):
             return v
-        return PostgresDsn.build(
-            scheme="postgresql",
-            user=values.get("POSTGRES_USER"),
-            password=values.get("POSTGRES_PASSWORD"),
-            host=values.get("POSTGRES_SERVER"),
-            path=f"/{values.get('POSTGRES_DB') or ''}",
+        return DBSettings(
+            SERVER=values.get("DB_HOST"),
+            NAME=values.get("DB_NAME"),
+            USERNAME=values.get("DB_USERNAME"),
+            PASSWORD=values.get("DB_PASSWORD"),
+            PORT=values.get("DB_PORT"),
         )
 
     AUTH_DOMAIN: str = "geneweaver.auth0.com"
@@ -38,7 +42,7 @@ class GeneweaverAPIConfig(BaseSettings):
         "openid profile email": "read",
     }
     JWT_PERMISSION_PREFIX: str = "approle"
-    AUTH_CLIENT_ID: str = "oVm9omUtLBpVyL7YfJA8gp3hHaHwyVt8"
+    AUTH_CLIENT_ID: str = "T7bj6wlmtVcAN2O6kzDRwPVFyIj4UQNs"
 
     class Config:
         """Configuration for the BaseSettings class."""
