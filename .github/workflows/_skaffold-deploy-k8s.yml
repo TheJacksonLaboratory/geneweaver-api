@@ -58,7 +58,7 @@ jobs:
         uses: google-github-actions/get-gke-credentials@v1
         with:
           cluster_name: ${{ vars.CLUSTER_NAME }}
-          location: ${{ vars.CLUSTER_REGION }
+          location: ${{ vars.CLUSTER_REGION }}
           project_id: ${{ vars.CLUSTER_PROJECT }}
       - name: Download coverage report artifact
         uses: actions/download-artifact@v3
