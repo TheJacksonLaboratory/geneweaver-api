@@ -54,11 +54,13 @@ jobs:
           --cov-report=html \
           --cov-fail-under=${{ inputs.required-coverage }} > coverage_report.txt
       - name: Upload coverage report
+        if: '!cancelled()'
         uses: actions/upload-artifact@v3
         with:
           name: coverage-report
           path: coverage_report.txt
       - name: Upload coverage report
+        if: '!cancelled()'
         uses: actions/upload-artifact@v3
         with:
           name: coverage-report-html
