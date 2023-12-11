@@ -13,10 +13,10 @@ WORKDIR /app
 
 COPY pyproject.toml poetry.lock /app/
 
-RUN poetry install --no-dev --no-root
+RUN poetry install --without dev --sync --no-root
 
 COPY /src /app/src
 
-RUN poetry install --no-dev --only-root
+RUN poetry install --only-root
 
 CMD ["poetry", "run", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--proxy-headers"]
