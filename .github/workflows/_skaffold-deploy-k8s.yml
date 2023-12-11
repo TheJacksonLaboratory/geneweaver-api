@@ -30,7 +30,7 @@ jobs:
         with:
           credentials_json: '${{ secrets.GCLOUD_REGISTRY_SA_KEY }}'
       - name: Docker Login
-        run: gcloud auth configure-docker us-docker.pkg.dev, us-east1-docker.pkg.dev
+        run: gcloud auth configure-docker us-docker.pkg.dev,us-east1-docker.pkg.dev
       - name: Build
         run: |
           skaffold build \
