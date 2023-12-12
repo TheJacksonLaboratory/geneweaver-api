@@ -1,4 +1,4 @@
-name: 'Deploy'
+name: 'Skaffold Deploy'
 on:
   workflow_call:
     inputs:
@@ -9,7 +9,6 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    needs: build
     environment: ${{ inputs.environment }}
     steps:
       - uses: actions/checkout@v3

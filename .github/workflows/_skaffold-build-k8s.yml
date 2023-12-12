@@ -1,4 +1,4 @@
-name: 'Build & Deploy'
+name: 'Skaffold Build'
 on:
   workflow_call:
     inputs:
