@@ -58,7 +58,7 @@ jobs:
         with:
           cluster_name: ${{ vars.CLUSTER_NAME }}
           location: ${{ vars.CLUSTER_REGION }}
-          project: ${{ vars.CLUSTER_PROJECT }}
+          project_id: ${{ vars.CLUSTER_PROJECT }}
       - name: Install Skaffold
         run: |
           curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/latest/skaffold-linux-amd64 && \
