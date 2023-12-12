@@ -27,7 +27,7 @@ jobs:
       runner-os: ${{ matrix.os }}
       python-version: ${{ matrix.python-version }}
       required-coverage: ${{ vars.REQUIRED_COVERAGE }}
-  build_and_deploy_dev:
+  build_dev:
     name: "Build and Deploy: Dev"
     needs: [test, format-lint, check-coverage]
     uses: ./.github/workflows/_skaffold-deploy-k8s.yml
@@ -41,5 +41,5 @@ jobs:
     uses: ./.github/workflows/_skaffold-deploy-k8s.yml
     secrets: inherit
     with:
-      environment: "jax-cluster-dev-10--dev"
+      environment: "jax-cluster-dev-10--sqa"
       default_image_repo: "us-east1-docker.pkg.dev/jax-cs-registry/docker-test/geneweaver"
