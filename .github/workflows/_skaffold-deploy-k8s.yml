@@ -38,6 +38,7 @@ jobs:
           path: build.json
   deploy:
     runs-on: ubuntu-latest
+    needs: build
     environment: ${{ inputs.environment }}
     steps:
       - name: Download Build Artifact Information
@@ -55,9 +56,9 @@ jobs:
         name: Get GKE credentials
         uses: 'google-github-actions/get-gke-credentials@v1'
         with:
-          cluster_name: ${{ var.CLUSTER_NAME }}
-          location: ${{ var.CLUSTER_REGION }}
-          project: ${{ var.CLUSTER_PROJECT }}
+          cluster_name: ${{ vars.CLUSTER_NAME }}
+          location: ${{ vars.CLUSTER_REGION }}
+          project: ${{ vars.CLUSTER_PROJECT }}
       - name: Install Skaffold
         run: |
           curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/latest/skaffold-linux-amd64 && \
