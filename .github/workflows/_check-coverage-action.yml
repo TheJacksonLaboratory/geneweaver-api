@@ -27,7 +27,7 @@ on:
         type: string
         default: "no"
 jobs:
-  run-tests:
+  check_coverage:
     runs-on: ${{ inputs.runner-os }}
     steps:
       - uses: actions/checkout@v3
@@ -66,7 +66,7 @@ jobs:
           name: coverage-report-html
           path: htmlcov
   comment-coverage-report:
-    needs: [ check-coverage ]
+    needs: [ check_coverage ]
     runs-on: ubuntu-latest
     if: ${{always() && github.event_name == 'pull_request'}}
     permissions:
