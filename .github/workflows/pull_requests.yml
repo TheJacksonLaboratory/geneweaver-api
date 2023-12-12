@@ -4,19 +4,40 @@ on:
     branches:
       - 'main'
 jobs:
-#  test:
-#    strategy:
-#      matrix:
-#        os: [ubuntu-latest]
-#        python-version: ['3.9', '3.10', '3.11']
-#    uses: ./.github/workflows/_run-tests-action.yml
-#    with:
-#      runner-os: ${{ matrix.os }}
-#      python-version: ${{ matrix.python-version }}
-#      required-coverage: ${{ vars.REQUIRED_COVERAGE }}
-  build_and_deploy:
+  format-lint:
+    uses: ./.github/workflows/_format-lint-action.yml
+    with:
+      python-version: '3.9'
+  check-coverage:
+    needs: [format-lint]
+    uses: ./.github/workflows/_check-coverage-action.yml
+    permissions:
+      pull-requests: write
+    with:
+      required-coverage: ${{ vars.REQUIRED_COVERAGE }}
+      coverage-module: "geneweaver.api"
+  test:
+    needs: [format-lint]
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        python-version: ['3.9', '3.10', '3.11']
+    uses: ./.github/workflows/_run-tests-action.yml
+    with:
+      runner-os: ${{ matrix.os }}
+      python-version: ${{ matrix.python-version }}
+      required-coverage: ${{ vars.REQUIRED_COVERAGE }}
+  build_and_deploy_dev:
     name: "Build and Deploy: Dev"
-#    needs: test
+    needs: [test, format-lint, check-coverage]
+    uses: ./.github/workflows/_skaffold-deploy-k8s.yml
+    secrets: inherit
+    with:
+      environment: "jax-cluster-dev-10--dev"
+      default_image_repo: "us-east1-docker.pkg.dev/jax-cs-registry/docker-test/geneweaver"
+  build_and_deploy_sqa:
+    name: "Build and Deploy: SQA"
+    needs: [build_and_deploy_dev]
     uses: ./.github/workflows/_skaffold-deploy-k8s.yml
     secrets: inherit
     with:
