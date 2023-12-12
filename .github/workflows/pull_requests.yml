@@ -15,7 +15,7 @@ jobs:
 #      python-version: ${{ matrix.python-version }}
 #      required-coverage: ${{ vars.REQUIRED_COVERAGE }}
   build_and_deploy:
-    needs: test
+#    needs: test
     uses: ./.github/workflows/_skaffold-deploy-k8s.yml
     with:
       environment: "jax-cluster-dev-10--dev"
