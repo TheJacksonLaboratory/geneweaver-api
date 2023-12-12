@@ -1,9 +1,9 @@
-name: 'Deploy'
+name: 'Build'
 on:
   workflow_call:
     inputs:
       environment:
-        description: 'Deployment profile'
+        description: 'Deployment environment/profile'
         required: true
         type: string
 jobs:
