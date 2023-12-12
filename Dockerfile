@@ -19,4 +19,4 @@ COPY /src /app/src
 
 RUN poetry install --only-root
 
-CMD ["poetry", "run", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--proxy-headers"]
+CMD ["poetry", "run", "uvicorn", "geneweaver.api.main:app", "--host", "0.0.0.0", "--port", "8000", "--proxy-headers"]
