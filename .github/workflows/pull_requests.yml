@@ -27,7 +27,7 @@ jobs:
       runner-os: ${{ matrix.os }}
       python-version: ${{ matrix.python-version }}
       required-coverage: ${{ vars.REQUIRED_COVERAGE }}
-  build_dev:
+  build_and_deploy_dev:
     name: "Build and Deploy: Dev"
     needs: [test, format-lint, check-coverage]
     uses: ./.github/workflows/_skaffold-deploy-k8s.yml
