@@ -1,20 +1,8 @@
-name: 'Python Tests Definition'
+name: 'Build & Deploy'
 on:
   workflow_call:
     inputs:
-      cluster_project:
-        description: 'Cluster project'
-        required: true
-        type: string
-      cluster_region:
-        description: 'Cluster region'
-        required: true
-        type: string
-      cluster_name:
-        description: 'Cluster name'
-        required: true
-        type: string
-      deployment_profile:
+      environment:
         description: 'Deployment profile'
         required: true
         type: string
@@ -28,10 +16,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Set up Python 3.9
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.9
       - name: Install Skaffold
         run: |
           curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/latest/skaffold-linux-amd64 && \
@@ -41,28 +25,45 @@ jobs:
         with:
           credentials_json: '${{ secrets.GCLOUD_REGISTRY_SA_KEY }}'
       - name: Docker Login
-        run: gcloud auth configure-docker us-docker.pkg.dev, us-east1-docker.pkg.dev
+        run: gcloud auth configure-docker us-docker.pkg.dev,us-east1-docker.pkg.dev
       - name: Build
         run: |
           skaffold build \
           --default-repo=${{ inputs.default_image_repo }} \
           --file-output=build.json
+      - name: Upload Build Artifact Information
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-artifact-json
+          path: build.json
+  deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - name: Download Build Artifact Information
+        uses: actions/download-artifact@v3
+        with:
+          name: build-artifact-json
       - name: Authenticate to Google Cloud
         uses: 'google-github-actions/auth@v1'
         with:
           credentials_json: '${{ secrets.GCLOUD_CLUSTER_SA_KEY }}'
-      - name: Get Cluster Credentials
+      - id: setup-gcloud
+        name: Setup Gcloud
+        uses: 'google-github-actions/setup-gcloud@v1'
+      - id: get-gke-credentials
+        name: Get GKE credentials
+        uses: 'google-github-actions/get-gke-credentials@v1'
+        with:
+          cluster_name: ${{ var.CLUSTER_NAME }}
+          location: ${{ var.CLUSTER_REGION }}
+          project: ${{ var.CLUSTER_PROJECT }}
+      - name: Install Skaffold
         run: |
-          gcloud container clusters get-credentials ${{ inputs.cluster_name }} \
-          --region ${{ inputs.cluster_region }} \
-          --project ${{ inputs.cluster_project }}
+          curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/latest/skaffold-linux-amd64 && \
+          sudo install skaffold /usr/local/bin/
       - name: Deploy
         run: |
           skaffold deploy \
-          --profile ${{ inputs.deployment_profile }} \
+          --profile ${{ inputs.environment }} \
           --build-artifacts=build.json
-      - name: Upload build artifact JSON
-        uses: actions/upload-artifact@v3
-        with:
-          name: Build Artifacts
-          path: build.json

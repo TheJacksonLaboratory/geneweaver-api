@@ -1,14 +1,16 @@
 name: Coverage
 on:
-  pull_request:
-    branches:
-      - 'main'
+#  pull_request:
+#    branches:
+#      - 'main'
   push:
     branches:
       - 'main'
 jobs:
   check-coverage:
     uses: ./.github/workflows/_check-coverage-action.yml
+    permissions:
+      pull-requests: write
     with:
       required-coverage: ${{ vars.REQUIRED_COVERAGE }}
       coverage-module: "geneweaver.api"
