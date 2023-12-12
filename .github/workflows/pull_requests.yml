@@ -17,6 +17,7 @@ jobs:
   build_and_deploy:
 #    needs: test
     uses: ./.github/workflows/_skaffold-deploy-k8s.yml
+    secrets: inherit
     with:
       environment: "jax-cluster-dev-10--dev"
       default_image_repo: "us-east1-docker.pkg.dev/jax-cs-registry/docker-test/geneweaver"
