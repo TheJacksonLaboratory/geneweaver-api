@@ -1,0 +1,46 @@
+name: Pull Request Test, Build and Deploy
+on:
+  pull_request:
+    branches:
+      - 'main'
+jobs:
+  format-lint:
+    name: "Format and Lint"
+    uses: ./.github/workflows/_format-lint-action.yml
+    with:
+      python-version: '3.9'
+  check-coverage:
+    name: "Check Coverage"
+    needs: [format-lint]
+    uses: ./.github/workflows/_check-coverage-action.yml
+    permissions:
+      pull-requests: write
+    with:
+      required-coverage: ${{ vars.REQUIRED_COVERAGE }}
+      coverage-module: "geneweaver.api"
+  test:
+    name: "Run Tests"
+    needs: [format-lint]
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        python-version: ['3.10', '3.11']
+    uses: ./.github/workflows/_run-tests-action.yml
+    with:
+      runner-os: ${{ matrix.os }}
+      python-version: ${{ matrix.python-version }}
+      required-coverage: ${{ vars.REQUIRED_COVERAGE }}
+  build:
+    name: "Build: Dev"
+    needs: [test, check-coverage]
+    uses: ./.github/workflows/_skaffold-build-k8s.yml
+    secrets: inherit
+    with:
+      default_image_repo: "us-east1-docker.pkg.dev/jax-cs-registry/docker-test/geneweaver"
+  deploy:
+    name: "Deploy: Dev"
+    needs: [build]
+    uses: ./.github/workflows/_skaffold-deploy-k8s.yml
+    secrets: inherit
+    with:
+      environment: "jax-cluster-dev-10--dev"

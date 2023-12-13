@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: geneweaver-api
+  labels:
+    app: geneweaver-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: geneweaver-api
+  template:
+    metadata:
+      labels:
+        app: geneweaver-api
+    spec:
+      serviceAccountName: workload-identity-geneweaver
+      containers:
+        - name: geneweaver-api
+          image: geneweaver-api
+          imagePullPolicy: Always
+          envFrom:
+            - configMapRef:
+                name: geneweaver-config
+            - secretRef:
+                name: geneweaver-db
+          ports:
+            - containerPort: 8000

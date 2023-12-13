@@ -4,7 +4,7 @@ from typing import Generator
 
 import psycopg
 from fastapi import Depends
-from geneweaver.api.core.config import db_settings, settings
+from geneweaver.api.core.config import settings
 from geneweaver.api.core.security import Auth0, UserInternal
 from geneweaver.db.user import by_sso_id
 from psycopg.rows import dict_row
@@ -21,7 +21,7 @@ Cursor = psycopg.Cursor
 
 def cursor() -> Generator:
     """Get a cursor from the connection pool."""
-    with psycopg.connect(db_settings.URI, row_factory=dict_row) as conn:
+    with psycopg.connect(settings.DB.URI, row_factory=dict_row) as conn:
         with conn.cursor() as cur:
             yield cur
 

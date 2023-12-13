@@ -1,0 +1,34 @@
+name: 'Skaffold Build'
+on:
+  workflow_call:
+    inputs:
+      default_image_repo:
+        description: 'Default image repo'
+        required: false
+        type: string
+        default: "us-docker.pkg.dev/jax-cs-registry/docker/geneweaver"
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Skaffold
+        run: |
+          curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/latest/skaffold-linux-amd64 && \
+          sudo install skaffold /usr/local/bin/
+      - name: Authenticate to Google Cloud
+        uses: 'google-github-actions/auth@v1'
+        with:
+          credentials_json: '${{ secrets.GCLOUD_REGISTRY_SA_KEY }}'
+      - name: Docker Login
+        run: gcloud auth configure-docker us-docker.pkg.dev,us-east1-docker.pkg.dev
+      - name: Build
+        run: |
+          skaffold build \
+          --default-repo=${{ inputs.default_image_repo }} \
+          --file-output=build.json
+      - name: Upload Build Artifact Information
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-artifact-json
+          path: build.json
