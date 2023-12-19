@@ -38,7 +38,7 @@ class GeneweaverAPIConfig(BaseSettings):
         "openid profile email": "read",
     }
     JWT_PERMISSION_PREFIX: str = "approle"
-    AUTH_CLIENT_ID: str = "oVm9omUtLBpVyL7YfJA8gp3hHaHwyVt8"
+    AUTH_CLIENT_ID: str = "T7bj6wlmtVcAN2O6kzDRwPVFyIj4UQNs"
 
     class Config:
         """Configuration for the BaseSettings class."""
