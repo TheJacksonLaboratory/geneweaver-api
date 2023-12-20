@@ -1,0 +1,13 @@
+deploy/
+htmlcov/
+.github/
+.env/
+.python-version
+skaffold.yaml
+
+
+*.pyc
+*.pyo
+*.pyd
+__pycache__
+.git

@@ -1,0 +1,40 @@
+apiVersion: skaffold/v2beta29
+kind: Config
+metadata:
+  name: geneweaver-api
+build:
+  tagPolicy:
+    gitCommit:
+      variant: AbbrevCommitSha
+  artifacts:
+    - image: geneweaver-api
+      context: .
+      docker:
+          dockerfile: Dockerfile
+  local:
+    useBuildkit: true
+test:
+  - image: geneweaver-api
+    structureTests:
+      - deploy/tests/*
+profiles:
+  - name: jax-cluster-dev-10--dev
+    deploy:
+      kustomize:
+        paths:
+          - deploy/k8s/overlays/jax-cluster-dev-10--dev
+  - name: jax-cluster-dev-10--sqa
+    deploy:
+      kustomize:
+        paths:
+          - deploy/k8s/overlays/jax-cluster-dev-10--sqa
+  - name: jax-cluster-prod-10--stage
+    deploy:
+      kustomize:
+        paths:
+          - deploy/k8s/overlays/jax-cluster-prod-10--stage
+  - name: jax-cluster-prod-10--prod
+    deploy:
+      kustomize:
+        paths:
+          - deploy/k8s/overlays/jax-cluster-prod-10--prod

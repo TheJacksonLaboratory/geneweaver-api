@@ -24,3 +24,36 @@ virtualenv activated, or just run `poetry run uvicorn geneweaver.api.main:app --
 
 This will host the application on `http://127.0.0.1:8000/` which means the swagger docs
 page is available at `http://127.0.0.1:8000/docs`.
+
+
+### Continuous Integration & Deployment
+When a PR is crated in GitHub, it will automatically trigger a workflow that will run 
+the tests and build the docker images, and then deploy to `dev`. Please be aware of this
+when creating tests in order to avoid conflicts with other PRs.
+
+When a PR is merged into `main`, it will automatically trigger a workflow that will run
+the tests and build the docker images, and then deploy to `sqa`.
+
+In order for any deployment to run, other than to `dev`, two things must be true:
+    - the deployment must be approved by SQA.
+    - the version number in `pyproject.toml` must be incremented.
+
+In order for the `stage` and `prod` deployments to run, the version number in 
+`pyproject.toml` must not contain a letter. This indicates that it is a release version.
+
+#### Version Numbers
+When creating a bugfix or feature addition PR, it is required that your version number
+contains a letter. This indicates to SQA that the code needs to be tests before it is 
+released. 
+
+For example, if the current version is `0.1.0`, then your PR should increment
+the version number to `0.1.1a0` when creating a bugfix PR. The SQA team will then
+test your code in the `sqa` environment. 
+
+If the code passes SQA testing, they will inform you that `0.1.1a0` has passed QA, at 
+which point you should create a PR with a single line change that increments the version
+number to `0.1.1`.
+
+If `0.1.1a0` fails QA, then you will need to create a fix, and increment the version
+number to `0.1.1a1`. This process will continue until the code passes QA, at which
+point you will increment the version number to `0.1.1` and create a PR to merge into

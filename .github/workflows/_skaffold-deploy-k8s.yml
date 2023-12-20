@@ -1,0 +1,41 @@
+name: 'Skaffold Deploy'
+on:
+  workflow_call:
+    inputs:
+      environment:
+        description: 'Deployment environment/profile'
+        required: true
+        type: string
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Download Build Artifact Information
+        uses: actions/download-artifact@v3
+        with:
+          name: build-artifact-json
+      - name: Authenticate to Google Cloud
+        uses: 'google-github-actions/auth@v1'
+        with:
+          credentials_json: '${{ secrets.GCLOUD_CLUSTER_SA_KEY }}'
+      - id: setup-gcloud
+        name: Setup Gcloud
+        uses: 'google-github-actions/setup-gcloud@v1'
+      - id: get-gke-credentials
+        name: Get GKE credentials
+        uses: 'google-github-actions/get-gke-credentials@v1'
+        with:
+          cluster_name: ${{ vars.CLUSTER_NAME }}
+          location: ${{ vars.CLUSTER_REGION }}
+          project_id: ${{ vars.CLUSTER_PROJECT }}
+      - name: Install Skaffold
+        run: |
+          curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/latest/skaffold-linux-amd64 && \
+          sudo install skaffold /usr/local/bin/
+      - name: Deploy
+        run: |
+          skaffold deploy \
+          --profile ${{ inputs.environment }} \
+          --build-artifacts=build.json

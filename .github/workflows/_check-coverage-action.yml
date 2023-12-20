@@ -27,7 +27,7 @@ on:
         type: string
         default: "no"
 jobs:
-  run-tests:
+  check_coverage:
     runs-on: ${{ inputs.runner-os }}
     steps:
       - uses: actions/checkout@v3
@@ -54,12 +54,49 @@ jobs:
           --cov-report=html \
           --cov-fail-under=${{ inputs.required-coverage }} > coverage_report.txt
       - name: Upload coverage report
+        if: '!cancelled()'
         uses: actions/upload-artifact@v3
         with:
           name: coverage-report
           path: coverage_report.txt
       - name: Upload coverage report
+        if: '!cancelled()'
         uses: actions/upload-artifact@v3
         with:
           name: coverage-report-html
           path: htmlcov
+  comment-coverage-report:
+    needs: [ check_coverage ]
+    runs-on: ubuntu-latest
+    if: ${{always() && github.event_name == 'pull_request'}}
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Download coverage report artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: coverage-report
+      - name: Read coverage report
+        id: read-coverage
+        run: |
+          echo "COVERAGE_REPORT<<EOF" >> $GITHUB_ENV
+          cat coverage_report.txt >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+      - name: Find Comment
+        uses: peter-evans/find-comment@v2
+        id: fc
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: 'github-actions[bot]'
+          body-includes: '### Test Coverage Report'
+      - name: Create or update comment
+        uses: peter-evans/create-or-update-comment@v3
+        with:
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          issue-number: ${{ github.event.pull_request.number }}
+          edit-mode: replace
+          body: |
+            ### Test Coverage Report
+            ```
+            ${{ env.COVERAGE_REPORT }}
+            ```
