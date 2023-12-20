@@ -1,3 +1,5 @@
+""" Tests for geneset API"""
+
 import importlib.resources
 import json
 from unittest.mock import Mock
@@ -23,15 +25,15 @@ response_mock.status_code = 200
 response_mock.json.return_value = test_data
 
 ### Mock dependencies
-m1 = Mock()
-def mock_full_user() -> m1.AsyncMock:
-    return m1
-m2 = Mock()
+def mock_full_user() -> Mock:
+    """ User auth mock"""
+    m1 = Mock()
+    return m1.AsyncMock()
+
 def mock_cursor() -> psycopg.Cursor:
+    """ DB cursor mock"""
+    m2 = Mock()
     return m2.AsyncMock()
-m3 = Mock()
-def mock_cursor_obj() -> psycopg.Cursor:
-    return m3.AsyncMock()
 
 app.dependency_overrides.update(
     {full_user: mock_full_user, cursor: mock_cursor}
@@ -39,34 +41,38 @@ app.dependency_overrides.update(
 
 @patch.object(client, 'get', return_value=response_mock)
 def test_get_geneset(mock_client):
-    response = client.get("/genesets/1234")
+    """ test get request for geneset ID"""
+    response = client.get("/api/genesets/1234")
     assert response.status_code == 200
 
 @patch('geneweaver.api.services.geneset.get_geneset')
 @patch('geneweaver.api.services.geneset.is_geneset_readable_by_user')
 def test_get_geneset_response(mock_genset_is_readable, mock_get_genenset):
+    """ test get geneset ID data response"""
     mock_genset_is_readable.return_value = True
     mock_get_genenset.return_value = test_data
 
-    response = client.get("/genesets/1234")
+    response = client.get("/api/genesets/1234")
     assert response.status_code == 200
     assert response.json() == test_data
 
 @patch('geneweaver.api.services.geneset.db_is_readable')
 def test_get_geneset_forbidden(mock_genset_is_readable):
+    """ test forbidden response"""
 
     mock_genset_is_readable.return_value = False
-    response = client.get("/genesets/1234")
+    response = client.get("/api/genesets/1234")
 
     assert response.json() == {'detail': 'Forbidden'}
     assert response.status_code == 403
 
 @patch('geneweaver.api.services.geneset.db_is_readable')
 def test_get_geneset_unexpected_error(mock_genset_is_readable):
+    """ test unexpected error response"""
 
     mock_genset_is_readable.side_effect = Exception
 
     with pytest.raises(Exception):
-        response = client.get("/genesets/1234")
+        response = client.get("/api/genesets/1234")
         assert response.json() == {'detail': 'Unexpected error'}
         assert response.status_code == 500

@@ -1,4 +1,4 @@
-"""Costant key/value messages"""
+"""Constants key/value messages"""
 
 
 ##Errors

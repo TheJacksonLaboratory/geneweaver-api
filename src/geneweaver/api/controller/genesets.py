@@ -42,7 +42,7 @@ def get_geneset(
         if response.get("message") == api_message.ACCESS_FORBIDEN:
             raise HTTPException(status_code=403, detail=api_message.ACCESS_FORBIDEN)
         else:
-            raise HTTPException(status_code=500, detail=api_message.ACCESS_FORBIDEN)
+            raise HTTPException(status_code=500, detail=api_message.UNEXPECTED_ERROR)
 
     return response
 
