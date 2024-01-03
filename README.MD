@@ -31,11 +31,11 @@ Ruff rules: (https://docs.astral.sh/ruff/rules/)
 
 From active local environment on command line run:
 
-    ruff src --fix
+    ruff src/ tests/ --fix
 
 then run black (code formatter: https://black.readthedocs.io/en/stable/the_black_code_style/current_style.html)
 
-    black src
+    black src/ tests/
 
 ### Unit test
 
