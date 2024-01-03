@@ -2,17 +2,17 @@
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Security
-from fastapi.logger import logger
+from geneweaver.api import dependencies as deps
+from geneweaver.api.schemas.auth import UserInternal
+from geneweaver.api.services import geneset as genset_service
 from geneweaver.core.schema.geneset import GenesetUpload
 from geneweaver.db import geneset as db_geneset
 from geneweaver.db import geneset_value as db_geneset_value
 
-from geneweaver.api import dependencies as deps
-from geneweaver.api.schemas.auth import UserInternal
-from geneweaver.api.services import geneset as genset_service
 from . import message as api_message
 
 router = APIRouter(prefix="/genesets")
+
 
 @router.get("")
 def get_visible_genesets(
@@ -28,15 +28,10 @@ def get_visible_genesets(
 def get_geneset(
     geneset_id: int,
     user: UserInternal = Security(deps.full_user),
-    cursor: Optional[deps.Cursor] = Depends(deps.cursor)
+    cursor: Optional[deps.Cursor] = Depends(deps.cursor),
 ) -> dict:
     """Get a geneset by ID."""
-    try:
-        response = genset_service.get_geneset(geneset_id, user, cursor)
-
-    except Exception as err:
-        logger.error(err)
-        raise HTTPException(status_code=500, detail=api_message.UNEXPECTED_ERROR)
+    response = genset_service.get_geneset(geneset_id, user, cursor)
 
     if "error" in response:
         if response.get("message") == api_message.ACCESS_FORBIDEN:
@@ -45,6 +40,7 @@ def get_geneset(
             raise HTTPException(status_code=500, detail=api_message.UNEXPECTED_ERROR)
 
     return response
+
 
 @router.post("")
 def upload_geneset(

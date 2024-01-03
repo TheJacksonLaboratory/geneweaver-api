@@ -25,6 +25,28 @@ virtualenv activated, or just run `poetry run uvicorn geneweaver.api.main:app --
 This will host the application on `http://127.0.0.1:8000/` which means the swagger docs
 page is available at `http://127.0.0.1:8000/docs`.
 
+### Code linters
+
+Ruff rules: (https://docs.astral.sh/ruff/rules/)
+
+From active local environment on command line run:
+
+    ruff src --fix
+
+then run black (code formatter: https://black.readthedocs.io/en/stable/the_black_code_style/current_style.html)
+
+    black src
+
+### Unit test
+
+Create appropriate test per code modifications without dependencies to external resources 
+such as DB, Webserver, or APIs. Create appropriate mocks for external resources and data as needed.
+
+    Tests directory: geneweaver-api/tests
+
+To execute tests, from the command line run:
+
+    pytest 
 
 ### Continuous Integration & Deployment
 When a PR is crated in GitHub, it will automatically trigger a workflow that will run 

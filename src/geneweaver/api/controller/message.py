@@ -1,6 +1,6 @@
-"""Constants key/value messages"""
+"""Constants key/value messages."""
 
 
 ##Errors
-ACCESS_FORBIDEN="Forbidden"
-UNEXPECTED_ERROR="Unexpected Error"
+ACCESS_FORBIDEN = "Forbidden"
+UNEXPECTED_ERROR = "Unexpected Error"

@@ -22,7 +22,6 @@ python-jose = {extras = ["cryptography"], version = "^3.3.0"}
 geneweaver-testing = "^0.0.3"
 pytest-asyncio = "^0.21.0"
 magicmock =  "^0.03"
-pylint= "^3.0.3"
 
 [tool.ruff]
 select = ['F', 'E', 'W', 'A', 'C90', 'N', 'B', 'ANN', 'D', 'I', 'ERA', 'PD', 'NPY', 'PT']
