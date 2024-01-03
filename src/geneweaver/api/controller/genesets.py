@@ -31,7 +31,7 @@ def get_geneset(
     cursor: Optional[deps.Cursor] = Depends(deps.cursor),
 ) -> dict:
     """Get a geneset by ID."""
-    response = genset_service.get_geneset(geneset_id, user, cursor)
+    response = genset_service.get_geneset(cursor, geneset_id, user)
 
     if "error" in response:
         if response.get("message") == api_message.ACCESS_FORBIDEN:

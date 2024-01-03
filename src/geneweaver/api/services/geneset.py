@@ -1,18 +1,18 @@
 """Service functions for dealing with genesets."""
 
 from fastapi.logger import logger
-from geneweaver.api import dependencies as deps
 from geneweaver.api.controller import message
 from geneweaver.api.schemas.auth import User
 from geneweaver.db import geneset as db_geneset
 from geneweaver.db import geneset_value as db_geneset_value
 from geneweaver.db.geneset import is_readable as db_is_readable
+from psycopg import Cursor
 
 
-def get_geneset(geneset_id: int, user: User, cursor: deps.Cursor) -> dict:
+def get_geneset(cursor: Cursor, geneset_id: int, user: User) -> dict:
     """Get a geneset by ID."""
     try:
-        if not is_geneset_readable_by_user(geneset_id, user, cursor):
+        if not is_geneset_readable_by_user(cursor, geneset_id, user):
             return {"error": True, "message": message.ACCESS_FORBIDEN}
 
         geneset = db_geneset.by_id(cursor, geneset_id)
@@ -24,9 +24,7 @@ def get_geneset(geneset_id: int, user: User, cursor: deps.Cursor) -> dict:
         raise err
 
 
-def is_geneset_readable_by_user(
-    geneset_id: int, user: User, cursor: deps.Cursor
-) -> bool:
+def is_geneset_readable_by_user(cursor: Cursor, geneset_id: int, user: User) -> bool:
     """Check if the user can read the geneset from DB."""
     readable: bool = False
     try:
