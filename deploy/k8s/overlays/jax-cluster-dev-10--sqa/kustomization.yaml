@@ -6,6 +6,10 @@ namespace: sqa
 bases:
 - ../../base
 
+# NOTE: When applying production ingress, replace this with a patch
+resources:
+  - ingress.yaml
+
 #patchesStrategicMerge:
 #  - configmap.yaml
 #  - ingress.yaml
