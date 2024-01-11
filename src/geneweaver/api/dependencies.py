@@ -8,6 +8,7 @@ from geneweaver.api.core.config import settings
 from geneweaver.api.core.security import Auth0, UserInternal
 from geneweaver.db.user import by_sso_id
 from psycopg.rows import dict_row
+from tempfile import TemporaryDirectory
 
 auth = Auth0(
     domain=settings.AUTH_DOMAIN,
@@ -26,10 +27,18 @@ def cursor() -> Generator:
             yield cur
 
 
-def full_user(
+async def full_user(
     cursor: Cursor = Depends(cursor),
     user: UserInternal = Depends(auth.get_user_strict),
 ) -> UserInternal:
     """Get the full user object."""
     user.id = by_sso_id(cursor, user.sso_id)[0]["usr_id"]
     yield user
+
+
+async def get_temp_dir():
+    dir = TemporaryDirectory()
+    try:
+        yield dir.name
+    finally:
+        del dir

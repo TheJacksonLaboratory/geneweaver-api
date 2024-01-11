@@ -33,7 +33,7 @@ def test_get_geneset_no_user_access(mock_genset_readable_func):
     mock_genset_readable_func.return_value = False
     response = geneset.get_geneset(None, 1234, None)
     assert response.get("error") is True
-    assert response.get("message") == message.ACCESS_FORBIDEN
+    assert response.get("message") == message.ACCESS_FORBIDDEN
 
 
 @patch("geneweaver.api.services.geneset.db_geneset")
@@ -48,7 +48,7 @@ def test_get_geneset_returned_values(
     mock_db_genset_value.by_geneset_id.return_value = test_data.get("geneset_values")
     response = geneset.get_geneset(None, 1234, None)
 
-    assert response.get("genset") == test_data["geneset"]
+    assert response.get("geneset") == test_data["geneset"]
     assert response.get("geneset_values") == test_data["geneset_values"]
 
 
