@@ -1,4 +1,5 @@
 {
+  "gene_identifier_type": "ENSEMBLE_GENE",
   "geneset": {
     "gs_id": 1234,
     "usr_id": 51,
@@ -28,7 +29,6 @@
     "gs_attribution": null,
     "gs_is_edgelist": false
   },
-  "gene_identifier_type": "ENSEMBLE_GENE",
   "geneset_values": [
     {
       "gs_id": 1234,

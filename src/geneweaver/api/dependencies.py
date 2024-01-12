@@ -1,5 +1,6 @@
 """Dependency injection capabilities for the GeneWeaver API."""
 # ruff: noqa: B008
+from tempfile import TemporaryDirectory
 from typing import Generator
 
 import psycopg
@@ -8,7 +9,6 @@ from geneweaver.api.core.config import settings
 from geneweaver.api.core.security import Auth0, UserInternal
 from geneweaver.db.user import by_sso_id
 from psycopg.rows import dict_row
-from tempfile import TemporaryDirectory
 
 auth = Auth0(
     domain=settings.AUTH_DOMAIN,
@@ -36,9 +36,10 @@ async def full_user(
     yield user
 
 
-async def get_temp_dir():
-    dir = TemporaryDirectory()
+async def get_temp_dir() -> TemporaryDirectory:
+    """Get a temp directory."""
+    temp_dir = TemporaryDirectory()
     try:
-        yield dir.name
+        yield temp_dir.name
     finally:
-        del dir
+        del temp_dir

@@ -3,10 +3,10 @@
 from fastapi.logger import logger
 from geneweaver.api.controller import message
 from geneweaver.api.schemas.auth import User
+from geneweaver.core.enum import GeneIdentifier
 from geneweaver.db import geneset as db_geneset
 from geneweaver.db import geneset_value as db_geneset_value
 from geneweaver.db.geneset import is_readable as db_is_readable
-from geneweaver.core.enum import GeneIdentifier
 from psycopg import Cursor
 
 
@@ -25,19 +25,28 @@ def get_geneset(cursor: Cursor, geneset_id: int, user: User) -> dict:
         raise err
 
 
-def get_geneset_w_gene_id_type(cursor: Cursor, geneset_id: int, user: User, gene_id_type: GeneIdentifier) -> dict:
+def get_geneset_w_gene_id_type(
+    cursor: Cursor, geneset_id: int, user: User, gene_id_type: GeneIdentifier
+) -> dict:
     """Get a geneset by ID and filter with gene identifier type."""
     try:
         if not is_geneset_readable_by_user(cursor, geneset_id, user):
             return {"error": True, "message": message.ACCESS_FORBIDDEN}
 
         geneset = db_geneset.by_id(cursor, geneset_id)
-        geneset_values = db_geneset_value.by_geneset_id(cursor, geneset_id, gene_id_type)
-        return {"geneset": geneset, "gene_identifier_type": gene_id_type.name, 'geneset_values': geneset_values}
+        geneset_values = db_geneset_value.by_geneset_id(
+            cursor, geneset_id, gene_id_type
+        )
+        return {
+            "gene_identifier_type": gene_id_type.name,
+            "geneset": geneset,
+            "geneset_values": geneset_values,
+        }
 
     except Exception as err:
         logger.error(err)
         raise err
+
 
 def is_geneset_readable_by_user(cursor: Cursor, geneset_id: int, user: User) -> bool:
     """Check if the user can read the geneset from DB."""
@@ -49,5 +58,3 @@ def is_geneset_readable_by_user(cursor: Cursor, geneset_id: int, user: User) -> 
         raise err
 
     return readable
-
-
