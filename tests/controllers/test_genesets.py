@@ -2,9 +2,7 @@
 from unittest.mock import patch
 
 import pytest
-from fastapi import HTTPException
-from geneweaver.api.controller.genesets import get_gene_identifier_type
-from geneweaver.core.enum import GeneIdentifier
+from geneweaver.api.controller import message
 
 from tests.data import test_geneset_data
 
@@ -43,13 +41,6 @@ def test_get_geneset_unexpected_error(mock_genset_is_readable, client):
         client.get("/api/genesets/1234")
 
 
-def test_get_gene_identifier_type():
-    """Test get gene identifier type responses."""
-    assert get_gene_identifier_type(2) == GeneIdentifier(2)
-    with pytest.raises(expected_exception=HTTPException):
-        get_gene_identifier_type(25)
-
-
 @patch("geneweaver.api.services.geneset.get_geneset_w_gene_id_type")
 def test_get_geneset_w_gene_id_type(mock_service_get_geneset_w_gene_id_type, client):
     """Test get geneset with gene id type response."""
@@ -79,3 +70,13 @@ def test_export_geneset_w_gene_id_type(mock_service_get_geneset_w_gene_id_type, 
     assert response.headers.get("content-type") == "application/octet-stream"
     assert int(response.headers.get("content-length")) > 0
     assert response.status_code == 200
+
+
+@patch("geneweaver.api.services.geneset.get_geneset_w_gene_id_type")
+def test_invalid_gene_type_id(mock_service_get_geneset_w_gene_id_type, client):
+    """Test geneset file export."""
+    mock_service_get_geneset_w_gene_id_type.return_value = geneset_w_gene_id_type_resp
+    response = client.get("/api/genesets/1234/export?gene_id_type=25")
+
+    assert message.GENE_IDENTIFIER_TYPE_VALUE_ERROR in response.json()["detail"]
+    assert response.status_code == 400
