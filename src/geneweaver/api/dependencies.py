@@ -42,7 +42,6 @@ async def full_user(
     @param cursor: DB cursor
     @param user: GW user.
     """
-
     try:
         user.id = db_user.by_sso_id_and_email(cursor, user.sso_id, user.email)[0][
             "usr_id"
