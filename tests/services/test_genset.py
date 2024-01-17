@@ -1,18 +1,16 @@
 """Tests for geneset Service."""
 
-import importlib.resources
-import json
 from unittest.mock import patch
 
 import pytest
 from geneweaver.api.controller import message
 from geneweaver.api.services import geneset
+from geneweaver.core.enum import GeneIdentifier
 
-## Load test data
-# Opening JSON file
-str_json = importlib.resources.read_text("tests.data", "response_geneset_1234.json")
-# returns JSON string as a dictionary
-test_data = json.loads(str_json)
+from tests.data import test_geneset_data
+
+geneset_by_id_resp = test_geneset_data.get("geneset_by_id_resp")
+geneset_w_gene_id_type_resp = test_geneset_data.get("geneset_w_gene_id_type_resp")
 
 
 @patch("geneweaver.api.services.geneset.db_geneset")
@@ -33,7 +31,7 @@ def test_get_geneset_no_user_access(mock_genset_readable_func):
     mock_genset_readable_func.return_value = False
     response = geneset.get_geneset(None, 1234, None)
     assert response.get("error") is True
-    assert response.get("message") == message.ACCESS_FORBIDEN
+    assert response.get("message") == message.ACCESS_FORBIDDEN
 
 
 @patch("geneweaver.api.services.geneset.db_geneset")
@@ -44,12 +42,14 @@ def test_get_geneset_returned_values(
 ):
     """Test get geneset by ID data response structure."""
     mock_genset_readable_func.return_value = True
-    mock_db_geneset.by_id.return_value = test_data.get("geneset")
-    mock_db_genset_value.by_geneset_id.return_value = test_data.get("geneset_values")
+    mock_db_geneset.by_id.return_value = geneset_by_id_resp.get("geneset")
+    mock_db_genset_value.by_geneset_id.return_value = geneset_by_id_resp.get(
+        "geneset_values"
+    )
     response = geneset.get_geneset(None, 1234, None)
 
-    assert response.get("genset") == test_data["geneset"]
-    assert response.get("geneset_values") == test_data["geneset_values"]
+    assert response.get("geneset") == geneset_by_id_resp["geneset"]
+    assert response.get("geneset_values") == geneset_by_id_resp["geneset_values"]
 
 
 @patch("geneweaver.api.services.geneset.db_is_readable")
@@ -69,3 +69,28 @@ def test_is_redable_by_user_error(mock_user, mock_genset_is_readable):
 
     with pytest.raises(expected_exception=Exception):
         geneset.is_geneset_readable_by_user(None, 1234, mock_user)
+
+
+@patch("geneweaver.api.services.geneset.db_geneset")
+@patch("geneweaver.api.services.geneset.db_geneset_value")
+@patch("geneweaver.api.services.geneset.is_geneset_readable_by_user")
+def test_get_geneset_w_gene_id_type_reponse(
+    mock_genset_readable_func, mock_db_genset_value, mock_db_geneset
+):
+    """Test get geneset by ID with gene identifier type data response."""
+    mock_genset_readable_func.return_value = True
+    mock_db_geneset.by_id.return_value = geneset_w_gene_id_type_resp.get("geneset")
+    mock_db_genset_value.by_geneset_id.return_value = geneset_w_gene_id_type_resp.get(
+        "geneset_values"
+    )
+
+    response = geneset.get_geneset_w_gene_id_type(None, 1234, None, GeneIdentifier(2))
+
+    assert response.get("geneset") == geneset_w_gene_id_type_resp["geneset"]
+    assert (
+        response.get("gene_identifier_type")
+        == geneset_w_gene_id_type_resp["gene_identifier_type"]
+    )
+    assert (
+        response.get("geneset_values") == geneset_w_gene_id_type_resp["geneset_values"]
+    )

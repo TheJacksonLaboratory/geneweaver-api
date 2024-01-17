@@ -1,5 +1,6 @@
 """Dependency injection capabilities for the GeneWeaver API."""
 # ruff: noqa: B008
+from tempfile import TemporaryDirectory
 from typing import Generator
 
 import psycopg
@@ -27,11 +28,20 @@ def cursor() -> Generator:
             yield cur
 
 
-def full_user(
+async def full_user(
     cursor: Cursor = Depends(cursor),
     user: UserInternal = Depends(auth.get_user_strict),
 ) -> UserInternal:
-    """Get the full user object.""" ""
+    """Get the full user object.
+
+    Since there are external dependencies to wait for,
+    the recommendation is to use async
+    Also, Workaround FASTAPI issue, where logs hide exact place of errors
+    https://github.com/tiangolo/fastapi/discussions/8428
+    Geneweaver issue: G3-96.
+    @param cursor: DB cursor
+    @param user: GW user.
+    """
     try:
         user.id = db_user.by_sso_id_and_email(cursor, user.sso_id, user.email)[0][
             "usr_id"
@@ -49,3 +59,12 @@ def full_user(
             )
 
     yield user
+
+
+async def get_temp_dir() -> TemporaryDirectory:
+    """Get a temp directory."""
+    temp_dir = TemporaryDirectory()
+    try:
+        yield temp_dir.name
+    finally:
+        del temp_dir

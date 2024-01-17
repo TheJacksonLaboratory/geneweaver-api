@@ -1,22 +1,10 @@
 """Fixtures for the controller tests."""
-import importlib.resources
-import json
 from unittest.mock import Mock
 
 import psycopg
 import pytest
 from fastapi.testclient import TestClient
 from geneweaver.api.core.config_class import GeneweaverAPIConfig
-
-# Load test data
-# Opening JSON file
-str_json = importlib.resources.read_text("tests.data", "response_geneset_1234.json")
-# returns JSON string as a dictionary
-test_data = json.loads(str_json)
-
-response_mock = Mock()
-response_mock.status_code = 200
-response_mock.json.return_value = test_data
 
 
 # Mock dependencies

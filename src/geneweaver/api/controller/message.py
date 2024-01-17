@@ -2,5 +2,6 @@
 
 
 ##Errors
-ACCESS_FORBIDEN = "Forbidden"
+ACCESS_FORBIDDEN = "Forbidden"
 UNEXPECTED_ERROR = "Unexpected Error"
+GENE_IDENTIFIER_TYPE_VALUE_ERROR = "Invalid gene identifier type"

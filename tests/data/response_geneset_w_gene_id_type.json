@@ -1,4 +1,5 @@
 {
+  "gene_identifier_type": "ENSEMBLE_GENE",
   "geneset": {
     "gs_id": 1234,
     "usr_id": 51,
@@ -42,7 +43,28 @@
       ],
       "gsv_in_threshold": true,
       "gsv_date": "2020-05-05",
-      "ode_ref_id": "Hs.456585"
+      "hom_id": 66961,
+      "gene_rank": 0,
+      "ode_ref_id": "ENSG00000178104",
+      "gdb_id": 2
+    },
+    {
+      "gs_id": 1234,
+      "ode_gene_id": 70495,
+      "gsv_value": 1,
+      "gsv_hits": 1,
+      "gsv_source_list": [
+        "PDE4DIP"
+      ],
+      "gsv_value_list": [
+        1
+      ],
+      "gsv_in_threshold": true,
+      "gsv_date": "2020-05-05",
+      "hom_id": 66961,
+      "gene_rank": 0,
+      "ode_ref_id": "ENSG00000178104",
+      "gdb_id": 2
     },
     {
       "gs_id": 1234,
@@ -57,7 +79,28 @@
       ],
       "gsv_in_threshold": true,
       "gsv_date": "2020-05-05",
-      "ode_ref_id": "HGNC:14107"
+      "hom_id": 10608,
+      "gene_rank": 0,
+      "ode_ref_id": "ENSG00000124225",
+      "gdb_id": 2
+    },
+    {
+      "gs_id": 1234,
+      "ode_gene_id": 83819,
+      "gsv_value": 1,
+      "gsv_hits": 1,
+      "gsv_source_list": [
+        "TMEPAI"
+      ],
+      "gsv_value_list": [
+        1
+      ],
+      "gsv_in_threshold": true,
+      "gsv_date": "2020-05-05",
+      "hom_id": 10608,
+      "gene_rank": 0,
+      "ode_ref_id": "ENSG00000124225",
+      "gdb_id": 2
     },
     {
       "gs_id": 1234,
@@ -72,7 +115,29 @@
       ],
       "gsv_in_threshold": true,
       "gsv_date": "2020-05-05",
-      "ode_ref_id": "Hs.541341"
+      "hom_id": 15481,
+      "gene_rank": 0,
+      "ode_ref_id": "ENSG00000138078",
+      "gdb_id": 2
+    },
+    {
+      "gs_id": 1234,
+      "ode_gene_id": 90284,
+      "gsv_value": 1,
+      "gsv_hits": 1,
+      "gsv_source_list": [
+        "PREPL"
+      ],
+      "gsv_value_list": [
+        1
+      ],
+      "gsv_in_threshold": true,
+      "gsv_date": "2020-05-05",
+      "hom_id": 15481,
+      "gene_rank": 0,
+      "ode_ref_id": "ENSG00000138078",
+      "gdb_id": 2
     }
   ]
 }
+
