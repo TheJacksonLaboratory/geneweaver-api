@@ -19,7 +19,6 @@ from . import message as api_message
 
 router = APIRouter(prefix="/genesets")
 gene_id_type_options = [f"{choice.name} ({choice.value})" for choice in GeneIdentifier]
-timestr = time.strftime("%Y%m%d-%H%M%S")
 
 
 @router.get("")
@@ -61,7 +60,7 @@ def get_geneset(
     return response
 
 
-@router.get("/{geneset_id}/export", response_class=FileResponse)
+@router.get("/{geneset_id}/file", response_class=FileResponse)
 def get_export_geneset_by_id_type(
     geneset_id: int,
     user: UserInternal = Security(deps.full_user),
@@ -74,6 +73,8 @@ def get_export_geneset_by_id_type(
     ),
 ) -> dict:
     """Export geneset into JSON file. Search by ID and optional gene identifier type."""
+    timestr = time.strftime("%Y%m%d-%H%M%S")
+
     # Validate gene identifier type
     if gene_id_type:
         gene_identifier_type = get_gene_identifier_type(gene_id_type)
@@ -89,7 +90,11 @@ def get_export_geneset_by_id_type(
         else:
             raise HTTPException(status_code=500, detail=api_message.UNEXPECTED_ERROR)
 
-    geneset_filename = f"geneset_{geneset_id}_{timestr}.json"
+    id_type = response.get("gene_identifier_type")
+    if id_type:
+        geneset_filename = f"geneset_{geneset_id}_{id_type}_{timestr}.json"
+    else:
+        geneset_filename = f"geneset_{geneset_id}_{timestr}.json"
 
     # Write the data to temp file
     temp_file_path = os.path.join(temp_dir, geneset_filename)
@@ -116,7 +121,11 @@ def upload_geneset(
 
 
 def get_gene_identifier_type(gene_id_type: int) -> GeneIdentifier:
-    """Get a valid GeneIdentifier object. Raise HTTP exception if invalid value."""
+    """Get a valid GeneIdentifier object. Raise HTTP exception if invalid value.
+
+    @param gene_id_type: gene identifier type
+    @return: GeneIdentifier obj or HTTP exception if invalid id value.
+    """
     try:
         gene_identifier = GeneIdentifier(gene_id_type)
     except ValueError as err:

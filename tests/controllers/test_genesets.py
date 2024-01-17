@@ -55,7 +55,7 @@ def test_get_geneset_w_gene_id_type(mock_service_get_geneset_w_gene_id_type, cli
 def test_get_geneset_export_forbidden(mock_genset_is_readable, client):
     """Test export forbidden response."""
     mock_genset_is_readable.return_value = False
-    response = client.get("/api/genesets/1234/export?gene_id_type=2")
+    response = client.get("/api/genesets/1234/file?gene_id_type=2")
 
     assert response.json() == {"detail": "Forbidden"}
     assert response.status_code == 403
@@ -65,7 +65,7 @@ def test_get_geneset_export_forbidden(mock_genset_is_readable, client):
 def test_export_geneset_w_gene_id_type(mock_service_get_geneset_w_gene_id_type, client):
     """Test geneset file export."""
     mock_service_get_geneset_w_gene_id_type.return_value = geneset_w_gene_id_type_resp
-    response = client.get("/api/genesets/1234/export?gene_id_type=2")
+    response = client.get("/api/genesets/1234/file?gene_id_type=2")
 
     assert response.headers.get("content-type") == "application/octet-stream"
     assert int(response.headers.get("content-length")) > 0
@@ -76,7 +76,7 @@ def test_export_geneset_w_gene_id_type(mock_service_get_geneset_w_gene_id_type, 
 def test_invalid_gene_type_id(mock_service_get_geneset_w_gene_id_type, client):
     """Test geneset file export."""
     mock_service_get_geneset_w_gene_id_type.return_value = geneset_w_gene_id_type_resp
-    response = client.get("/api/genesets/1234/export?gene_id_type=25")
+    response = client.get("/api/genesets/1234/file?gene_id_type=25")
 
     assert message.GENE_IDENTIFIER_TYPE_VALUE_ERROR in response.json()["detail"]
     assert response.status_code == 400

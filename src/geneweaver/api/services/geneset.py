@@ -11,7 +11,13 @@ from psycopg import Cursor
 
 
 def get_geneset(cursor: Cursor, geneset_id: int, user: User) -> dict:
-    """Get a geneset by ID."""
+    """Get a geneset by ID.
+
+    @param cursor: DB cursor
+    @param geneset_id: geneset identifier
+    @param user: GW user
+    @return: dictionary response (geneset and genset values).
+    """
     try:
         if not is_geneset_readable_by_user(cursor, geneset_id, user):
             return {"error": True, "message": message.ACCESS_FORBIDDEN}
@@ -28,7 +34,14 @@ def get_geneset(cursor: Cursor, geneset_id: int, user: User) -> dict:
 def get_geneset_w_gene_id_type(
     cursor: Cursor, geneset_id: int, user: User, gene_id_type: GeneIdentifier
 ) -> dict:
-    """Get a geneset by ID and filter with gene identifier type."""
+    """Get a geneset by ID and filter with gene identifier type.
+
+    @param cursor: DB cursor
+    @param geneset_id: geneset identifier
+    @param user: GW user
+    @param gene_id_type: gene identifier type object
+    @return: Dictionary response (geneset identifier, geneset, and genset values).
+    """
     try:
         if not is_geneset_readable_by_user(cursor, geneset_id, user):
             return {"error": True, "message": message.ACCESS_FORBIDDEN}
@@ -49,7 +62,13 @@ def get_geneset_w_gene_id_type(
 
 
 def is_geneset_readable_by_user(cursor: Cursor, geneset_id: int, user: User) -> bool:
-    """Check if the user can read the geneset from DB."""
+    """Check if the user can read the geneset from DB.
+
+    @param cursor: DB cursor object
+    @param geneset_id: geneset identifier
+    @param user: GW user
+    @return: True if geneset is readable by user.
+    """
     readable: bool = False
     try:
         readable = db_is_readable(cursor, user.id, geneset_id)

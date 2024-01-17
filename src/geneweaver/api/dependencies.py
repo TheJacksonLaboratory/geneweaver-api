@@ -31,7 +31,16 @@ async def full_user(
     cursor: Cursor = Depends(cursor),
     user: UserInternal = Depends(auth.get_user_strict),
 ) -> UserInternal:
-    """Get the full user object."""
+    """Get the full user object.
+
+    Since there are external dependencies to wait for,
+    the recommendation is to use async
+    Also, Workaround FASTAPI issue, where logs hide exact place of errors
+    https://github.com/tiangolo/fastapi/discussions/8428
+    Geneweaver issue: G3-96.
+    @param cursor: DB cursor
+    @param user: GW user.
+    """
     user.id = by_sso_id(cursor, user.sso_id)[0]["usr_id"]
     yield user
 
