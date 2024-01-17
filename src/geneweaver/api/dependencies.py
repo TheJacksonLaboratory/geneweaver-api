@@ -6,8 +6,9 @@ from typing import Generator
 import psycopg
 from fastapi import Depends
 from geneweaver.api.core.config import settings
+from geneweaver.api.core.exceptions import AuthenticationMismatch
 from geneweaver.api.core.security import Auth0, UserInternal
-from geneweaver.db.user import by_sso_id
+from geneweaver.db import user as db_user
 from psycopg.rows import dict_row
 
 auth = Auth0(
@@ -41,7 +42,23 @@ async def full_user(
     @param cursor: DB cursor
     @param user: GW user.
     """
-    user.id = by_sso_id(cursor, user.sso_id)[0]["usr_id"]
+
+    try:
+        user.id = db_user.by_sso_id_and_email(cursor, user.sso_id, user.email)[0][
+            "usr_id"
+        ]
+    except IndexError as e:
+        if db_user.sso_id_exists(cursor, user.sso_id):
+            raise AuthenticationMismatch(
+                detail="Email and SSO ID Mismatch. Please contact and administrator."
+            ) from e
+        elif db_user.email_exists(cursor, user.email):
+            user.id = db_user.link_user_id_with_sso_id(cursor, user.id, user.sso_id)
+        else:
+            user.id = db_user.create_sso_user(
+                cursor, user.name, user.email, user.sso_id
+            )
+
     yield user
 
 

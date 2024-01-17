@@ -10,6 +10,14 @@ class Auth0UnauthenticatedException(HTTPException):
         super().__init__(401, **kwargs)
 
 
+class AuthenticationMismatch(HTTPException):
+    """Exception for mismatched authentication."""
+
+    def __init__(self, **kwargs) -> None:  # noqa: ANN003
+        """Initialize the exception."""
+        super().__init__(401, **kwargs)
+
+
 class Auth0UnauthorizedException(HTTPException):
     """Exception for unauthorized requests."""
 
