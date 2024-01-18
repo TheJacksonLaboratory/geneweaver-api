@@ -277,3 +277,6 @@ class Auth0:
 
     def _process_email(self, payload: dict) -> None:
         payload["email"] = payload.pop(f"{self.audience}/claims/email")
+
+        if payload["email"] is not None:
+            payload["email"] = payload["email"].lower()
