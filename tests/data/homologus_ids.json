@@ -34,7 +34,7 @@
     "source_gene_id_Type": 7,
     "target_species": 2
   },
-  "gene_ids_map_req_2_resp": {
+  "gene_ids_map_resp_2": {
     "gene_ids_map": [
       {
         "source_ref_id": "DAB1",

@@ -12,7 +12,7 @@ species_type_options = [f"{choice.name} ({choice.value})" for choice in Species]
 class GeneIdMappingResp(BaseModel):
     """Model for gene id mapping."""
 
-    gene_ids_map: list
+    gene_ids_map: list[dict]
 
 
 class GeneIdMappingReq(BaseModel):

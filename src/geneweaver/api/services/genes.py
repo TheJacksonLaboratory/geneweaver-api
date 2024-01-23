@@ -4,7 +4,7 @@ from typing import Iterable, Optional
 
 from fastapi.logger import logger
 from geneweaver.core.enum import GeneIdentifier, Species
-from geneweaver.db.gene import get_homolog_ids
+from geneweaver.db import gene as db_gene
 from psycopg import Cursor
 
 
@@ -12,9 +12,9 @@ def get_gene_mapping(
     cursor: Cursor,
     gene_id_list: Iterable,
     target_gene_id_type: GeneIdentifier,
-    source_gene_id_type: Optional[GeneIdentifier],
-    target_species: Optional[Species],
-    source_species: Optional[Species],
+    source_gene_id_type: Optional[GeneIdentifier] = None,
+    target_species: Optional[Species] = None,
+    source_species: Optional[Species] = None,
 ) -> dict:
     """Get homologus gene identifier mappings.
 
@@ -31,7 +31,7 @@ def get_gene_mapping(
     """
     ids_map = None
     try:
-        ids_map = get_homolog_ids(
+        ids_map = db_gene.get_homolog_ids(
             cursor,
             gene_id_list,
             target_gene_id_type,
