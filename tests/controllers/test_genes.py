@@ -16,7 +16,7 @@ def test_gene_id_mapping_response_post_req(mock_gene_id_mapping, client):
     }
 
     response = client.post(
-        url="/api/genes/homologous_ids", data=json.dumps(gene_ids_map_req_1)
+        url="/api/genes/homologous-ids", data=json.dumps(gene_ids_map_req_1)
     )
     print(response)
     assert response.status_code == 200
@@ -31,7 +31,7 @@ def test_gene_id_mapping_invalid_url(mock_gene_id_mapping, client):
     }
 
     response = client.post(
-        url="/api/genes/homologous", data=json.dumps(gene_ids_map_req_1)
+        url="/api/genes/homologous_ids", data=json.dumps(gene_ids_map_req_1)
     )
     print(response)
     assert response.status_code == 404
@@ -45,7 +45,7 @@ def test_gene_id_mapping_invalid_post_data_(mock_gene_id_mapping, client):
     }
 
     response = client.post(
-        url="/api/genes/homologous_ids", data=json.dumps({"test": "test"})
+        url="/api/genes/homologous-ids", data=json.dumps({"test": "test"})
     )
     print(response)
     assert response.status_code == 422

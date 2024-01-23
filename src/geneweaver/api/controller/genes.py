@@ -9,7 +9,7 @@ from geneweaver.api.services import genes as genes_service
 router = APIRouter(prefix="/genes")
 
 
-@router.post("/homologous_ids", response_model=GeneIdMappingResp)
+@router.post("/homologous-ids", response_model=GeneIdMappingResp)
 def get_related_gene_ids(
     gene_id_mapping: GeneIdMappingReq,
     cursor: Optional[deps.Cursor] = Depends(deps.cursor),
