@@ -54,6 +54,8 @@ async def full_user(
         elif db_user.email_exists(cursor, user.email):
             user.id = db_user.link_user_id_with_sso_id(cursor, user.id, user.sso_id)
         else:
+            if not user.name:
+                user.name = user.email
             user.id = db_user.create_sso_user(
                 cursor, user.name, user.email, user.sso_id
             )
