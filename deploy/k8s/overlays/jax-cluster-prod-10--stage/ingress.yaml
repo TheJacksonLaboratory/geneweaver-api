@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name:  geneweaver-api-ingress
+  annotations:
+    # NOTE: When deploying a new instance, make sure to use the staging issuer first
+    # so that you don't hit the rate limit for the production issuer.
+    cert-manager.io/cluster-issuer: "letsencrypt-staging"
+    # cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/auth-url: "http://oauth2-proxy.oauth2-proxy.svc.cluster.local/oauth2/auth"
+    nginx.ingress.kubernetes.io/auth-signin: "https://auth.jax-cluster-prod-10.jax.org/oauth2/start?rd=https://$http_host$escaped_request_uri"
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - "geneweaver-stage.jax.org"
+      secretName: geneweaver-sqa-jax-org-tls
+  rules:
+  - host: "geneweaver-stage.jax.org"
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/api"
+        backend:
+          service:
+            name: geneweaver-api
+            port:
+              number: 8000
