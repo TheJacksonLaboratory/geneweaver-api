@@ -6,6 +6,8 @@ namespace: stage
 bases:
 - ../../base
 
-#patchesStrategicMerge:
-#  - configmap.yaml
-#  - ingress.yaml
+patchesStrategicMerge:
+  - configmap.yaml
+
+resources:
+  - ingress.yaml
