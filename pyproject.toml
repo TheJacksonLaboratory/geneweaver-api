@@ -13,7 +13,7 @@ python = "^3.9"
 geneweaver-core = "^0.8.0a2"
 fastapi = {extras = ["all"], version = "^0.99.1"}
 uvicorn = {extras = ["standard"], version = "^0.24.0"}
-geneweaver-db = "^0.2.1a5"
+geneweaver-db = "^0.2.1a6"
 psycopg-pool = "^3.1.7"
 requests = "^2.31.0"
 python-jose = {extras = ["cryptography"], version = "^3.3.0"}

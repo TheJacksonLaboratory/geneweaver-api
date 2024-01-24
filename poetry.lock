@@ -513,13 +513,13 @@ pydantic = {version = ">=1.10.7,<2.0.0", extras = ["dotenv"]}
 
 [[package]]
 name = "geneweaver-db"
-version = "0.2.1a5"
+version = "0.2.1a6"
 description = "Database Interaction Services for GeneWeaver"
 optional = false
 python-versions = ">=3.9,<4.0"
 files = [
-    {file = "geneweaver_db-0.2.1a5-py3-none-any.whl", hash = "sha256:fbdbcdd83bb829da8d62742806849cc64b2705dade692924a88ba596ea69c7cb"},
-    {file = "geneweaver_db-0.2.1a5.tar.gz", hash = "sha256:1802b8b3cd82ac54eddaf76d4fb951b2fc6547b9c741a7b401176a228250a342"},
+    {file = "geneweaver_db-0.2.1a6-py3-none-any.whl", hash = "sha256:9b6d30de0318fbfc4af721d3e155c7b21a5d794743229467ea92273b759f48b7"},
+    {file = "geneweaver_db-0.2.1a6.tar.gz", hash = "sha256:92c97e08f87397122d911022ee427d9c443d134e6bb41d44e7ce44e90822ccd9"},
 ]
 
 [package.dependencies]
@@ -1904,4 +1904,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "f4d88df61e170c6ef09b984cb8648425f9d9e8b6acaf1632660c49e55075baf1"
+content-hash = "ee29249456f56f30f50d8aad6e309ca8bf9e416e79827be10a95017dd7d179df"
