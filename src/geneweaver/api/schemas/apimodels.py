@@ -20,7 +20,7 @@ class GeneIdMappingReq(BaseModel):
 
     source_ids: Iterable[str]
     target_gene_id_type: GeneIdentifier = Query(
-        None, description=f"Options: {gene_id_type_options}"
+        description=f"Options: {gene_id_type_options}"
     )
     source_gene_id_type: Optional[GeneIdentifier] = Query(
         None, description=f"Options: {gene_id_type_options}"
