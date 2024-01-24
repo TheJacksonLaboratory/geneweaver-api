@@ -1,0 +1,443 @@
+{
+  "gene_ids_map_req_1_gene_ids_species": {
+    "source_ids": [
+      "DAB1",
+      "SLC6A9"
+    ],
+    "target_gene_id_type": 2,
+    "source_gene_id_Type": 7,
+    "target_species": 2,
+    "source_species": 6
+  },
+  "gene_ids_map_resp_1": {
+    "gene_ids_map": [
+      {
+        "source_ref_id": "DAB1",
+        "source_sp_id": 6,
+        "result_ref_id": "ENSG00000173406",
+        "result_sp_id": 2
+      },
+      {
+        "source_ref_id": "SLC6A9",
+        "source_sp_id": 6,
+        "result_ref_id": "ENSG00000196517",
+        "result_sp_id": 2
+      }
+    ]
+  },
+  "gene_ids_map_req_2_gene_ids_target_species": {
+    "source_ids": [
+      "DAB1",
+      "SLC6A9"
+    ],
+    "target_gene_id_type": 2,
+    "source_gene_id_Type": 7,
+    "target_species": 2
+  },
+  "gene_ids_map_resp_2": {
+    "gene_ids_map": [
+      {
+        "source_ref_id": "DAB1",
+        "source_sp_id": 2,
+        "result_ref_id": "ENSG00000173406",
+        "result_sp_id": 2
+      },
+      {
+        "source_ref_id": "DAB1",
+        "source_sp_id": 6,
+        "result_ref_id": "ENSG00000173406",
+        "result_sp_id": 2
+      },
+      {
+        "source_ref_id": "DAB1",
+        "source_sp_id": 10,
+        "result_ref_id": "ENSG00000173406",
+        "result_sp_id": 2
+      },
+      {
+        "source_ref_id": "DAB1",
+        "source_sp_id": 11,
+        "result_ref_id": "ENSG00000173406",
+        "result_sp_id": 2
+      },
+      {
+        "source_ref_id": "SLC6A9",
+        "source_sp_id": 2,
+        "result_ref_id": "ENSG00000196517",
+        "result_sp_id": 2
+      },
+      {
+        "source_ref_id": "SLC6A9",
+        "source_sp_id": 6,
+        "result_ref_id": "ENSG00000196517",
+        "result_sp_id": 2
+      },
+      {
+        "source_ref_id": "SLC6A9",
+        "source_sp_id": 10,
+        "result_ref_id": "ENSG00000196517",
+        "result_sp_id": 2
+      },
+      {
+        "source_ref_id": "SLC6A9",
+        "source_sp_id": 11,
+        "result_ref_id": "ENSG00000196517",
+        "result_sp_id": 2
+      }
+    ]
+  },
+  "gene_ids_map_req_3_gene_ids_no_species": {
+    "source_ids": [
+      "DAB1",
+      "SLC6A9"
+    ],
+    "target_gene_id_type": 2,
+    "source_gene_id_Type": 7
+  },
+  "gene_ids_map_resp_3": {
+    "gene_ids_map": [
+      {
+        "source_ref_id": "DAB1",
+        "source_sp_id": 2,
+        "result_ref_id": "ENSCAFG00000018929",
+        "result_sp_id": 11
+      },
+      {
+        "source_ref_id": "DAB1",
+        "source_sp_id": 2,
+        "result_ref_id": "ENSDARG00000059939",
+        "result_sp_id": 4
+      },
+      {
+        "source_ref_id": "DAB1",
+        "source_sp_id": 2,
+        "result_ref_id": "ENSG00000173406",
+        "result_sp_id": 2
+      },
+      {
+        "source_ref_id": "DAB1",
+        "source_sp_id": 2,
+        "result_ref_id": "ENSGALG00000010857",
+        "result_sp_id": 10
+      },
+      {
+        "source_ref_id": "DAB1",
+        "source_sp_id": 2,
+        "result_ref_id": "ENSMUSG00000028519",
+        "result_sp_id": 1
+      },
+      {
+        "source_ref_id": "DAB1",
+        "source_sp_id": 2,
+        "result_ref_id": "ENSRNOG00000007410",
+        "result_sp_id": 3
+      },
+      {
+        "source_ref_id": "DAB1",
+        "source_sp_id": 4,
+        "result_ref_id": "ENSDARG00000041705",
+        "result_sp_id": 4
+      },
+      {
+        "source_ref_id": "DAB1",
+        "source_sp_id": 4,
+        "result_ref_id": "ENSDARG00000056330",
+        "result_sp_id": 4
+      },
+      {
+        "source_ref_id": "DAB1",
+        "source_sp_id": 4,
+        "result_ref_id": "ENSDARG00000074510",
+        "result_sp_id": 4
+      },
+      {
+        "source_ref_id": "DAB1",
+        "source_sp_id": 4,
+        "result_ref_id": "ENSDARG00000076307",
+        "result_sp_id": 4
+      },
+      {
+        "source_ref_id": "DAB1",
+        "source_sp_id": 4,
+        "result_ref_id": "ENSDARG00000079105",
+        "result_sp_id": 4
+      },
+      {
+        "source_ref_id": "DAB1",
+        "source_sp_id": 4,
+        "result_ref_id": "ENSDARG00000088872",
+        "result_sp_id": 4
+      },
+      {
+        "source_ref_id": "DAB1",
+        "source_sp_id": 4,
+        "result_ref_id": "ENSDARG00000101030",
+        "result_sp_id": 4
+      },
+      {
+        "source_ref_id": "DAB1",
+        "source_sp_id": 4,
+        "result_ref_id": "ENSDARG00000104635",
+        "result_sp_id": 4
+      },
+      {
+        "source_ref_id": "DAB1",
+        "source_sp_id": 4,
+        "result_ref_id": "ENSDARG00000104730",
+        "result_sp_id": 4
+      },
+      {
+        "source_ref_id": "DAB1",
+        "source_sp_id": 6,
+        "result_ref_id": "ENSCAFG00000018929",
+        "result_sp_id": 11
+      },
+      {
+        "source_ref_id": "DAB1",
+        "source_sp_id": 6,
+        "result_ref_id": "ENSDARG00000059939",
+        "result_sp_id": 4
+      },
+      {
+        "source_ref_id": "DAB1",
+        "source_sp_id": 6,
+        "result_ref_id": "ENSG00000173406",
+        "result_sp_id": 2
+      },
+      {
+        "source_ref_id": "DAB1",
+        "source_sp_id": 6,
+        "result_ref_id": "ENSGALG00000010857",
+        "result_sp_id": 10
+      },
+      {
+        "source_ref_id": "DAB1",
+        "source_sp_id": 6,
+        "result_ref_id": "ENSMUSG00000028519",
+        "result_sp_id": 1
+      },
+      {
+        "source_ref_id": "DAB1",
+        "source_sp_id": 6,
+        "result_ref_id": "ENSRNOG00000007410",
+        "result_sp_id": 3
+      },
+      {
+        "source_ref_id": "DAB1",
+        "source_sp_id": 10,
+        "result_ref_id": "ENSCAFG00000018929",
+        "result_sp_id": 11
+      },
+      {
+        "source_ref_id": "DAB1",
+        "source_sp_id": 10,
+        "result_ref_id": "ENSDARG00000059939",
+        "result_sp_id": 4
+      },
+      {
+        "source_ref_id": "DAB1",
+        "source_sp_id": 10,
+        "result_ref_id": "ENSG00000173406",
+        "result_sp_id": 2
+      },
+      {
+        "source_ref_id": "DAB1",
+        "source_sp_id": 10,
+        "result_ref_id": "ENSGALG00000010857",
+        "result_sp_id": 10
+      },
+      {
+        "source_ref_id": "DAB1",
+        "source_sp_id": 10,
+        "result_ref_id": "ENSMUSG00000028519",
+        "result_sp_id": 1
+      },
+      {
+        "source_ref_id": "DAB1",
+        "source_sp_id": 10,
+        "result_ref_id": "ENSRNOG00000007410",
+        "result_sp_id": 3
+      },
+      {
+        "source_ref_id": "DAB1",
+        "source_sp_id": 11,
+        "result_ref_id": "ENSCAFG00000018929",
+        "result_sp_id": 11
+      },
+      {
+        "source_ref_id": "DAB1",
+        "source_sp_id": 11,
+        "result_ref_id": "ENSDARG00000059939",
+        "result_sp_id": 4
+      },
+      {
+        "source_ref_id": "DAB1",
+        "source_sp_id": 11,
+        "result_ref_id": "ENSG00000173406",
+        "result_sp_id": 2
+      },
+      {
+        "source_ref_id": "DAB1",
+        "source_sp_id": 11,
+        "result_ref_id": "ENSGALG00000010857",
+        "result_sp_id": 10
+      },
+      {
+        "source_ref_id": "DAB1",
+        "source_sp_id": 11,
+        "result_ref_id": "ENSMUSG00000028519",
+        "result_sp_id": 1
+      },
+      {
+        "source_ref_id": "DAB1",
+        "source_sp_id": 11,
+        "result_ref_id": "ENSRNOG00000007410",
+        "result_sp_id": 3
+      },
+      {
+        "source_ref_id": "SLC6A9",
+        "source_sp_id": 2,
+        "result_ref_id": "ENSCAFG00000004826",
+        "result_sp_id": 11
+      },
+      {
+        "source_ref_id": "SLC6A9",
+        "source_sp_id": 2,
+        "result_ref_id": "ENSDARG00000018534",
+        "result_sp_id": 4
+      },
+      {
+        "source_ref_id": "SLC6A9",
+        "source_sp_id": 2,
+        "result_ref_id": "ENSG00000196517",
+        "result_sp_id": 2
+      },
+      {
+        "source_ref_id": "SLC6A9",
+        "source_sp_id": 2,
+        "result_ref_id": "ENSGALG00000010098",
+        "result_sp_id": 10
+      },
+      {
+        "source_ref_id": "SLC6A9",
+        "source_sp_id": 2,
+        "result_ref_id": "ENSMUSG00000028542",
+        "result_sp_id": 1
+      },
+      {
+        "source_ref_id": "SLC6A9",
+        "source_sp_id": 2,
+        "result_ref_id": "ENSRNOG00000019484",
+        "result_sp_id": 3
+      },
+      {
+        "source_ref_id": "SLC6A9",
+        "source_sp_id": 6,
+        "result_ref_id": "ENSCAFG00000004826",
+        "result_sp_id": 11
+      },
+      {
+        "source_ref_id": "SLC6A9",
+        "source_sp_id": 6,
+        "result_ref_id": "ENSDARG00000018534",
+        "result_sp_id": 4
+      },
+      {
+        "source_ref_id": "SLC6A9",
+        "source_sp_id": 6,
+        "result_ref_id": "ENSG00000196517",
+        "result_sp_id": 2
+      },
+      {
+        "source_ref_id": "SLC6A9",
+        "source_sp_id": 6,
+        "result_ref_id": "ENSGALG00000010098",
+        "result_sp_id": 10
+      },
+      {
+        "source_ref_id": "SLC6A9",
+        "source_sp_id": 6,
+        "result_ref_id": "ENSMUSG00000028542",
+        "result_sp_id": 1
+      },
+      {
+        "source_ref_id": "SLC6A9",
+        "source_sp_id": 6,
+        "result_ref_id": "ENSRNOG00000019484",
+        "result_sp_id": 3
+      },
+      {
+        "source_ref_id": "SLC6A9",
+        "source_sp_id": 10,
+        "result_ref_id": "ENSCAFG00000004826",
+        "result_sp_id": 11
+      },
+      {
+        "source_ref_id": "SLC6A9",
+        "source_sp_id": 10,
+        "result_ref_id": "ENSDARG00000018534",
+        "result_sp_id": 4
+      },
+      {
+        "source_ref_id": "SLC6A9",
+        "source_sp_id": 10,
+        "result_ref_id": "ENSG00000196517",
+        "result_sp_id": 2
+      },
+      {
+        "source_ref_id": "SLC6A9",
+        "source_sp_id": 10,
+        "result_ref_id": "ENSGALG00000010098",
+        "result_sp_id": 10
+      },
+      {
+        "source_ref_id": "SLC6A9",
+        "source_sp_id": 10,
+        "result_ref_id": "ENSMUSG00000028542",
+        "result_sp_id": 1
+      },
+      {
+        "source_ref_id": "SLC6A9",
+        "source_sp_id": 10,
+        "result_ref_id": "ENSRNOG00000019484",
+        "result_sp_id": 3
+      },
+      {
+        "source_ref_id": "SLC6A9",
+        "source_sp_id": 11,
+        "result_ref_id": "ENSCAFG00000004826",
+        "result_sp_id": 11
+      },
+      {
+        "source_ref_id": "SLC6A9",
+        "source_sp_id": 11,
+        "result_ref_id": "ENSDARG00000018534",
+        "result_sp_id": 4
+      },
+      {
+        "source_ref_id": "SLC6A9",
+        "source_sp_id": 11,
+        "result_ref_id": "ENSG00000196517",
+        "result_sp_id": 2
+      },
+      {
+        "source_ref_id": "SLC6A9",
+        "source_sp_id": 11,
+        "result_ref_id": "ENSGALG00000010098",
+        "result_sp_id": 10
+      },
+      {
+        "source_ref_id": "SLC6A9",
+        "source_sp_id": 11,
+        "result_ref_id": "ENSMUSG00000028542",
+        "result_sp_id": 1
+      },
+      {
+        "source_ref_id": "SLC6A9",
+        "source_sp_id": 11,
+        "result_ref_id": "ENSRNOG00000019484",
+        "result_sp_id": 3
+      }
+    ]
+  }
+}

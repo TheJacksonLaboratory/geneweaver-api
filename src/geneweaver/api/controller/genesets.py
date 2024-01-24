@@ -8,6 +8,7 @@ from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException, Query, Security
 from fastapi.responses import FileResponse
 from geneweaver.api import dependencies as deps
+from geneweaver.api.schemas.apimodels import gene_id_type_options
 from geneweaver.api.schemas.auth import UserInternal
 from geneweaver.api.services import geneset as genset_service
 from geneweaver.core.enum import GeneIdentifier
@@ -18,7 +19,6 @@ from geneweaver.db import geneset_value as db_geneset_value
 from . import message as api_message
 
 router = APIRouter(prefix="/genesets")
-gene_id_type_options = [f"{choice.name} ({choice.value})" for choice in GeneIdentifier]
 
 
 @router.get("")
