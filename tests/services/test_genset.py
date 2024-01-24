@@ -71,11 +71,12 @@ def test_is_redable_by_user_error(mock_user, mock_genset_is_readable):
         geneset.is_geneset_readable_by_user(None, 1234, mock_user)
 
 
+@patch("geneweaver.api.services.geneset.db_gene")
 @patch("geneweaver.api.services.geneset.db_geneset")
 @patch("geneweaver.api.services.geneset.db_geneset_value")
 @patch("geneweaver.api.services.geneset.is_geneset_readable_by_user")
 def test_get_geneset_w_gene_id_type_reponse(
-    mock_genset_readable_func, mock_db_genset_value, mock_db_geneset
+    mock_genset_readable_func, mock_db_genset_value, mock_db_geneset, mock_db_gene
 ):
     """Test get geneset by ID with gene identifier type data response."""
     mock_genset_readable_func.return_value = True
@@ -83,6 +84,7 @@ def test_get_geneset_w_gene_id_type_reponse(
     mock_db_genset_value.by_geneset_id.return_value = geneset_w_gene_id_type_resp.get(
         "geneset_values"
     )
+    mock_db_gene.gene_database_by_id.return_value = [{"sp_id": 0}]
 
     response = geneset.get_geneset_w_gene_id_type(None, 1234, None, GeneIdentifier(2))
 
