@@ -5,8 +5,8 @@ metadata:
   annotations:
     # NOTE: When deploying a new instance, make sure to use the staging issuer first
     # so that you don't hit the rate limit for the production issuer.
-    cert-manager.io/cluster-issuer: "letsencrypt-staging"
-    # cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    # cert-manager.io/cluster-issuer: "letsencrypt-staging"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
 spec:
   ingressClassName: nginx
   tls:
