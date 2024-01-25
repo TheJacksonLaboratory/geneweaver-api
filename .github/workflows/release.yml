@@ -98,7 +98,7 @@ jobs:
   deploy_stage:
     name: "Deploy: Stage"
     needs: [ build, version, deploy_sqa]
-    if: ${{ needs.version.outputs.should_release == 'true' && needs.version.outputs.prerelease == 'false'}}
+    if: ${{ needs.version.outputs.should_release }} == 'true' && ${{ needs.version.outputs.prerelease }} == 'false'
     uses: ./.github/workflows/_skaffold-deploy-k8s.yml
     secrets: inherit
     with:
@@ -106,7 +106,7 @@ jobs:
   deploy_prod:
     name: "Deploy: Prod"
     needs: [ build, version, deploy_stage]
-    if: ${{ needs.version.outputs.should_release == 'true' && needs.version.outputs.prerelease == 'false'}}
+    if: ${{ needs.version.outputs.should_release }} == 'true' && ${{ needs.version.outputs.prerelease }} == 'false'
     uses: ./.github/workflows/_skaffold-deploy-k8s.yml
     secrets: inherit
     with:
