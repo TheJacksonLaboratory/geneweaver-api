@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "geneweaver-api"
-version = "0.0.1a13"
+version = "0.0.1"
 description = "description"
 authors = ["Jax Computational Sciences <cssc@jax.org>"]
 packages = [
