@@ -33,3 +33,7 @@ select = ['F', 'E', 'W', 'A', 'C90', 'N', 'B', 'ANN', 'D', 'I', 'ERA', 'PD', 'NP
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+# TODO: Remove this when batch API is hooked up and tested.
+[tool.coverage.report]
+omit = ["*/batch.py"]
