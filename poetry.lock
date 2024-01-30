@@ -496,13 +496,13 @@ all = ["email-validator (>=1.1.1)", "httpx (>=0.23.0)", "itsdangerous (>=1.1.0)"
 
 [[package]]
 name = "geneweaver-core"
-version = "0.8.0"
+version = "0.9.0a0"
 description = "The core of the Jax-Geneweaver Python library"
 optional = false
 python-versions = ">=3.9,<4.0"
 files = [
-    {file = "geneweaver_core-0.8.0-py3-none-any.whl", hash = "sha256:1b195f49ede0c3e748b651518e2b3812f8ede14a347d22717fefc85aeba3cd67"},
-    {file = "geneweaver_core-0.8.0.tar.gz", hash = "sha256:ba492f68246e846448d696470bd3ed77000a139137a3d0f4c0a10c8f09c92444"},
+    {file = "geneweaver_core-0.9.0a0-py3-none-any.whl", hash = "sha256:b86a07eb8470599d75c511bdfb4255852ffb2b64d47a307711e46baa8b7463a2"},
+    {file = "geneweaver_core-0.9.0a0.tar.gz", hash = "sha256:db2ffc11ca9ce1f56a64f71140915b58fcf6fbc25314dbaf62f5b90a185bfa9a"},
 ]
 
 [package.dependencies]
@@ -513,17 +513,17 @@ pydantic = {version = ">=1.10.7,<2.0.0", extras = ["dotenv"]}
 
 [[package]]
 name = "geneweaver-db"
-version = "0.3.0a1"
+version = "0.3.0a2"
 description = "Database Interaction Services for GeneWeaver"
 optional = false
 python-versions = ">=3.9,<4.0"
 files = [
-    {file = "geneweaver_db-0.3.0a1-py3-none-any.whl", hash = "sha256:1b9e735a46eb2469443142c62dff78752d7d27fcee5ca8c7911a2360456ebb41"},
-    {file = "geneweaver_db-0.3.0a1.tar.gz", hash = "sha256:72ccabe8d64c47b275fdb563fcbd3f49250b856d5dbf7fe8865fc0e853c1b30c"},
+    {file = "geneweaver_db-0.3.0a2-py3-none-any.whl", hash = "sha256:40e9a6e54b874487829b5febdc70206c9c570860c6945610bebb7dcb8db4270b"},
+    {file = "geneweaver_db-0.3.0a2.tar.gz", hash = "sha256:28ee8860c3dc0f27966b90dcf1161d4563d127706e071c3a31c4d18180867fab"},
 ]
 
 [package.dependencies]
-geneweaver-core = ">=0.8.0,<0.9.0"
+geneweaver-core = ">=0.9.0a0,<0.10.0"
 psycopg = {version = ">=3.1.13,<4.0.0", extras = ["binary"]}
 
 [[package]]
@@ -1905,4 +1905,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "356cb7adb5d705ab1b612f8619a0f1666bb7dd043aa201682d0d0cabd896c1e2"
+content-hash = "7ccc15cf0d4a1fcdf31cf64853a018c81c554936f2cd46caa7ad2210b0042412"

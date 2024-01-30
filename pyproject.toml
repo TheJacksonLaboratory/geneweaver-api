@@ -10,10 +10,10 @@ packages = [
 [tool.poetry.dependencies]
 python = "^3.9"
 
-geneweaver-core = "^0.8.0"
+geneweaver-core = "^0.9.0a0"
 fastapi = {extras = ["all"], version = "^0.99.1"}
 uvicorn = {extras = ["standard"], version = "^0.24.0"}
-geneweaver-db = "^0.3.0a1"
+geneweaver-db = "^0.3.0a2"
 psycopg-pool = "^3.1.7"
 requests = "^2.31.0"
 python-jose = {extras = ["cryptography"], version = "^3.3.0"}
