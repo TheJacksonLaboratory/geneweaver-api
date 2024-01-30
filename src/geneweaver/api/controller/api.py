@@ -4,12 +4,14 @@ This file defines the root API for the GeneWeaver API. It is responsible for
 defining the FastAPI application and including all other API routers.
 """
 from fastapi import APIRouter, FastAPI, Security
-from geneweaver.api.controller import batch, genes, genesets
+from geneweaver.api import __version__
+from geneweaver.api.controller import genes, genesets
 from geneweaver.api.core import deps
 from geneweaver.api.core.config import settings
 
 app = FastAPI(
     title="GeneWeaver API",
+    version=__version__,
     docs_url=f"{settings.API_PREFIX}/docs",
     redoc_url=f"{settings.API_PREFIX}/redoc",
     openapi_url=f"{settings.API_PREFIX}/openapi.json",
@@ -18,12 +20,10 @@ app = FastAPI(
 )
 
 api_router = APIRouter(
-    tags=["api"],
     dependencies=[
         Security(deps.auth.implicit_scheme),
     ],
 )
-api_router.include_router(batch.router)
 api_router.include_router(genesets.router)
 api_router.include_router(genes.router)
 

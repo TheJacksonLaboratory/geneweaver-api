@@ -18,7 +18,7 @@ from geneweaver.db import geneset_value as db_geneset_value
 
 from . import message as api_message
 
-router = APIRouter(prefix="/genesets")
+router = APIRouter(prefix="/genesets", tags=["genesets"])
 
 
 @router.get("")
@@ -109,7 +109,6 @@ def get_export_geneset_by_id_type(
     )
 
 
-@router.post("")
 def upload_geneset(
     geneset: GenesetUpload,
     user: UserInternal = Security(deps.full_user),
