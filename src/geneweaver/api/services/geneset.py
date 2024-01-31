@@ -54,7 +54,7 @@ def get_geneset_w_gene_id_type(
         original_gene_id_type = gene_id_type
         genedb_sp_id = db_gene.gene_database_by_id(cursor, gene_id_type)[0]["sp_id"]
 
-        if genedb_sp_id != 0 and geneset["sp_id"] != genedb_sp_id:
+        if genedb_sp_id != 0 and geneset["species_id"] != genedb_sp_id:
             mapping_across_species = True
             gene_id_type = GeneIdentifier(7)
 
