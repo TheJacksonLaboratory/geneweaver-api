@@ -6,7 +6,7 @@ from geneweaver.api import dependencies as deps
 from geneweaver.api.schemas.apimodels import GeneIdMappingReq, GeneIdMappingResp
 from geneweaver.api.services import genes as genes_service
 
-router = APIRouter(prefix="/genes")
+router = APIRouter(prefix="/genes", tags=["genes"])
 
 
 @router.post("/homologous-ids", response_model=GeneIdMappingResp)

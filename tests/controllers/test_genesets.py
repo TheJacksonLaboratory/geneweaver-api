@@ -2,7 +2,6 @@
 from unittest.mock import patch
 
 import pytest
-from geneweaver.api.controller import message
 
 from tests.data import test_geneset_data
 
@@ -78,5 +77,5 @@ def test_invalid_gene_type_id(mock_service_get_geneset_w_gene_id_type, client):
     mock_service_get_geneset_w_gene_id_type.return_value = geneset_w_gene_id_type_resp
     response = client.get("/api/genesets/1234/file?gene_id_type=25")
 
-    assert message.GENE_IDENTIFIER_TYPE_VALUE_ERROR in response.json()["detail"]
-    assert response.status_code == 400
+    assert 'ctx' in response.json()["detail"][0]
+    assert response.status_code == 422

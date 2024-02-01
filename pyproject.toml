@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "geneweaver-api"
-version = "0.1.0"
+version = "0.2.0a0"
 description = "description"
 authors = ["Jax Computational Sciences <cssc@jax.org>"]
 packages = [
@@ -10,10 +10,10 @@ packages = [
 [tool.poetry.dependencies]
 python = "^3.9"
 
-geneweaver-core = "^0.8.0"
+geneweaver-core = "^0.9.0a1"
 fastapi = {extras = ["all"], version = "^0.99.1"}
 uvicorn = {extras = ["standard"], version = "^0.24.0"}
-geneweaver-db = "^0.2.1"
+geneweaver-db = "^0.3.0a3"
 psycopg-pool = "^3.1.7"
 requests = "^2.31.0"
 python-jose = {extras = ["cryptography"], version = "^3.3.0"}
@@ -33,3 +33,7 @@ select = ['F', 'E', 'W', 'A', 'C90', 'N', 'B', 'ANN', 'D', 'I', 'ERA', 'PD', 'NP
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+# TODO: Remove this when batch API is hooked up and tested.
+[tool.coverage.report]
+omit = ["*/batch.py"]
