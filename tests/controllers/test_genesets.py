@@ -77,5 +77,5 @@ def test_invalid_gene_type_id(mock_service_get_geneset_w_gene_id_type, client):
     mock_service_get_geneset_w_gene_id_type.return_value = geneset_w_gene_id_type_resp
     response = client.get("/api/genesets/1234/file?gene_id_type=25")
 
-    assert 'ctx' in response.json()["detail"][0]
+    assert "ctx" in response.json()["detail"][0]
     assert response.status_code == 422
