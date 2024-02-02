@@ -16,9 +16,7 @@ gene_homologus_ids_json = importlib.resources.read_text(
     "tests.data", "homologus_ids.json"
 )
 
-publications_json = importlib.resources.read_text(
-    "tests.data", "publications.json"
-)
+publications_json = importlib.resources.read_text("tests.data", "publications.json")
 
 ## laod and returns JSON string as a dictionary
 
@@ -52,10 +50,8 @@ test_gene_data = {
 
 # publication test data
 test_publication_data = {
-    "publication_by_id": json.loads(publications_json).get(
-        "publication_by_id"
-    ),
+    "publication_by_id": json.loads(publications_json).get("publication_by_id"),
     "publication_by_pubmed_id": json.loads(publications_json).get(
         "publication_by_pubmed_id"
-    )
+    ),
 }

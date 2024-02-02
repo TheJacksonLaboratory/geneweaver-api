@@ -2,8 +2,6 @@
 
 from unittest.mock import patch
 
-import pytest
-from geneweaver.api.controller import message
 from geneweaver.api.services import publications as pub_service
 
 from tests.data import test_publication_data
@@ -11,10 +9,9 @@ from tests.data import test_publication_data
 publication_by_id_resp = test_publication_data.get("publication_by_id")
 publication_by_pubmed_id_resp = test_publication_data.get("publication_by_pubmed_id")
 
+
 @patch("geneweaver.api.services.publications.db_publication")
-def test_get_publication_by_id(
-    mock_db_publication
-):
+def test_get_publication_by_id(mock_db_publication):
     """Test get publication by ID data response structure."""
     mock_db_publication.by_id.return_value = publication_by_id_resp
 
@@ -24,9 +21,7 @@ def test_get_publication_by_id(
 
 
 @patch("geneweaver.api.services.publications.db_publication")
-def test_get_publication_by_pubmed_id(
-    mock_db_publication
-):
+def test_get_publication_by_pubmed_id(mock_db_publication):
     """Test get publication by ID data response structure."""
     mock_db_publication.by_pubmed_id.return_value = publication_by_id_resp
 
