@@ -108,9 +108,12 @@ def get_geneset_metadata(
     ],
     user: UserInternal = Security(deps.full_user),
     cursor: Optional[deps.Cursor] = Depends(deps.cursor),
+    include_pub_info: Optional[bool] = False,
 ) -> dict:
     """Get a geneset metadata by geneset id."""
-    response = genset_service.get_geneset_metadata(cursor, geneset_id, user)
+    response = genset_service.get_geneset_metadata(
+        cursor, geneset_id, user, include_pub_info
+    )
 
     if "error" in response:
         if response.get("message") == api_message.ACCESS_FORBIDDEN:

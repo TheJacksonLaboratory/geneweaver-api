@@ -12,19 +12,22 @@ from geneweaver.db.geneset import is_readable as db_is_readable
 from psycopg import Cursor
 
 
-def get_geneset_metadata(cursor: Cursor, geneset_id: int, user: User) -> dict:
+def get_geneset_metadata(
+    cursor: Cursor, geneset_id: int, user: User, include_pub_info: bool = False
+) -> dict:
     """Get a geneset metadata by geneset id.
 
     @param cursor: DB cursor
     @param geneset_id: geneset identifier
     @param user: GW user
+    @param include_pub_info: bool (Optional with publication information)
     @return: dictionary response (geneset).
     """
     try:
         if not is_geneset_readable_by_user(cursor, geneset_id, user):
             return {"error": True, "message": message.ACCESS_FORBIDDEN}
 
-        geneset = db_geneset.by_id(cursor, geneset_id)
+        geneset = db_geneset.by_id(cursor, geneset_id, include_pub_info)
         return {"geneset": geneset}
 
     except Exception as err:
