@@ -99,3 +99,23 @@ def get_export_geneset_by_id_type(
         media_type="application/octet-stream",
         filename=geneset_filename,
     )
+
+
+@router.get("/{geneset_id}/metadata")
+def get_geneset_metadata(
+    geneset_id: Annotated[
+        int, Path(format="int64", minimum=0, maxiumum=9223372036854775807)
+    ],
+    user: UserInternal = Security(deps.full_user),
+    cursor: Optional[deps.Cursor] = Depends(deps.cursor),
+) -> dict:
+    """Get a geneset metadata by geneset id."""
+    response = genset_service.get_geneset_metadata(cursor, geneset_id, user)
+
+    if "error" in response:
+        if response.get("message") == api_message.ACCESS_FORBIDDEN:
+            raise HTTPException(status_code=403, detail=api_message.ACCESS_FORBIDDEN)
+        else:
+            raise HTTPException(status_code=500, detail=api_message.UNEXPECTED_ERROR)
+
+    return response
