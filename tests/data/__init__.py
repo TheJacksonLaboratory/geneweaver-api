@@ -24,6 +24,9 @@ publications_json = importlib.resources.read_text("tests.data", "publications.js
 test_geneset_data = {
     "geneset_by_id_resp": json.loads(geneset_response_json),
     "geneset_w_gene_id_type_resp": json.loads(geneset_w_gene_id_type_json),
+    "geneset_metadata_w_pub_info": json.loads(geneset_response_json).get(
+        "geneset_with_publication_info"
+    ),
 }
 
 # Gene test data

@@ -74,5 +74,37 @@
       "gsv_date": "2020-05-05",
       "ode_ref_id": "Hs.541341"
     }
-  ]
+  ],
+  "geneset_with_publication_info": {
+    "geneset": {
+      "id": 1234,
+      "user_id": 51,
+      "file_id": 1715,
+      "curation_id": 3,
+      "species_id": 2,
+      "name": "Differential expression in heroin and cocaine abusers-Down-regulated Cocaine, Up-regulated Heroin",
+      "abbreviation": "UpRegHeroinDwnRegCocaine",
+      "pub_id": 6,
+      "description": "From the initial set of differentially expressed genes in post mortum nucleus accumbens of chronic heroin and cocaine abusers, this set contains genes upregulated in cocaine abusers but downregulated in heroin abusers.",
+      "count": 3,
+      "threshold_type": 3,
+      "threshold": "0.5",
+      "groups": "0",
+      "status": "normal",
+      "gene_id_type": -7,
+      "attribution": null,
+      "created": "2008-04-22",
+      "updated": "2020-05-06T09:19:44.883323",
+      "publication_id": 6,
+      "publication_authors": "Albertson DN, Schmidt CJ, Kapatos G, Bannon MJ",
+      "publication_title": "Distinctive profiles of gene expression in the human nucleus accumbens associated with cocaine and heroin abuse.",
+      "publication_abstract": "Drug abuse is thought to induce long-term cellular and behavioral adaptations as a result of alterations in gene expression. Understanding the molecular consequences of addiction may contribute to the development of better treatment strategies. This study utilized high-throughput Affymetrix microarrays to identify gene expression changes in the post-mortem nucleus accumbens of chronic heroin abusers. These data were analyzed independently and in relation to our previously reported data involving human cocaine abusers, in order to determine which expression changes were drug specific and which may be common to the phenomenon of addiction. A significant decrease in the expression of numerous genes encoding proteins involved in presynaptic release of neurotransmitter was seen in heroin abusers, a finding not seen in the cocaine-abusing cohort. Conversely, the striking decrease in myelin-related genes observed in cocaine abusers was not evident in our cohort of heroin subjects. Overall, little overlap in gene expression profiles was seen between the two drug-abusing cohorts: out of the approximately 39,000 transcripts investigated, the abundance of only 25 was significantly changed in both cocaine and heroin abusers, with nearly one-half of these being altered in opposite directions. These data suggest that the profiles of nucleus accumbens gene expression associated with chronic heroin or cocaine abuse are largely unique, despite what are thought to be common effects of these drugs on dopamine neurotransmission in this brain region. A re-examination of our current assumptions about the commonality of molecular mechanisms associated with substance abuse seems warranted.",
+      "publication_journal": "Neuropsychopharmacology : official publication of the American College of Neuropsychopharmacology",
+      "publication_volume": "31",
+      "publication_pages": "2304-12",
+      "publication_month": "Oct",
+      "publication_year": "2006",
+      "publication_pubmed_id": "16710320"
+    }
+  }
 }

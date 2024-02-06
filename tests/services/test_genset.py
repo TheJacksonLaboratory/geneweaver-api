@@ -11,6 +11,7 @@ from tests.data import test_geneset_data
 
 geneset_by_id_resp = test_geneset_data.get("geneset_by_id_resp")
 geneset_w_gene_id_type_resp = test_geneset_data.get("geneset_w_gene_id_type_resp")
+geneset_metadata_w_pub_info = test_geneset_data.get("geneset_metadata_w_pub_info")
 
 
 @patch("geneweaver.api.services.geneset.db_geneset")
@@ -107,3 +108,14 @@ def test_get_geneset_metadata(mock_genset_readable_func, mock_db_geneset):
     response = geneset.get_geneset_metadata(None, 1234, None)
 
     assert response.get("geneset") == geneset_by_id_resp["geneset"]
+
+
+@patch("geneweaver.api.services.geneset.db_geneset")
+@patch("geneweaver.api.services.geneset.is_geneset_readable_by_user")
+def test_get_geneset_metadata_w_pub_info(mock_genset_readable_func, mock_db_geneset):
+    """Test get geneset metadata by geneset id with publication info."""
+    mock_genset_readable_func.return_value = True
+    mock_db_geneset.by_id.return_value = geneset_metadata_w_pub_info
+    response = geneset.get_geneset_metadata(None, 1234, None, True)
+
+    assert response.get("geneset") == geneset_metadata_w_pub_info
