@@ -16,7 +16,7 @@ def test_gene_id_mapping_response_post_req(mock_gene_id_mapping, client):
     }
 
     response = client.post(
-        url="/api/genes/homologous-ids", data=json.dumps(gene_ids_map_req_1)
+        url="/api/genes/homologs", data=json.dumps(gene_ids_map_req_1)
     )
     print(response)
     assert response.status_code == 200
@@ -31,7 +31,7 @@ def test_gene_id_mapping_invalid_url(mock_gene_id_mapping, client):
     }
 
     response = client.post(
-        url="/api/genes/homologous_ids", data=json.dumps(gene_ids_map_req_1)
+        url="/api/genes/homologous-ids", data=json.dumps(gene_ids_map_req_1)
     )
     print(response)
     assert response.status_code == 404
@@ -44,9 +44,7 @@ def test_gene_id_mapping_invalid_post_data_(mock_gene_id_mapping, client):
         "ids_map": gene_ids_map_resp_1.get("gene_ids_map")
     }
 
-    response = client.post(
-        url="/api/genes/homologous-ids", data=json.dumps({"test": "test"})
-    )
+    response = client.post(url="/api/genes/homologs", data=json.dumps({"test": "test"}))
     assert response.status_code == 422
 
 
@@ -59,9 +57,7 @@ def test_gene_id_mapping_missing_target_gene_identifier(mock_gene_id_mapping, cl
 
     req_gene_map = gene_ids_map_req_1.copy()
     req_gene_map.pop("target_gene_id_type")
-    response = client.post(
-        url="/api/genes/homologous-ids", data=json.dumps(req_gene_map)
-    )
+    response = client.post(url="/api/genes/homologs", data=json.dumps(req_gene_map))
     assert response.status_code == 422
 
 
@@ -74,7 +70,5 @@ def test_gene_id_mapping_missing_gene_list(mock_gene_id_mapping, client):
 
     req_gene_map = gene_ids_map_req_1.copy()
     req_gene_map.pop("source_ids")
-    response = client.post(
-        url="/api/genes/homologous-ids", data=json.dumps(req_gene_map)
-    )
+    response = client.post(url="/api/genes/homologs", data=json.dumps(req_gene_map))
     assert response.status_code == 422
