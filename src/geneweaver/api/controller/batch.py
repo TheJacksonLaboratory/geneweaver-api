@@ -2,16 +2,16 @@
 from typing import Optional
 
 from fastapi import APIRouter, Security, UploadFile
-from geneweaver.api.core import deps
+from geneweaver.api import dependencies as deps
 from geneweaver.api.schemas.auth import UserInternal
 from geneweaver.api.schemas.batch import BatchResponse
 from geneweaver.api.services.parse.batch import process_batch_file
 
-router = APIRouter(prefix="/batch")
+router = APIRouter(prefix="/batch", tags=["batch"])
 
 
 @router.post(path="")
-async def batch(
+async def upload_batch_file(
     batch_file: UploadFile,
     curation_group_id: Optional[int] = None,
     user: UserInternal = Security(deps.auth.get_user_strict),
@@ -29,3 +29,9 @@ async def batch(
             "system_messages": system_messages,
         },
     }
+
+
+@router.post(path="/validate")
+async def validate_batch_file(batch_file: UploadFile) -> None:
+    """Validate a batch file."""
+    pass
