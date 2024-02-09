@@ -11,7 +11,7 @@ ENV PATH="${POETRY_HOME}/bin:${PATH}"
 
 WORKDIR /app
 
-COPY pyproject.toml poetry.lock /app/
+COPY pyproject.toml poetry.lock README.md /app/
 
 RUN poetry install --without dev --sync --no-root
 
