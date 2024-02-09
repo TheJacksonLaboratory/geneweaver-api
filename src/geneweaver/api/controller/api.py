@@ -6,8 +6,13 @@ defining the FastAPI application and including all other API routers.
 from fastapi import APIRouter, FastAPI, Security
 from geneweaver.api import __version__
 from geneweaver.api.controller import genes, genesets, publications
-from geneweaver.api.core import deps
+from geneweaver.api import dependencies as deps
 from geneweaver.api.core.config import settings
+
+
+
+
+
 
 app = FastAPI(
     title="GeneWeaver API",
@@ -17,6 +22,7 @@ app = FastAPI(
     openapi_url=f"{settings.API_PREFIX}/openapi.json",
     swagger_ui_oauth2_redirect_url=f"{settings.API_PREFIX}/docs/oauth2-redirect",
     swagger_ui_init_oauth={"clientId": settings.AUTH_CLIENT_ID},
+    lifespan=deps.lifespan,
 )
 
 api_router = APIRouter(
