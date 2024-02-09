@@ -13,7 +13,6 @@ from geneweaver.api.core.security import Auth0, UserInternal
 from geneweaver.db import user as db_user
 from psycopg.rows import dict_row
 from psycopg_pool import ConnectionPool
-import logging
 
 auth = Auth0(
     domain=settings.AUTH_DOMAIN,
@@ -24,12 +23,15 @@ auth = Auth0(
 
 Cursor = psycopg.Cursor
 
-logger = logging.getLogger('uvicorn.error')
+logger = logging.getLogger("uvicorn.error")
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI):
-    # Load the ML model
+async def lifespan(app: FastAPI) -> None:
+    """Open and close the DB connection pool.
+
+    :param app: The FastAPI application (dependency injection).
+    """
     logger.info("Opening DB Connection Pool.")
     app.pool = ConnectionPool(settings.DB.URI)
     app.pool.open()

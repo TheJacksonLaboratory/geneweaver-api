@@ -5,14 +5,9 @@ defining the FastAPI application and including all other API routers.
 """
 from fastapi import APIRouter, FastAPI, Security
 from geneweaver.api import __version__
-from geneweaver.api.controller import genes, genesets, publications
 from geneweaver.api import dependencies as deps
+from geneweaver.api.controller import genes, genesets, publications
 from geneweaver.api.core.config import settings
-
-
-
-
-
 
 app = FastAPI(
     title="GeneWeaver API",
