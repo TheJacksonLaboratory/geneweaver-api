@@ -1,15 +1,18 @@
 """Dependency injection capabilities for the GeneWeaver API."""
 # ruff: noqa: B008
+import logging
+from contextlib import asynccontextmanager
 from tempfile import TemporaryDirectory
 from typing import Generator
 
 import psycopg
-from fastapi import Depends
+from fastapi import Depends, FastAPI, Request
 from geneweaver.api.core.config import settings
 from geneweaver.api.core.exceptions import AuthenticationMismatch
 from geneweaver.api.core.security import Auth0, UserInternal
 from geneweaver.db import user as db_user
 from psycopg.rows import dict_row
+from psycopg_pool import ConnectionPool
 
 auth = Auth0(
     domain=settings.AUTH_DOMAIN,
@@ -20,11 +23,36 @@ auth = Auth0(
 
 Cursor = psycopg.Cursor
 
+logger = logging.getLogger("uvicorn.error")
 
-def cursor() -> Generator:
-    """Get a cursor from the connection pool."""
-    with psycopg.connect(settings.DB.URI, row_factory=dict_row) as conn:
+
+@asynccontextmanager
+async def lifespan(app: FastAPI) -> None:
+    """Open and close the DB connection pool.
+
+    :param app: The FastAPI application (dependency injection).
+    """
+    logger.info("Opening DB Connection Pool.")
+    app.pool = ConnectionPool(settings.DB.URI)
+    app.pool.open()
+    app.pool.wait()
+    with app.pool.connection() as conn:
         with conn.cursor() as cur:
+            logger.info("Setting search path.")
+            cur.execute(
+                'SET search_path = "$user", '
+                "public, production, extsrc, odestatic, curation;"
+            )
+            conn.commit()
+    yield
+    logger.info("Closing DB Connection Pool.")
+    app.pool.close()
+
+
+def cursor(request: Request) -> Generator:
+    """Get a cursor from the connection pool."""
+    with request.app.pool.connection() as conn:
+        with conn.cursor(row_factory=dict_row) as cur:
             yield cur
 
 
