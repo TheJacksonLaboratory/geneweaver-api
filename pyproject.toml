@@ -1,8 +1,12 @@
 [tool.poetry]
 name = "geneweaver-api"
-version = "0.2.0a6"
-description = "description"
+version = "0.2.0a7"
+description = "The Geneweaver API"
 authors = ["Jax Computational Sciences <cssc@jax.org>"]
+readme = "README.md"
+license = "Apache-2.0"
+homepage = "https://thejacksonlaboratory.github.io/geneweaver-docs/"
+repository = "https://github.com/TheJacksonLaboratory/geneweaver-api"
 packages = [
     {include = "geneweaver/api", from = "src"}
 ]
