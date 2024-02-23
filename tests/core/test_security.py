@@ -5,7 +5,6 @@ from unittest.mock import patch
 import pytest
 from fastapi import HTTPException
 from fastapi.security import HTTPAuthorizationCredentials, SecurityScopes
-from geneweaver.api.core.config import settings
 from geneweaver.api.core.exceptions import (
     Auth0UnauthenticatedException,
     Auth0UnauthorizedException,
@@ -41,7 +40,9 @@ def do_auth():
     auth = Auth0(
         domain=test_domain,
         api_audience=test_audience,
-        scopes=settings.AUTH_SCOPES,
+        scopes={
+            "openid profile email": "read",
+        },
         auto_error=True,
         email_auto_error=True,
     )
