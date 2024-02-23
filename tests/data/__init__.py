@@ -18,6 +18,11 @@ gene_homologus_ids_json = importlib.resources.read_text(
 
 publications_json = importlib.resources.read_text("tests.data", "publications.json")
 
+jwt_test_keys_json = importlib.resources.read_text(
+    "tests.data", "security_jwt_RS256_keys.json"
+)
+
+
 ## laod and returns JSON string as a dictionary
 
 # geneset test data
@@ -57,4 +62,10 @@ test_publication_data = {
     "publication_by_pubmed_id": json.loads(publications_json).get(
         "publication_by_pubmed_id"
     ),
+}
+
+# Json web token keys data =
+test_jwt_keys_data = {
+    "test_private_key": json.loads(jwt_test_keys_json).get("private_key"),
+    "test_public_key": json.loads(jwt_test_keys_json).get("public_key"),
 }
