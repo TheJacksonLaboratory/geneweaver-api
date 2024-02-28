@@ -16,6 +16,8 @@ gene_homologus_ids_json = importlib.resources.read_text(
     "tests.data", "homologus_ids.json"
 )
 
+gene_id_mapping_json = importlib.resources.read_text("tests.data", "gene_maping.json")
+
 publications_json = importlib.resources.read_text("tests.data", "publications.json")
 
 jwt_test_keys_json = importlib.resources.read_text(
@@ -34,8 +36,8 @@ test_geneset_data = {
     ),
 }
 
-# Gene test data
-test_gene_data = {
+# Gene homolog ids test data
+test_gene_homolog_data = {
     "gene_ids_map_req_1_gene_ids_species": json.loads(gene_homologus_ids_json).get(
         "gene_ids_map_req_1_gene_ids_species"
     ),
@@ -56,7 +58,23 @@ test_gene_data = {
     ),
 }
 
-# publication test data
+# Gene mapping test data
+test_gene_mapping_data = {
+    "gene_mapping_req_1": json.loads(gene_id_mapping_json).get(
+        "gene_mapping_request_1"
+    ),
+    "gene_mapping_resp_1": json.loads(gene_id_mapping_json).get(
+        "gene_mapping_response_1"
+    ),
+    "gene_mapping_req_2": json.loads(gene_id_mapping_json).get(
+        "gene_mapping_request_2"
+    ),
+    "gene_mapping_resp_2": json.loads(gene_id_mapping_json).get(
+        "gene_mapping_response_2"
+    ),
+}
+
+# Publication test data
 test_publication_data = {
     "publication_by_id": json.loads(publications_json).get("publication_by_id"),
     "publication_by_pubmed_id": json.loads(publications_json).get(

@@ -1,6 +1,6 @@
 """Service methods for genes."""
 
-from typing import Iterable, Optional
+from typing import Iterable, List, Optional
 
 from fastapi.logger import logger
 from geneweaver.core.enum import GeneIdentifier, Species
@@ -8,7 +8,7 @@ from geneweaver.db import gene as db_gene
 from psycopg import Cursor
 
 
-def get_gene_mapping(
+def get_homolog_ids(
     cursor: Cursor,
     gene_id_list: Iterable,
     target_gene_id_type: GeneIdentifier,
@@ -38,6 +38,35 @@ def get_gene_mapping(
             source_gene_id_type,
             target_species,
             source_species,
+        )
+
+    except Exception as err:
+        logger.error(err)
+        raise err
+
+    return {"ids_map": ids_map}
+
+
+def get_gene_mapping(
+    cursor: Cursor,
+    source_ids: List[str],
+    target_species: Species,
+    target_gene_id_type: GeneIdentifier,
+) -> dict:
+    """Get gene identifier mappings.
+
+    Get gene id mappings based on target GeneIdentifier id.
+
+    @param cursor: DB Cursor
+    @param source_ids: list of gene ids to search
+    @param target_gene_id_type: gene identifier
+    @param target_species: target species identifier
+    @return: dictionary with id mappings.
+    """
+    ids_map = None
+    try:
+        ids_map = db_gene.mapping(
+            cursor, source_ids, target_species, target_gene_id_type
         )
 
     except Exception as err:
