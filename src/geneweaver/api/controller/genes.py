@@ -44,8 +44,8 @@ def get_genes_mapping(
     response = genes_service.get_gene_mapping(
         cursor,
         gene_id_mapping.source_ids,
-        gene_id_mapping.target_gene_id_type,
         gene_id_mapping.target_species,
+        gene_id_mapping.target_gene_id_type,
     )
 
     resp_id_map = response.get("ids_map")

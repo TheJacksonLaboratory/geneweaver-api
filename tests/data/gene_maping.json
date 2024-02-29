@@ -8,16 +8,7 @@
     "target_species": "Mus Musculus"
   },
   "gene_mapping_response_1": {
-      "gene_ids_map": [
-        {
-          "original_ref_id": "DAB1",
-          "mapped_ref_id": "1600"
-        },
-        {
-          "original_ref_id": "SLC6A9",
-          "mapped_ref_id": "6536"
-        }
-      ]
+      "gene_ids_map": []
   },
   "gene_mapping_request_2": {
     "source_ids": [
