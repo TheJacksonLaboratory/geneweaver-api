@@ -5,12 +5,6 @@ from geneweaver.core.enum import GeneIdentifier, Species
 from pydantic import BaseModel
 
 
-class GeneIdHomologResp(BaseModel):
-    """Model for homolog gene id mapping."""
-
-    gene_ids_map: list[dict]
-
-
 class GeneIdHomologReq(BaseModel):
     """Model for homolog gene id mapping request."""
 
@@ -20,12 +14,10 @@ class GeneIdHomologReq(BaseModel):
     target_species: Optional[Species] = None
     source_species: Optional[Species] = None
 
-
-class GeneIdMappingResp(BaseModel):
-    """Model for gene id mapping."""
+class GeneIdHomologResp(BaseModel):
+    """Model for homolog gene id mapping."""
 
     gene_ids_map: list[dict]
-
 
 class GeneIdMappingReq(BaseModel):
     """Model for gene id mapping request."""
@@ -33,3 +25,20 @@ class GeneIdMappingReq(BaseModel):
     source_ids: List[str]
     target_gene_id_type: GeneIdentifier
     target_species: Species
+
+class GeneIdMappingResp(BaseModel):
+    """Model for gene id mapping."""
+
+    gene_ids_map: list[dict]
+
+
+class GeneIdMappingAonReq(BaseModel):
+    """Model for AON gene id mapping request."""
+
+    source_ids: List[str]
+    target_species: Species
+
+class GeneIdMappingAonResp(BaseModel):
+    """Model for gene id mapping."""
+
+    gene_ids_map: list[dict]

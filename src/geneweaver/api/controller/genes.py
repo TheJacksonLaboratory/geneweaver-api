@@ -8,17 +8,19 @@ from geneweaver.api.schemas.apimodels import (
     GeneIdHomologResp,
     GeneIdMappingReq,
     GeneIdMappingResp,
+    GeneIdMappingAonReq,
+    GeneIdMappingAonResp
 )
 from geneweaver.api.services import genes as genes_service
 
 router = APIRouter(prefix="/genes", tags=["genes"])
 
 
-@router.post("/homologs", response_model=GeneIdHomologResp)
+@router.post("/homologs", response_model=GeneIdMappingResp)
 def get_related_gene_ids(
     gene_id_mapping: GeneIdHomologReq,
     cursor: Optional[deps.Cursor] = Depends(deps.cursor),
-) -> GeneIdHomologResp:
+) -> GeneIdMappingResp:
     """Get homologous gene ids given list of gene ids."""
     response = genes_service.get_homolog_ids(
         cursor,
@@ -30,7 +32,7 @@ def get_related_gene_ids(
     )
 
     resp_id_map = response.get("ids_map")
-    gene_id_mapping_resp = GeneIdHomologResp(gene_ids_map=resp_id_map)
+    gene_id_mapping_resp = GeneIdMappingResp(gene_ids_map=resp_id_map)
 
     return gene_id_mapping_resp
 
@@ -39,13 +41,31 @@ def get_related_gene_ids(
 def get_genes_mapping(
     gene_id_mapping: GeneIdMappingReq,
     cursor: Optional[deps.Cursor] = Depends(deps.cursor),
-) -> GeneIdHomologResp:
+) -> GeneIdMappingResp:
     """Get gene ids mapping given list of gene ids and target gene identifier type."""
     response = genes_service.get_gene_mapping(
         cursor,
         gene_id_mapping.source_ids,
         gene_id_mapping.target_species,
         gene_id_mapping.target_gene_id_type,
+    )
+
+    resp_id_map = response.get("ids_map")
+    gene_id_mapping_resp = GeneIdMappingResp(gene_ids_map=resp_id_map)
+
+    return gene_id_mapping_resp
+
+
+@router.post("/mapping/aon", response_model=GeneIdMappingResp)
+def get_genes_mapping_aon(
+    gene_id_mapping: GeneIdMappingAonReq,
+    cursor: Optional[deps.Cursor] = Depends(deps.cursor),
+) -> GeneIdMappingResp:
+    """Get gene ids mapping given list of gene ids and target gene identifier type."""
+    response = genes_service.get_gene_aon_mapping(
+        cursor,
+        gene_id_mapping.source_ids,
+        gene_id_mapping.target_species
     )
 
     resp_id_map = response.get("ids_map")

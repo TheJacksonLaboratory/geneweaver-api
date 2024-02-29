@@ -74,3 +74,30 @@ def get_gene_mapping(
         raise err
 
     return {"ids_map": ids_map}
+
+
+def get_gene_aon_mapping(
+    cursor: Cursor,
+    source_ids: List[str],
+    target_species: Species,
+) -> dict:
+    """Get gene identifier AON mappings.
+
+    Get gene id mappings based on species and default gene identifier type.
+
+    @param cursor: DB Cursor
+    @param source_ids: list of gene ids to search
+    @param target_species: target species identifier
+    @return: dictionary with id mappings.
+    """
+    ids_map = None
+    try:
+        ids_map = db_gene.aon_mapping(
+            cursor, source_ids, target_species,
+        )
+
+    except Exception as err:
+        logger.error(err)
+        raise err
+
+    return {"ids_map": ids_map}
