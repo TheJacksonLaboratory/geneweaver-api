@@ -40,11 +40,11 @@ def get_genes_mapping(
     gene_id_mapping: GeneIdMappingReq,
     cursor: Optional[deps.Cursor] = Depends(deps.cursor),
 ) -> GeneIdHomologResp:
-    """Get gene ids mapping given list of gene ids and target gene identifier type."""
+    """Get gene ids mapping."""
     response = genes_service.get_gene_mapping(
         cursor,
         gene_id_mapping.source_ids,
-        gene_id_mapping.target_species,
+        gene_id_mapping.species,
         gene_id_mapping.target_gene_id_type,
     )
 

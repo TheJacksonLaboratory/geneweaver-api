@@ -50,7 +50,7 @@ def get_homolog_ids(
 def get_gene_mapping(
     cursor: Cursor,
     source_ids: List[str],
-    target_species: Species,
+    species: Species,
     target_gene_id_type: GeneIdentifier,
 ) -> dict:
     """Get gene identifier mappings.
@@ -60,14 +60,12 @@ def get_gene_mapping(
     @param cursor: DB Cursor
     @param source_ids: list of gene ids to search
     @param target_gene_id_type: gene identifier
-    @param target_species: target species identifier
+    @param species: target species identifier
     @return: dictionary with id mappings.
     """
     ids_map = None
     try:
-        ids_map = db_gene.mapping(
-            cursor, source_ids, target_species, target_gene_id_type
-        )
+        ids_map = db_gene.mapping(cursor, source_ids, species, target_gene_id_type)
 
     except Exception as err:
         logger.error(err)

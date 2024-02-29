@@ -5,7 +5,7 @@
       "SLC6A9"
     ],
     "target_gene_id_type": "Ensemble Gene",
-    "target_species": "Mus Musculus"
+    "species": "Mus Musculus"
   },
   "gene_mapping_response_1": {
       "gene_ids_map": []
@@ -18,7 +18,7 @@
       "ENSG00000003096"
     ],
     "target_gene_id_type": "Ensemble Gene",
-    "target_species": "Homo Sapiens"
+    "species": "Homo Sapiens"
   },
   "gene_mapping_response_2": {
     "gene_ids_map": [

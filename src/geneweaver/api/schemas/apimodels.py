@@ -32,4 +32,4 @@ class GeneIdMappingReq(BaseModel):
 
     source_ids: List[str]
     target_gene_id_type: GeneIdentifier
-    target_species: Species
+    species: Species
