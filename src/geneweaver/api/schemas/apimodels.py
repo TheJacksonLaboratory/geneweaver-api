@@ -24,7 +24,7 @@ class GeneIdMappingReq(BaseModel):
 
     source_ids: List[str]
     target_gene_id_type: GeneIdentifier
-    target_species: Species
+    species: Species
 
 class GeneIdMappingResp(BaseModel):
     """Model for gene id mapping."""
@@ -42,3 +42,5 @@ class GeneIdMappingAonResp(BaseModel):
     """Model for gene id mapping."""
 
     gene_ids_map: list[dict]
+    species: Species
+
