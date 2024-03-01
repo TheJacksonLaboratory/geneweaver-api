@@ -77,7 +77,7 @@ def get_gene_mapping(
 def get_gene_aon_mapping(
     cursor: Cursor,
     source_ids: List[str],
-    target_species: Species,
+    species: Species,
 ) -> dict:
     """Get gene identifier AON mappings.
 
@@ -85,7 +85,7 @@ def get_gene_aon_mapping(
 
     @param cursor: DB Cursor
     @param source_ids: list of gene ids to search
-    @param target_species: target species identifier
+    @param species: target species identifier
     @return: dictionary with id mappings.
     """
     ids_map = None
@@ -93,7 +93,7 @@ def get_gene_aon_mapping(
         ids_map = db_gene.aon_mapping(
             cursor,
             source_ids,
-            target_species,
+            species,
         )
 
     except Exception as err:
