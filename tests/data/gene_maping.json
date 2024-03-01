@@ -39,5 +39,24 @@
         "mapped_ref_id": "KLHL13"
       }
     ]
+  },
+  "gene_aon_mapping_request_1": {
+    "source_ids": [
+      "DAB1",
+      "SLC6A9"
+    ],
+    "species": "Homo Sapiens"
+  },
+  "gene_aon_mapping_response_1": {
+    "gene_ids_map": [
+      {
+        "original_ref_id": "DAB1",
+        "mapped_ref_id": "HGNC:2661"
+      },
+      {
+        "original_ref_id": "SLC6A9",
+        "mapped_ref_id": "HGNC:11056"
+      }
+    ]
   }
 }

@@ -72,6 +72,12 @@ test_gene_mapping_data = {
     "gene_mapping_resp_2": json.loads(gene_id_mapping_json).get(
         "gene_mapping_response_2"
     ),
+    "gene_aon_mapping_req_1": json.loads(gene_id_mapping_json).get(
+        "gene_aon_mapping_request_1"
+    ),
+    "gene_aon_mapping_resp_1": json.loads(gene_id_mapping_json).get(
+        "gene_aon_mapping_response_1"
+    ),
 }
 
 # Publication test data
