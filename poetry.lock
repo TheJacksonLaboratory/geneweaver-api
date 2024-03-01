@@ -513,13 +513,13 @@ pydantic = {version = ">=1.10.7,<2.0.0", extras = ["dotenv"]}
 
 [[package]]
 name = "geneweaver-db"
-version = "0.3.0a10"
+version = "0.3.0a11"
 description = "Database Interaction Services for GeneWeaver"
 optional = false
 python-versions = ">=3.9,<4.0"
 files = [
-    {file = "geneweaver_db-0.3.0a10-py3-none-any.whl", hash = "sha256:023c371e94adc2e4f78ff868cb53a42d544d2f6220a485c5cb0e4e7ccc05b2ae"},
-    {file = "geneweaver_db-0.3.0a10.tar.gz", hash = "sha256:777566522fce0c80bfa51882003f4be5034c75496a7866cdaa5f8396fab2c71a"},
+    {file = "geneweaver_db-0.3.0a11-py3-none-any.whl", hash = "sha256:88e486fd5490884e91e99e0354ff899c21d5e18f60a547d700f8d077e28ee3f5"},
+    {file = "geneweaver_db-0.3.0a11.tar.gz", hash = "sha256:7c1875414ece157e03fe284b537a007ff69a4384253e6432289b85124f05b562"},
 ]
 
 [package.dependencies]
@@ -1317,13 +1317,13 @@ testing = ["fields", "hunter", "process-tests", "pytest-xdist", "six", "virtuale
 
 [[package]]
 name = "python-dateutil"
-version = "2.8.2"
+version = "2.9.0.post0"
 description = "Extensions to the standard Python datetime module"
 optional = false
 python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,>=2.7"
 files = [
-    {file = "python-dateutil-2.8.2.tar.gz", hash = "sha256:0123cacc1627ae19ddf3c27a5de5bd67ee4586fbdd6440d9748f8abb483d3e86"},
-    {file = "python_dateutil-2.8.2-py2.py3-none-any.whl", hash = "sha256:961d03dc3453ebbc59dbdea9e4e11c5651520a876d0f4db161e8674aae935da9"},
+    {file = "python-dateutil-2.9.0.post0.tar.gz", hash = "sha256:37dd54208da7e1cd875388217d5e00ebd4179249f90fb72437e91a35459a0ad3"},
+    {file = "python_dateutil-2.9.0.post0-py2.py3-none-any.whl", hash = "sha256:a8b2bc7bffae282281c8140a97d3aa9c14da0b136dfe83f850eea9a5f7470427"},
 ]
 
 [package.dependencies]
@@ -1905,4 +1905,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "eac0a046b0ef1de8db57870553513c89bf1bbfeb01e551fa10e3e8e0e4fff4e9"
+content-hash = "53c418b2b7cd7f82dc46c6ad988aedb90d4c3a5941a89a4db69472c72164b6b4"
