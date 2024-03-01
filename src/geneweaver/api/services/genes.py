@@ -91,7 +91,9 @@ def get_gene_aon_mapping(
     ids_map = None
     try:
         ids_map = db_gene.aon_mapping(
-            cursor, source_ids, target_species,
+            cursor,
+            source_ids,
+            target_species,
         )
 
     except Exception as err:

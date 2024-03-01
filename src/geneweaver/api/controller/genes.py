@@ -5,11 +5,9 @@ from fastapi import APIRouter, Depends
 from geneweaver.api import dependencies as deps
 from geneweaver.api.schemas.apimodels import (
     GeneIdHomologReq,
-    GeneIdHomologResp,
+    GeneIdMappingAonReq,
     GeneIdMappingReq,
     GeneIdMappingResp,
-    GeneIdMappingAonReq,
-    GeneIdMappingAonResp
 )
 from geneweaver.api.services import genes as genes_service
 
@@ -40,8 +38,8 @@ def get_related_gene_ids(
 @router.post("/mapping", response_model=GeneIdMappingResp)
 def get_genes_mapping(
     gene_id_mapping: GeneIdMappingReq,
-    cursor: Optional[deps.Cursor] = Depends(deps.cursor)
-) -> GeneIdHomologResp:
+    cursor: Optional[deps.Cursor] = Depends(deps.cursor),
+) -> GeneIdMappingResp:
     """Get gene ids mapping."""
     response = genes_service.get_gene_mapping(
         cursor,
@@ -63,9 +61,7 @@ def get_genes_mapping_aon(
 ) -> GeneIdMappingResp:
     """Get gene ids mapping given list of gene ids and target gene identifier type."""
     response = genes_service.get_gene_aon_mapping(
-        cursor,
-        gene_id_mapping.source_ids,
-        gene_id_mapping.target_species
+        cursor, gene_id_mapping.source_ids, gene_id_mapping.species
     )
 
     resp_id_map = response.get("ids_map")

@@ -27,6 +27,8 @@ gene_id_mapping_req_1 = test_gene_mapping_data.get("gene_mapping_req_1")
 gene_id_mapping_resp_1 = test_gene_mapping_data.get("gene_mapping_resp_1")
 gene_id_mapping_req_2 = test_gene_mapping_data.get("gene_mapping_req_2")
 gene_id_mapping_resp_2 = test_gene_mapping_data.get("gene_mapping_resp_2")
+gene_id_aon_mapping_req_1 = test_gene_mapping_data.get("gene_aon_mapping_req_1")
+gene_id_aon_mapping_resp_1 = test_gene_mapping_data.get("gene_aon_mapping_resp_1")
 
 
 @patch("geneweaver.api.services.genes.db_gene")
@@ -147,7 +149,7 @@ def test_get_gene_map_mouse(mock_db_gene):
     response = genes.get_gene_mapping(
         None,
         gene_id_mapping_req_1.get("source_ids"),
-        gene_id_mapping_req_1.get("target_species"),
+        gene_id_mapping_req_1.get("species"),
         gene_id_mapping_req_1.get("target_gene_id_type"),
     )
 
@@ -165,7 +167,7 @@ def test_get_gene_map_human(mock_db_gene):
     response = genes.get_gene_mapping(
         None,
         gene_id_mapping_req_2.get("source_ids"),
-        gene_id_mapping_req_2.get("target_species"),
+        gene_id_mapping_req_2.get("species"),
         gene_id_mapping_req_2.get("target_gene_id_type"),
     )
 
@@ -182,6 +184,38 @@ def test_get_gene_map_error(mock_db_gene):
         genes.get_gene_mapping(
             None,
             gene_id_mapping_req_2.get("source_ids"),
-            gene_id_mapping_req_2.get("target_species"),
+            gene_id_mapping_req_2.get("species"),
             gene_id_mapping_req_2.get("target_gene_id_type"),
+        )
+
+
+@patch("geneweaver.api.services.genes.db_gene")
+def test_get_gene_aon_map(mock_db_gene):
+    """Test gene ids map by gene id type and species - Human."""
+    mock_db_gene.aon_mapping.return_value = gene_id_aon_mapping_resp_1.get(
+        "gene_ids_map"
+    )
+
+    # Request:
+    # (source_ids, target gene id type, target species)
+    response = genes.get_gene_aon_mapping(
+        None,
+        gene_id_aon_mapping_req_1.get("source_ids"),
+        gene_id_aon_mapping_req_1.get("species"),
+    )
+
+    assert response.get("error") is None
+    assert response.get("ids_map") == gene_id_aon_mapping_resp_1.get("gene_ids_map")
+
+
+@patch("geneweaver.api.services.genes.db_gene")
+def test_get_aon_gene_map_error(mock_db_gene):
+    """Test error in DB call."""
+    mock_db_gene.aon_mapping.side_effect = Exception("ERROR")
+
+    with pytest.raises(expected_exception=Exception):
+        genes.get_gene_aon_mapping(
+            None,
+            gene_id_aon_mapping_req_1.get("source_ids"),
+            gene_id_aon_mapping_req_1.get("species"),
         )
