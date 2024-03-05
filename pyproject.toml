@@ -3,7 +3,7 @@ name = "geneweaver-api"
 version = "0.3.0a2"
 description = "The Geneweaver API"
 authors = [
-    "Alexander Berger <alexander.berger@jax.org",
+    "Alexander Berger <alexander.berger@jax.org>",
     "Francisco Castellanos <francisco.castellanos@jax.org>",
     "Sejal Desai <sejal.desai@jax.org>"
 ]
