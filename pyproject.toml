@@ -2,7 +2,11 @@
 name = "geneweaver-api"
 version = "0.3.0a2"
 description = "The Geneweaver API"
-authors = ["Jax Computational Sciences <cssc@jax.org>"]
+authors = [
+    "Alexander Berger <alexander.berger@jax.org",
+    "Francisco Castellanos <francisco.castellanos@jax.org>",
+    "Sejal Desai <sejal.desai@jax.org>"
+]
 readme = "README.md"
 license = "Apache-2.0"
 homepage = "https://thejacksonlaboratory.github.io/geneweaver-docs/"
