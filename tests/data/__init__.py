@@ -24,6 +24,7 @@ jwt_test_keys_json = importlib.resources.read_text(
     "tests.data", "security_jwt_RS256_keys.json"
 )
 
+species_json = importlib.resources.read_text("tests.data", "species.json")
 
 ## laod and returns JSON string as a dictionary
 
@@ -92,4 +93,16 @@ test_publication_data = {
 test_jwt_keys_data = {
     "test_private_key": json.loads(jwt_test_keys_json).get("private_key"),
     "test_public_key": json.loads(jwt_test_keys_json).get("public_key"),
+}
+
+
+## Species test data
+test_species_data = {
+    "species_no_params": json.loads(species_json).get("species_no_parameters"),
+    "species_by_taxonomy_id_10090": json.loads(species_json).get(
+        "species_by_taxonomy_id_10090"
+    ),
+    "species_by_gene_id_type_flybase": json.loads(species_json).get(
+        "species_by_gene_id_type_flybase"
+    ),
 }
