@@ -1,0 +1,86 @@
+{
+  "genes_list_10": {
+    "genes": [
+      {
+        "id": 1,
+        "reference_id": "MGI:87853",
+        "gene_database": 10,
+        "species": 1,
+        "preferred": false,
+        "date": "2020-05-05"
+      },
+      {
+        "id": 2,
+        "reference_id": "MGI:87854",
+        "gene_database": 10,
+        "species": 1,
+        "preferred": false,
+        "date": "2020-05-05"
+      },
+      {
+        "id": 3,
+        "reference_id": "MGI:87859",
+        "gene_database": 10,
+        "species": 1,
+        "preferred": false,
+        "date": "2020-05-05"
+      },
+      {
+        "id": 4,
+        "reference_id": "MGI:87860",
+        "gene_database": 10,
+        "species": 1,
+        "preferred": false,
+        "date": "2020-05-05"
+      },
+      {
+        "id": 5,
+        "reference_id": "MGI:87862",
+        "gene_database": 10,
+        "species": 1,
+        "preferred": false,
+        "date": "2020-05-05"
+      },
+      {
+        "id": 6,
+        "reference_id": "MGI:87863",
+        "gene_database": 10,
+        "species": 1,
+        "preferred": false,
+        "date": "2020-05-05"
+      },
+      {
+        "id": 7,
+        "reference_id": "MGI:87864",
+        "gene_database": 10,
+        "species": 1,
+        "preferred": false,
+        "date": "2020-05-05"
+      },
+      {
+        "id": 8,
+        "reference_id": "MGI:87866",
+        "gene_database": 10,
+        "species": 1,
+        "preferred": false,
+        "date": "2020-05-05"
+      },
+      {
+        "id": 9,
+        "reference_id": "MGI:87867",
+        "gene_database": 10,
+        "species": 1,
+        "preferred": false,
+        "date": "2020-05-05"
+      },
+      {
+        "id": 10,
+        "reference_id": "MGI:87868",
+        "gene_database": 10,
+        "species": 1,
+        "preferred": false,
+        "date": "2020-05-05"
+      }
+    ]
+  }
+}

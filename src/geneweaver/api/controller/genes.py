@@ -1,7 +1,7 @@
 """Endpoints related to genes."""
 from typing import Optional
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from geneweaver.api import dependencies as deps
 from geneweaver.api.schemas.apimodels import (
     GeneIdHomologReq,
@@ -10,8 +10,52 @@ from geneweaver.api.schemas.apimodels import (
     GeneIdMappingResp,
 )
 from geneweaver.api.services import genes as genes_service
+from geneweaver.core.enum import GeneIdentifier, Species
+from typing_extensions import Annotated
+
+from . import message as api_message
 
 router = APIRouter(prefix="/genes", tags=["genes"])
+
+
+@router.get("")
+def get_genes(
+    cursor: Optional[deps.Cursor] = Depends(deps.cursor),
+    reference_id: Annotated[
+        Optional[str], Query(description=api_message.GENE_REFERENCE)
+    ] = None,
+    gene_database: Optional[GeneIdentifier] = None,
+    species: Optional[Species] = None,
+    preferred: Annotated[
+        Optional[bool], Query(description=api_message.GENE_PREFERRED)
+    ] = None,
+    limit: Annotated[
+        Optional[int],
+        Query(
+            format="int64",
+            minimum=0,
+            maxiumum=9223372036854775807,
+            description=api_message.LIMIT,
+        ),
+    ] = None,
+    offset: Annotated[
+        Optional[int],
+        Query(
+            format="int64",
+            minimum=0,
+            maxiumum=9223372036854775807,
+            description=api_message.OFFSET,
+        ),
+    ] = None,
+) -> dict:
+    """Get geneweaver list of genes."""
+    if limit is None:
+        limit = 100
+
+    response = genes_service.get_genes(
+        cursor, reference_id, gene_database, species, preferred, limit, offset
+    )
+    return response
 
 
 @router.post("/homologs", response_model=GeneIdMappingResp)
