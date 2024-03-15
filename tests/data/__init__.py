@@ -111,7 +111,7 @@ test_species_data = {
 
 
 def get_species_db_resp(species_data: dict) -> dict:
-    """ " get species data as returned by DB."""
+    """Get species data as returned by DB."""
     species = species_data.get("species")
     for species_record in species:
         ref_gene_id_type = species_record.get("reference_gene_identifier", None)
