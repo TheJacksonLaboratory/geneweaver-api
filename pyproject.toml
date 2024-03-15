@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "geneweaver-api"
-version = "0.3.0a01"
+version = "0.3.0a02"
 description = "The Geneweaver API"
 authors = [
     "Alexander Berger <alexander.berger@jax.org>",
