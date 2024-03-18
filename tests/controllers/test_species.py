@@ -3,7 +3,7 @@ from unittest.mock import patch
 
 from tests.data import test_species_data
 
-species_no_params = test_species_data.get("species_no_params")
+species_no_params = test_species_data.get("species_no_parameters")
 species_by_taxonomy_id_10090 = test_species_data.get("species_by_taxonomy_id_10090")
 species_by_gene_id_type_flybase = test_species_data.get(
     "species_by_gene_id_type_flybase"

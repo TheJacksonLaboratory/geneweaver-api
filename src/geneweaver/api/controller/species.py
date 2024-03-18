@@ -16,9 +16,9 @@ def get_species(
     taxonomy_id: Annotated[
         Optional[int], Query(format="int64", minimum=0, maxiumum=9223372036854775807)
     ] = None,
-    gene_id_type: Optional[GeneIdentifier] = None,
+    reference_gene_id_type: Optional[GeneIdentifier] = None,
 ) -> dict:
     """Get species."""
-    response = species_service.get_species(cursor, taxonomy_id, gene_id_type)
+    response = species_service.get_species(cursor, taxonomy_id, reference_gene_id_type)
 
     return response

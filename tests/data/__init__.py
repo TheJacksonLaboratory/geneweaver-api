@@ -3,6 +3,8 @@
 import importlib.resources
 import json
 
+from geneweaver.core.enum import GeneIdentifier
+
 ## Load test data
 # Opening JSON files
 geneset_response_json = importlib.resources.read_text(
@@ -100,7 +102,7 @@ test_jwt_keys_data = {
 
 ## Species test data
 test_species_data = {
-    "species_no_params": json.loads(species_json).get("species_no_parameters"),
+    "species_no_parameters": json.loads(species_json).get("species_no_parameters"),
     "species_by_taxonomy_id_10090": json.loads(species_json).get(
         "species_by_taxonomy_id_10090"
     ),
@@ -109,7 +111,21 @@ test_species_data = {
     ),
 }
 
+
 ## geneweaver genes test data
 test_genes_data = {
     "genes_list_10": json.loads(genes_json).get("genes_list_10"),
 }
+
+def get_species_db_resp(species_data: dict) -> dict:
+    """Get species data as returned by DB."""
+    species = species_data.get("species")
+    for species_record in species:
+        ref_gene_id_type = species_record.get("reference_gene_identifier", None)
+        if ref_gene_id_type:
+            species_record["reference_gene_identifier"] = GeneIdentifier(
+                ref_gene_id_type
+            ).as_int()
+
+    return species
+
