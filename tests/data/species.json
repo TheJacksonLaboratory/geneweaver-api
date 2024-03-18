@@ -1,0 +1,92 @@
+{
+  "species_no_parameters": {
+    "species": [
+      {
+        "id": 0,
+        "name": "",
+        "taxonomic_id": 0,
+        "reference_gene_identifier": null
+      },
+      {
+        "id": 3,
+        "name": "Rattus norvegicus",
+        "taxonomic_id": 10116,
+        "reference_gene_identifier": "RGD"
+      },
+      {
+        "id": 4,
+        "name": "Danio rerio",
+        "taxonomic_id": 7955,
+        "reference_gene_identifier": "ZFIN"
+      },
+      {
+        "id": 10,
+        "name": "Gallus gallus",
+        "taxonomic_id": 9031,
+        "reference_gene_identifier": "CGNC"
+      },
+      {
+        "id": 1,
+        "name": "Mus musculus",
+        "taxonomic_id": 10090,
+        "reference_gene_identifier": "MGI"
+      },
+      {
+        "id": 5,
+        "name": "Drosophila melanogaster",
+        "taxonomic_id": 7227,
+        "reference_gene_identifier": "FlyBase"
+      },
+      {
+        "id": 11,
+        "name": "Canis familiaris",
+        "taxonomic_id": 9615,
+        "reference_gene_identifier": "Entrez"
+      },
+      {
+        "id": 2,
+        "name": "Homo sapiens",
+        "taxonomic_id": 9606,
+        "reference_gene_identifier": "HGNC"
+      },
+      {
+        "id": 8,
+        "name": "Caenorhabditis elegans",
+        "taxonomic_id": 6239,
+        "reference_gene_identifier": "Wormbase"
+      },
+      {
+        "id": 9,
+        "name": "Saccharomyces cerevisiae",
+        "taxonomic_id": 559292,
+        "reference_gene_identifier": "SGD"
+      },
+      {
+        "id": 6,
+        "name": "Macaca mulatta",
+        "taxonomic_id": 9544,
+        "reference_gene_identifier": "Entrez"
+      }
+    ]
+  },
+  "species_by_taxonomy_id_10090": {
+    "species": [
+      {
+        "id": 1,
+        "name": "Mus musculus",
+        "taxonomic_id": 10090,
+        "reference_gene_identifier": "MGI"
+      }
+    ]
+  },
+  "species_by_gene_id_type_flybase": {
+    "species": [
+      {
+        "id": 5,
+        "name": "Drosophila melanogaster",
+        "taxonomic_id": 7227,
+        "reference_gene_identifier": "FlyBase"
+      }
+    ]
+  }
+}
