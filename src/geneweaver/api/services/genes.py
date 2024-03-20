@@ -8,6 +8,40 @@ from geneweaver.db import gene as db_gene
 from psycopg import Cursor
 
 
+def get_genes(
+    cursor: Cursor,
+    reference_id: Optional[str] = None,
+    gene_database: Optional[GeneIdentifier] = None,
+    species: Optional[Species] = None,
+    preferred: Optional[bool] = None,
+    limit: Optional[int] = None,
+    offset: Optional[int] = None,
+) -> dict:
+    """Get geneweaver genes from DB.
+
+    :param cursor: The database cursor.
+    :param reference_id: The reference id to search for.
+    :param gene_database: The gene database to search for.
+    :param species: The species to search for.
+    :param preferred: Whether to search for preferred genes.
+    :param limit: The limit of results to return.
+    :param offset: The offset of results to return.
+    """
+    if limit is None:
+        limit = 100
+
+    try:
+        gene_list = db_gene.get(
+            cursor, reference_id, gene_database, species, preferred, limit, offset
+        )
+
+    except Exception as err:
+        logger.error(err)
+        raise err
+
+    return {"genes": gene_list}
+
+
 def get_homolog_ids(
     cursor: Cursor,
     gene_id_list: Iterable,

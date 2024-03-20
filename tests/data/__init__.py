@@ -3,6 +3,8 @@
 import importlib.resources
 import json
 
+from geneweaver.core.enum import GeneIdentifier
+
 ## Load test data
 # Opening JSON files
 geneset_response_json = importlib.resources.read_text(
@@ -24,6 +26,9 @@ jwt_test_keys_json = importlib.resources.read_text(
     "tests.data", "security_jwt_RS256_keys.json"
 )
 
+species_json = importlib.resources.read_text("tests.data", "species.json")
+
+genes_json = importlib.resources.read_text("tests.data", "genes.json")
 
 ## laod and returns JSON string as a dictionary
 
@@ -88,8 +93,39 @@ test_publication_data = {
     ),
 }
 
-# Json web token keys data =
+# Json web token keys data
 test_jwt_keys_data = {
     "test_private_key": json.loads(jwt_test_keys_json).get("private_key"),
     "test_public_key": json.loads(jwt_test_keys_json).get("public_key"),
 }
+
+
+## Species test data
+test_species_data = {
+    "species_no_parameters": json.loads(species_json).get("species_no_parameters"),
+    "species_by_taxonomy_id_10090": json.loads(species_json).get(
+        "species_by_taxonomy_id_10090"
+    ),
+    "species_by_gene_id_type_flybase": json.loads(species_json).get(
+        "species_by_gene_id_type_flybase"
+    ),
+}
+
+
+## geneweaver genes test data
+test_genes_data = {
+    "genes_list_10": json.loads(genes_json).get("genes_list_10"),
+}
+
+def get_species_db_resp(species_data: dict) -> dict:
+    """Get species data as returned by DB."""
+    species = species_data.get("species")
+    for species_record in species:
+        ref_gene_id_type = species_record.get("reference_gene_identifier", None)
+        if ref_gene_id_type:
+            species_record["reference_gene_identifier"] = GeneIdentifier(
+                ref_gene_id_type
+            ).as_int()
+
+    return species
+

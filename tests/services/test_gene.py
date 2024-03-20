@@ -5,7 +5,10 @@ from unittest.mock import patch
 import pytest
 from geneweaver.api.services import genes
 
-from tests.data import test_gene_homolog_data, test_gene_mapping_data
+from tests.data import test_gene_homolog_data, test_gene_mapping_data, test_genes_data
+
+# genes
+genes_list_10 = test_genes_data.get("genes_list_10")
 
 # gene homolog ids test data
 gene_ids_homolog_req_1 = test_gene_homolog_data.get(
@@ -219,3 +222,35 @@ def test_get_aon_gene_map_error(mock_db_gene):
             gene_id_aon_mapping_req_1.get("source_ids"),
             gene_id_aon_mapping_req_1.get("species"),
         )
+
+
+@patch("geneweaver.api.services.genes.db_gene")
+def test_get_gene_error(mock_db_gene):
+    """Test error in DB call."""
+    mock_db_gene.get.side_effect = Exception("ERROR")
+
+    with pytest.raises(expected_exception=Exception):
+        genes.get(None)
+
+
+@patch("geneweaver.api.services.genes.db_gene")
+def test_get_gene(mock_db_gene):
+    """Test error in DB call."""
+    mock_db_gene.get.return_value = genes_list_10
+
+    response = genes.get_genes(None)
+
+    assert response.get("error") is None
+    assert response.get("genes") == genes_list_10
+
+    response = genes.get_genes(
+        None,
+        gene_database=10,
+        species=1,
+        preferred=False,
+        reference_id="MGI:87853",
+        limit=10,
+        offset=10,
+    )
+
+    assert response.get("error") is None
