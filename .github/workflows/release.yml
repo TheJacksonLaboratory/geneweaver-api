@@ -65,22 +65,30 @@ jobs:
         # Check if this version tag already exists
         if git rev-parse "v$version" >/dev/null 2>&1; then
             echo "Version already released"
-            echo "should_release=true" >> $GITHUB_OUTPUT
+            export SHOULD_RELEASE=true
         else
             echo "New version detected"
-            echo "should_release=false" >> $GITHUB_OUTPUT
+            export SHOULD_RELEASE=false
         fi
-    - name: Determine Release Type
-      id: release_type
-      run: |
-        version=$(python -c "import toml; print(toml.load('pyproject.toml')['tool']['poetry']['version'])")
+
         if [[ $version =~ [a-zA-Z] ]]; then
           echo "Pre-release version detected"
-          echo "prerelease=true" >> $GITHUB_OUTPUT
+          export PRERELEASE=true
         else
           echo "Full release version detected"
-          echo "prerelease=false" >> $GITHUB_OUTPUT
+          export PRERELEASE=false
         fi
+        
+        if [[ "$SHOULD_RELEASE" == "true" && "$PRERELEASE" == "false" ]]; then
+          export SCHEDULE_PROD_RELEASE=true
+        else
+          export SCHEDULE_PROD_RELEASE=false
+        fi
+        
+        echo "should_release=$SHOULD_RELEASE" >> $GITHUB_OUTPUT
+        echo "prerelease=$PRERELEASE" >> $GITHUB_OUTPUT
+        echo "schedule_prod_release=$SCHEDULE_PROD_RELEASE" >> $GITHUB_OUTPUT
+
   build:
     name: "Build"
     needs: [ test, check-coverage, format-lint, version ]
@@ -98,7 +106,7 @@ jobs:
   deploy_stage:
     name: "Deploy: Stage"
     needs: [ build, version, deploy_sqa]
-    if: ${{ needs.version.outputs.should_release }} == 'true' && ${{ needs.version.outputs.prerelease }} == 'false'
+    if: ${{ needs.version.outputs.schedule_prod_release }} == 'true'
     uses: ./.github/workflows/_skaffold-deploy-k8s.yml
     secrets: inherit
     with:
@@ -106,7 +114,7 @@ jobs:
   deploy_prod:
     name: "Deploy: Prod"
     needs: [ build, version, deploy_stage]
-    if: ${{ needs.version.outputs.should_release }} == 'true' && ${{ needs.version.outputs.prerelease }} == 'false'
+    if: ${{ needs.version.outputs.schedule_prod_release }} == 'true'
     uses: ./.github/workflows/_skaffold-deploy-k8s.yml
     secrets: inherit
     with:
@@ -115,7 +123,7 @@ jobs:
     name: "Create Github Release Draft"
     runs-on: ubuntu-latest
     needs: [ deploy_prod ]
-    if: ${{ needs.version.outputs.should_release == 'true' && needs.version.outputs.prerelease == 'false'}}
+    if: ${{ needs.version.outputs.schedule_prod_release }} == 'true'
     steps:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
