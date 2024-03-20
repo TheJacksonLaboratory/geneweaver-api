@@ -2,7 +2,10 @@
 import json
 from unittest.mock import patch
 
-from tests.data import test_gene_homolog_data, test_gene_mapping_data
+from tests.data import test_gene_homolog_data, test_gene_mapping_data, test_genes_data
+
+# genes
+genes_list_10 = test_genes_data.get("genes_list_10")
 
 # gene homolog ids test data
 gene_ids_homolog_req_1 = test_gene_homolog_data.get(
@@ -143,4 +146,37 @@ def test_gene_aon_mapping_invalid_post_data_(client):
     response = client.post(
         url="/api/genes/mapping/aon", data=json.dumps({"test": "test"})
     )
+    assert response.status_code == 422
+
+
+@patch("geneweaver.api.services.genes.get_genes")
+def test_valid_gene_get_req(mock_gene_call, client):
+    """Test valid get genes request."""
+    mock_gene_call.return_value = genes_list_10
+
+    response = client.get(url="/api/genes")
+
+    print(response)
+    assert response.status_code == 200
+    assert response.json() == genes_list_10
+
+    response = client.get(url="/api/genes?limit=10")
+    assert response.status_code == 200
+    assert response.json() == genes_list_10
+
+
+@patch("geneweaver.api.services.genes.get_genes")
+def test_invalid_param_gene_get_req(mock_gene_call, client):
+    """Test invalid get genes request parameters."""
+    mock_gene_call.return_value = genes_list_10
+
+    response = client.get(url="/api/genes?limit=abc")
+    assert response.status_code == 422
+    response = client.get(url="/api/genes?offset=abc")
+    assert response.status_code == 422
+    response = client.get(url="/api/genes?gene_database=abc")
+    assert response.status_code == 422
+    response = client.get(url="/api/genes?species=abc")
+    assert response.status_code == 422
+    response = client.get(url="/api/genes?preferred=abc")
     assert response.status_code == 422
