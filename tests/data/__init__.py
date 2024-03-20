@@ -28,6 +28,8 @@ jwt_test_keys_json = importlib.resources.read_text(
 
 species_json = importlib.resources.read_text("tests.data", "species.json")
 
+genes_json = importlib.resources.read_text("tests.data", "genes.json")
+
 ## laod and returns JSON string as a dictionary
 
 # geneset test data
@@ -91,7 +93,7 @@ test_publication_data = {
     ),
 }
 
-# Json web token keys data =
+# Json web token keys data
 test_jwt_keys_data = {
     "test_private_key": json.loads(jwt_test_keys_json).get("private_key"),
     "test_public_key": json.loads(jwt_test_keys_json).get("public_key"),
@@ -110,6 +112,11 @@ test_species_data = {
 }
 
 
+## geneweaver genes test data
+test_genes_data = {
+    "genes_list_10": json.loads(genes_json).get("genes_list_10"),
+}
+
 def get_species_db_resp(species_data: dict) -> dict:
     """Get species data as returned by DB."""
     species = species_data.get("species")
@@ -121,3 +128,4 @@ def get_species_db_resp(species_data: dict) -> dict:
             ).as_int()
 
     return species
+
