@@ -6,6 +6,7 @@ from tests.data import test_gene_homolog_data, test_gene_mapping_data, test_gene
 
 # genes
 genes_list_10 = test_genes_data.get("genes_list_10")
+gene_preferred_resp_1 = test_genes_data.get("gene_preferred_resp_1")
 
 # gene homolog ids test data
 gene_ids_homolog_req_1 = test_gene_homolog_data.get(
@@ -180,3 +181,14 @@ def test_invalid_param_gene_get_req(mock_gene_call, client):
     assert response.status_code == 422
     response = client.get(url="/api/genes?preferred=abc")
     assert response.status_code == 422
+
+
+@patch("geneweaver.api.services.genes.get_gene_preferred")
+def test_valid_get_preferred_gene_req(mock_gene_call, client):
+    """Test valid get preferred gene request."""
+    mock_gene_call.return_value = gene_preferred_resp_1
+
+    response = client.get(url="/api/genes/1000/preferred")
+
+    assert response.status_code == 200
+    assert response.json() == gene_preferred_resp_1

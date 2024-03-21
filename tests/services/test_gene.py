@@ -9,6 +9,7 @@ from tests.data import test_gene_homolog_data, test_gene_mapping_data, test_gene
 
 # genes
 genes_list_10 = test_genes_data.get("genes_list_10")
+gene_preferred_resp_1 = test_genes_data.get("gene_preferred_resp_1")
 
 # gene homolog ids test data
 gene_ids_homolog_req_1 = test_gene_homolog_data.get(
@@ -235,7 +236,7 @@ def test_get_gene_error(mock_db_gene):
 
 @patch("geneweaver.api.services.genes.db_gene")
 def test_get_gene(mock_db_gene):
-    """Test error in DB call."""
+    """Test get gene."""
     mock_db_gene.get.return_value = genes_list_10
 
     response = genes.get_genes(None)
@@ -254,3 +255,23 @@ def test_get_gene(mock_db_gene):
     )
 
     assert response.get("error") is None
+
+
+@patch("geneweaver.api.services.genes.db_gene")
+def test_get_gene_preferred(mock_db_gene):
+    """Test get gene preferred."""
+    mock_db_gene.get_preferred.return_value = gene_preferred_resp_1
+
+    response = genes.get_gene_preferred(None, gene_id=1000)
+
+    assert response.get("error") is None
+    assert response.get("gene") == gene_preferred_resp_1
+
+
+@patch("geneweaver.api.services.genes.db_gene")
+def test_get_gene_preferred_error(mock_db_gene):
+    """Test error in DB call gene_preferred."""
+    mock_db_gene.get_preferred.side_effect = Exception("ERROR")
+
+    with pytest.raises(expected_exception=Exception):
+        genes.get_gene_preferred(None, gene_id=1000)

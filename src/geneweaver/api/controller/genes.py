@@ -1,7 +1,7 @@
 """Endpoints related to genes."""
 from typing import Optional
 
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Path, Query
 from geneweaver.api import dependencies as deps
 from geneweaver.api.schemas.apimodels import (
     GeneIdHomologReq,
@@ -34,7 +34,7 @@ def get_genes(
         Query(
             format="int64",
             minimum=0,
-            maxiumum=9223372036854775807,
+            maxiumum=1000,
             description=api_message.LIMIT,
         ),
     ] = None,
@@ -55,6 +55,18 @@ def get_genes(
     response = genes_service.get_genes(
         cursor, reference_id, gene_database, species, preferred, limit, offset
     )
+    return response
+
+
+@router.get("/{gene_id}/preferred")
+def get_gene_preferred(
+    gene_id: Annotated[
+        int, Path(format="int64", minimum=0, maxiumum=9223372036854775807)
+    ],
+    cursor: Optional[deps.Cursor] = Depends(deps.cursor),
+) -> dict:
+    """Get preferred gene for a given gene ode_id."""
+    response = genes_service.get_gene_preferred(cursor, gene_id)
     return response
 
 

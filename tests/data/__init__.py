@@ -115,7 +115,9 @@ test_species_data = {
 ## geneweaver genes test data
 test_genes_data = {
     "genes_list_10": json.loads(genes_json).get("genes_list_10"),
+    "gene_preferred_resp_1": json.loads(genes_json).get("gene_preferred_resp_1"),
 }
+
 
 def get_species_db_resp(species_data: dict) -> dict:
     """Get species data as returned by DB."""
@@ -128,4 +130,3 @@ def get_species_db_resp(species_data: dict) -> dict:
             ).as_int()
 
     return species
-
