@@ -4,7 +4,7 @@ from typing import Optional
 from fastapi import APIRouter, Depends, Query
 from geneweaver.api import dependencies as deps
 from geneweaver.api.services import species as species_service
-from geneweaver.core.enum import GeneIdentifier
+from geneweaver.core.enum import GeneIdentifier, Species
 from typing_extensions import Annotated
 
 router = APIRouter(prefix="/species", tags=["species"])
@@ -20,5 +20,15 @@ def get_species(
 ) -> dict:
     """Get species."""
     response = species_service.get_species(cursor, taxonomy_id, reference_gene_id_type)
+
+    return response
+
+
+@router.get("/{species_id}")
+def get_species_by_id(
+    species_id: Species, cursor: Optional[deps.Cursor] = Depends(deps.cursor)
+) -> dict:
+    """Get species."""
+    response = species_service.get_species_by_id(cursor, species_id)
 
     return response
