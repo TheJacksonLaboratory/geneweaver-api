@@ -3,7 +3,7 @@
 from typing import Optional
 
 from fastapi.logger import logger
-from geneweaver.core.enum import GeneIdentifier
+from geneweaver.core.enum import GeneIdentifier, Species
 from geneweaver.db import species as db_species
 from psycopg import Cursor
 
@@ -23,14 +23,35 @@ def get_species(
     try:
         species = db_species.get(cursor, taxonomy_id, reference_gene_id_type)
         for species_record in species:
-            ref_gene_id_type = species_record.get("reference_gene_identifier", None)
-            if ref_gene_id_type:
-                species_record["reference_gene_identifier"] = GeneIdentifier(
-                    ref_gene_id_type
-                )
+            decode_gene_identifier(species_record)
 
         return {"species": species}
 
     except Exception as err:
         logger.error(err)
         raise err
+
+
+def get_species_by_id(cursor: Cursor, species: Species) -> dict:
+    """Get species from DB.
+
+    @param cursor: DB cursor
+    @param species: species id
+    @return: dictionary response (species).
+    """
+    try:
+        species_rsp = db_species.get_by_id(cursor, species)
+        decode_gene_identifier(species_rsp)
+
+        return {"species": species_rsp}
+
+    except Exception as err:
+        logger.error(err)
+        raise err
+
+
+def decode_gene_identifier(species: Species) -> None:
+    """Decode gene identifier from DB to Enum str value."""
+    ref_gene_id_type = species.get("reference_gene_identifier", None)
+    if ref_gene_id_type:
+        species["reference_gene_identifier"] = GeneIdentifier(ref_gene_id_type)

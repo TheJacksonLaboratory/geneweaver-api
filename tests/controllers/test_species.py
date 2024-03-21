@@ -41,3 +41,14 @@ def test_valid_species_url_gene_id_type_req(mock_species_service_call, client):
 
     assert response.status_code == 200
     assert response.json() == species_by_gene_id_type_flybase
+
+
+@patch("geneweaver.api.services.species.get_species_by_id")
+def test_valid_url_species_by_id(mock_species_service_call, client):
+    """Test valid url request to get species by id."""
+    mock_species_service_call.return_value = species_by_gene_id_type_flybase
+
+    response = client.get(url="/api/species/5")
+
+    assert response.status_code == 200
+    assert response.json() == species_by_gene_id_type_flybase

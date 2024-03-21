@@ -4,7 +4,7 @@ from unittest.mock import patch
 
 import pytest
 from geneweaver.api.services import species as species_service
-from geneweaver.core.enum import GeneIdentifier
+from geneweaver.core.enum import GeneIdentifier, Species
 
 from tests.data import get_species_db_resp, test_species_data
 
@@ -63,8 +63,38 @@ def test_get_species_by_gene_id_type_and_taxonomy(mock_db_species):
 
 @patch("geneweaver.api.services.species.db_species")
 def test_get_species_with_error(mock_db_species):
-    """Test error in DB call."""
+    """Test get species error in DB call."""
     mock_db_species.get.side_effect = Exception("ERROR")
 
     with pytest.raises(expected_exception=Exception):
         species_service.get(None)
+
+
+@patch("geneweaver.api.services.species.db_species")
+def test_get_species_by_id(mock_db_species):
+    """Test speccies by species id."""
+    mock_db_species.get_by_id.return_value = species_by_gene_id_type_flybase[0]
+
+    response = species_service.get_species_by_id(None, Species(5))
+
+    assert response.get("species") == species_by_gene_id_type_flybase[0]
+
+
+@patch("geneweaver.api.services.species.db_species")
+def test_get_species_by_id_with_error(mock_db_species):
+    """Test species by id error in DB call."""
+    mock_db_species.get_by_id.side_effect = Exception("ERROR")
+
+    with pytest.raises(expected_exception=Exception):
+        species_service.get_species_by_id(None, Species(5))
+
+
+def test_get_decode_gene_identifier():
+    """Test decode gene identifier."""
+    species = species_by_gene_id_type_flybase[0].copy()
+    species_service.decode_gene_identifier(species)
+
+    assert (
+        species
+        == test_species_data.get("species_by_gene_id_type_flybase").get("species")[0]
+    )
