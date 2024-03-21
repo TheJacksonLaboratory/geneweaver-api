@@ -46,7 +46,7 @@ such as DB, Webserver, or APIs. Create appropriate mocks for external resources 
 
 To execute tests, from the command line run:
 
-    pytest 
+    pytest tests --cov=geneweaver.api --cov-report term  --cov-report html 
 
 ### Continuous Integration & Deployment
 When a PR is crated in GitHub, it will automatically trigger a workflow that will run 

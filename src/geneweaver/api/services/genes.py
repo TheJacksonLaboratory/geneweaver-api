@@ -42,6 +42,23 @@ def get_genes(
     return {"genes": gene_list}
 
 
+def get_gene_preferred(cursor: Cursor, gene_id: int) -> dict:
+    """Get preferred gene from DB.
+
+    :param cursor: The database cursor.
+    :param gene_id: The id of the gene to get.
+    @return: dictionary with gene.
+    """
+    try:
+        gene = db_gene.get_preferred(cursor, gene_id)
+
+    except Exception as err:
+        logger.error(err)
+        raise err
+
+    return {"gene": gene}
+
+
 def get_homolog_ids(
     cursor: Cursor,
     gene_id_list: Iterable,
