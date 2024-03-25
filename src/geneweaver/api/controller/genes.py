@@ -91,7 +91,7 @@ def get_related_gene_ids(
     return gene_id_mapping_resp
 
 
-@router.post("/mapping", response_model=GeneIdMappingResp)
+@router.post("/mappings", response_model=GeneIdMappingResp)
 def get_genes_mapping(
     gene_id_mapping: GeneIdMappingReq,
     cursor: Optional[deps.Cursor] = Depends(deps.cursor),
@@ -110,7 +110,7 @@ def get_genes_mapping(
     return gene_id_mapping_resp
 
 
-@router.post("/mapping/aon", response_model=GeneIdMappingResp)
+@router.post("/mappings/aon", response_model=GeneIdMappingResp)
 def get_genes_mapping_aon(
     gene_id_mapping: GeneIdMappingAonReq,
     cursor: Optional[deps.Cursor] = Depends(deps.cursor),

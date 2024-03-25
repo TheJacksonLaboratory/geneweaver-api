@@ -12,7 +12,7 @@ def get_species(
     cursor: Cursor,
     taxonomy_id: Optional[int] = None,
     reference_gene_id_type: Optional[GeneIdentifier] = None,
-) -> dict:
+) -> list:
     """Get species from DB.
 
     @param cursor: DB cursor
@@ -21,11 +21,7 @@ def get_species(
     @return: dictionary response (species).
     """
     try:
-        species = db_species.get(cursor, taxonomy_id, reference_gene_id_type)
-        for species_record in species:
-            decode_gene_identifier(species_record)
-
-        return {"species": species}
+        return db_species.get(cursor, taxonomy_id, reference_gene_id_type)
 
     except Exception as err:
         logger.error(err)
@@ -40,10 +36,7 @@ def get_species_by_id(cursor: Cursor, species: Species) -> dict:
     @return: dictionary response (species).
     """
     try:
-        species_rsp = db_species.get_by_id(cursor, species)
-        decode_gene_identifier(species_rsp)
-
-        return {"species": species_rsp}
+        return db_species.get_by_id(cursor, species)
 
     except Exception as err:
         logger.error(err)
