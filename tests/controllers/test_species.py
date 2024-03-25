@@ -10,7 +10,8 @@ species_by_gene_id_type_flybase = test_species_data.get(
 )
 
 
-def _validate_species_response(response_item: dict, expected_item: dict):
+def _validate_species_response(response_item: dict, expected_item: dict) -> None:
+    """Validate species response."""
     assert response_item["id"] == expected_item["id"]
     assert response_item["name"] == expected_item["name"]
     assert response_item["taxonomic_id"] == expected_item["taxonomic_id"]
