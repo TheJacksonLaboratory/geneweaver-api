@@ -14,7 +14,7 @@ def test_valid_url_req(mock_pub_service_call, client):
     """Test valid url request to get publication by id."""
     mock_pub_service_call.return_value = publication_by_id_resp
 
-    response = client.get(url="/api/publications/123")
+    response = client.get(url="/api/publications/123", params={"as_pubmed_id": False})
 
     assert response.status_code == 200
     assert response.json() == publication_by_id_resp
@@ -25,7 +25,9 @@ def test_valid_pubmed_url_req(mock_pub_service_call, client):
     """Test valid url request to get publication by pubmed id."""
     mock_pub_service_call.return_value = publication_by_pubmed_id_resp
 
-    response = client.get(url="/api/publications/pubmed/17931734")
+    response = client.get(
+        url="/api/publications/17931734", params={"as_pubmed_id": True}
+    )
 
     assert response.status_code == 200
     assert response.json() == publication_by_pubmed_id_resp
@@ -36,7 +38,9 @@ def test_pub_record_not_found(mock_pub_service_call, client):
     """Test pub record not found response."""
     mock_pub_service_call.return_value = {"publication": None}
 
-    response = client.get(url="/api/publications/456456")
+    response = client.get(
+        url="/api/publications/456456", params={"as_pubmed_id": False}
+    )
 
     assert response.status_code == 404
     assert response.json() == {"detail": message.RECORD_NOT_FOUND_ERROR}
@@ -47,7 +51,7 @@ def test_pubmed_record_not_found(mock_pub_service_call, client):
     """Test pubmed record not found response."""
     mock_pub_service_call.return_value = {"publication": None}
 
-    response = client.get(url="/api/publications/pubmed/456456")
+    response = client.get(url="/api/publications/456456", params={"as_pubmed_id": True})
 
     assert response.status_code == 404
     assert response.json() == {"detail": message.RECORD_NOT_FOUND_ERROR}

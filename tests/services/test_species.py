@@ -13,7 +13,7 @@ species_by_taxonomy_id_10090 = get_species_db_resp(
     test_species_data.get("species_by_taxonomy_id_10090")
 )
 species_by_gene_id_type_flybase = get_species_db_resp(
-    test_species_data.get("species_by_gene_id_type_flybase")
+    [test_species_data.get("species_by_gene_id_type_flybase")]
 )
 
 
@@ -24,7 +24,7 @@ def test_get_species(mock_db_species):
 
     response = species_service.get_species(None)
 
-    assert response.get("species") == species_no_params
+    assert response == species_no_params
 
 
 @patch("geneweaver.api.services.species.db_species")
@@ -34,7 +34,7 @@ def test_get_species_by_taxonomy_id(mock_db_species):
 
     response = species_service.get_species(None, taxonomy_id=10090)
 
-    assert response.get("species") == species_by_taxonomy_id_10090
+    assert response == species_by_taxonomy_id_10090
 
 
 @patch("geneweaver.api.services.species.db_species")
@@ -46,7 +46,7 @@ def test_get_species_by_gene_id_type(mock_db_species):
         None, reference_gene_id_type=GeneIdentifier("FlyBase")
     )
 
-    assert response.get("species") == species_by_gene_id_type_flybase
+    assert response == species_by_gene_id_type_flybase
 
 
 @patch("geneweaver.api.services.species.db_species")
@@ -58,7 +58,7 @@ def test_get_species_by_gene_id_type_and_taxonomy(mock_db_species):
         None, reference_gene_id_type=GeneIdentifier("FlyBase"), taxonomy_id=7227
     )
 
-    assert response.get("species") == species_by_gene_id_type_flybase
+    assert response == species_by_gene_id_type_flybase
 
 
 @patch("geneweaver.api.services.species.db_species")
@@ -77,7 +77,7 @@ def test_get_species_by_id(mock_db_species):
 
     response = species_service.get_species_by_id(None, Species(5))
 
-    assert response.get("species") == species_by_gene_id_type_flybase[0]
+    assert response == species_by_gene_id_type_flybase[0]
 
 
 @patch("geneweaver.api.services.species.db_species")
@@ -94,7 +94,4 @@ def test_get_decode_gene_identifier():
     species = species_by_gene_id_type_flybase[0].copy()
     species_service.decode_gene_identifier(species)
 
-    assert (
-        species
-        == test_species_data.get("species_by_gene_id_type_flybase").get("species")[0]
-    )
+    assert species == test_species_data.get("species_by_gene_id_type_flybase")
