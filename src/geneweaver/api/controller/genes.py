@@ -70,7 +70,7 @@ def get_gene_preferred(
     return response
 
 
-@router.post("/homologs", response_model=GeneIdMappingResp)
+@router.post("/homologs", response_model=GeneIdMappingResp, deprecated=True)
 def get_related_gene_ids(
     gene_id_mapping: GeneIdHomologReq,
     cursor: Optional[deps.Cursor] = Depends(deps.cursor),
