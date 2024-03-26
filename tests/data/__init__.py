@@ -119,14 +119,14 @@ test_genes_data = {
 }
 
 
-def get_species_db_resp(species_data: dict) -> dict:
+def get_species_db_resp(species_data: list) -> list:
     """Get species data as returned by DB."""
-    species = species_data.get("species")
+    species = species_data
     for species_record in species:
         ref_gene_id_type = species_record.get("reference_gene_identifier", None)
         if ref_gene_id_type:
             species_record["reference_gene_identifier"] = GeneIdentifier(
                 ref_gene_id_type
-            ).as_int()
+            )
 
     return species

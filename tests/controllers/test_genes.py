@@ -95,7 +95,7 @@ def test_gene_mapping_valid_post_req(mock_gene_id_mapping, client):
     }
 
     response = client.post(
-        url="/api/genes/mapping", data=json.dumps(gene_id_mapping_req_1)
+        url="/api/genes/mappings", data=json.dumps(gene_id_mapping_req_1)
     )
     print(response)
     assert response.status_code == 200
@@ -110,7 +110,7 @@ def test_gene_mapping_invalid_url(mock_gene_id_mapping, client):
     }
 
     response = client.post(
-        url="/api/genes/mappings", data=json.dumps(gene_id_mapping_req_1)
+        url="/api/genes/mapping", data=json.dumps(gene_id_mapping_req_1)
     )
     print(response)
     assert response.status_code == 404
@@ -123,7 +123,7 @@ def test_gene_mapping_invalid_post_data_(mock_gene_id_mapping, client):
         "ids_map": gene_id_mapping_resp_1.get("gene_ids_map")
     }
 
-    response = client.post(url="/api/genes/mapping", data=json.dumps({"test": "test"}))
+    response = client.post(url="/api/genes/mappings", data=json.dumps({"test": "test"}))
     assert response.status_code == 422
 
 
@@ -135,7 +135,7 @@ def test_gene_aon_mapping_valid_post_req(mock_gene_id_aon_mapping, client):
     }
 
     response = client.post(
-        url="/api/genes/mapping/aon", data=json.dumps(gene_id_aon_mapping_req_1)
+        url="/api/genes/mappings/aon", data=json.dumps(gene_id_aon_mapping_req_1)
     )
     print(response)
     assert response.status_code == 200
@@ -145,7 +145,7 @@ def test_gene_aon_mapping_valid_post_req(mock_gene_id_aon_mapping, client):
 def test_gene_aon_mapping_invalid_post_data_(client):
     """Test genes ids aon mapping url and invalid post data request."""
     response = client.post(
-        url="/api/genes/mapping/aon", data=json.dumps({"test": "test"})
+        url="/api/genes/mappings/aon", data=json.dumps({"test": "test"})
     )
     assert response.status_code == 422
 

@@ -1,6 +1,5 @@
 {
-  "species_no_parameters": {
-    "species": [
+  "species_no_parameters": [
       {
         "id": 0,
         "name": "",
@@ -67,26 +66,21 @@
         "taxonomic_id": 9544,
         "reference_gene_identifier": "Entrez"
       }
-    ]
-  },
-  "species_by_taxonomy_id_10090": {
-    "species": [
+  ],
+  "species_by_taxonomy_id_10090":
+    [
       {
         "id": 1,
         "name": "Mus musculus",
         "taxonomic_id": 10090,
         "reference_gene_identifier": "MGI"
       }
-    ]
-  },
-  "species_by_gene_id_type_flybase": {
-    "species": [
+    ],
+  "species_by_gene_id_type_flybase":
       {
         "id": 5,
         "name": "Drosophila melanogaster",
         "taxonomic_id": 7227,
         "reference_gene_identifier": "FlyBase"
       }
-    ]
-  }
 }
