@@ -26,7 +26,7 @@ def get_visible_genesets(
     cursor: Optional[deps.Cursor] = Depends(deps.cursor),
 ) -> dict:
     """Get all visible genesets."""
-    user_genesets = db_geneset.by_user_id(cursor, user.id)
+    user_genesets = db_geneset.by_owner_id(cursor, user.id)
     return {"genesets": user_genesets}
 
 
