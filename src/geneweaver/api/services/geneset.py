@@ -24,11 +24,16 @@ def get_geneset_metadata(
     @return: dictionary response (geneset).
     """
     try:
-        if not is_geneset_readable_by_user(cursor, geneset_id, user):
+        if user is None or user.id is None:
             return {"error": True, "message": message.ACCESS_FORBIDDEN}
 
-        geneset = db_geneset.by_id(cursor, geneset_id, include_pub_info)
-        return {"geneset": geneset}
+        results = db_geneset.get(
+            cursor,
+            is_readable_by=user.id,
+            gs_id=geneset_id,
+            with_publication_info=include_pub_info,
+        )
+        return {"geneset": results[0]}
 
     except Exception as err:
         logger.error(err)
@@ -44,10 +49,18 @@ def get_geneset(cursor: Cursor, geneset_id: int, user: User) -> dict:
     @return: dictionary response (geneset and genset values).
     """
     try:
-        if not is_geneset_readable_by_user(cursor, geneset_id, user):
+        # if not is_geneset_readable_by_user(cursor, geneset_id, user):
+
+        if user is None or user.id is None:
             return {"error": True, "message": message.ACCESS_FORBIDDEN}
 
-        geneset = db_geneset.by_id(cursor, geneset_id)
+        results = db_geneset.get(
+            cursor,
+            is_readable_by=user.id,
+            gs_id=geneset_id,
+            with_publication_info=False,
+        )
+        geneset = results[0]
         geneset_values = db_geneset_value.by_geneset_id(cursor, geneset_id)
         return {"geneset": geneset, "geneset_values": geneset_values}
 
@@ -68,10 +81,19 @@ def get_geneset_w_gene_id_type(
     @return: Dictionary response (geneset identifier, geneset, and genset values).
     """
     try:
-        if not is_geneset_readable_by_user(cursor, geneset_id, user):
+        # if not is_geneset_readable_by_user(cursor, geneset_id, user):
+        #
+
+        if user is None or user.id is None:
             return {"error": True, "message": message.ACCESS_FORBIDDEN}
 
-        geneset = db_geneset.by_id(cursor, geneset_id)
+        results = db_geneset.get(
+            cursor,
+            is_readable_by=user.id,
+            gs_id=geneset_id,
+            with_publication_info=False,
+        )
+        geneset = results[0]
 
         mapping_across_species = False
         original_gene_id_type = gene_id_type
