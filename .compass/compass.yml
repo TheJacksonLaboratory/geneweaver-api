@@ -1,0 +1,103 @@
+name: geneweaver-api
+id: 'ari:cloud:compass:44257862-6c68-4d47-8211-da38d2bb001b:component/90bb0329-f6c5-429a-abbc-8d174535ad21/ac8655e4-ce94-4576-adb6-15a785b0161b'
+description: null
+configVersion: 1
+typeId: SERVICE
+ownerId: 'ari:cloud:teams::team/0d1a489d-e157-4c61-8d94-7e5c651eb9cc'
+fields:
+  tier: 2
+  lifecycle: Active
+links:
+  - name: null
+    type: REPOSITORY
+    url: 'https://github.com/TheJacksonLaboratory/geneweaver-api'
+  - name: null
+    type: PROJECT
+    url: 'https://jacksonlaboratory.atlassian.net/browse/G3'
+  - name: ''
+    type: DOCUMENT
+    url: 'https://thejacksonlaboratory.github.io/geneweaver-docs/'
+  - name: Swagger Page
+    type: OTHER_LINK
+    url: 'https://geneweaver.jax.org/api/docs'
+  - name: GeneWeaver Slack
+    type: CHAT_CHANNEL
+    url: 'https://thejacksonlaboratory.slack.com/archives/GGKCSAWCF'
+  - name: GeneWeaver JCPG Slack
+    type: CHAT_CHANNEL
+    url: 'https://thejacksonlaboratory.slack.com/archives/C05G32L2SLX'
+relationships:
+  DEPENDS_ON:
+    - 'ari:cloud:compass:44257862-6c68-4d47-8211-da38d2bb001b:component/90bb0329-f6c5-429a-abbc-8d174535ad21/f1375e59-b539-46b4-a44c-2cf1bce3637a'
+    - 'ari:cloud:compass:44257862-6c68-4d47-8211-da38d2bb001b:component/90bb0329-f6c5-429a-abbc-8d174535ad21/a95bd6b6-cf4f-4635-bb62-693ef9df2f69'
+    - 'ari:cloud:compass:44257862-6c68-4d47-8211-da38d2bb001b:component/90bb0329-f6c5-429a-abbc-8d174535ad21/37625f97-0774-42ba-9e0e-9a6b4c87a707'
+    - 'ari:cloud:compass:44257862-6c68-4d47-8211-da38d2bb001b:component/90bb0329-f6c5-429a-abbc-8d174535ad21/43044a89-087b-4469-86a8-34f9ded06b4c'
+    - 'ari:cloud:compass:44257862-6c68-4d47-8211-da38d2bb001b:component/90bb0329-f6c5-429a-abbc-8d174535ad21/71eb9358-bf9c-4bb2-b30f-2918b099ed57'
+labels: null
+customFields:
+  - name: 'FIN: Funding End Date'
+    type: text
+    value: null
+  - name: 'FIN: Funding Sources'
+    type: text
+    value: null
+  - name: 'FIN: Hosting Cost'
+    type: number
+    value: null
+  - name: 'FIN: Incurred Development Cost'
+    type: number
+    value: null
+  - name: 'FIN: Maintenance Cost'
+    type: number
+    value: null
+  - name: 'INFO: Business Owner'
+    type: text
+    value: 'Erich Baker, Elissa Chesler'
+  - name: 'INFO: Creation Date'
+    type: text
+    value: null
+  - name: 'INFO: Data Type(s)'
+    type: text
+    value: null
+  - name: 'INFO: FAIR Compliance'
+    type: text
+    value: null
+  - name: 'INFO: Usage Statistics'
+    type: text
+    value: null
+  - name: 'INFO: User Statistics'
+    type: text
+    value: null
+  - name: 'TECH: Authentication Type'
+    type: text
+    value: null
+  - name: 'TECH: Authorization'
+    type: text
+    value: null
+  - name: 'TECH: Automated Deployments'
+    type: boolean
+    value: true
+  - name: 'TECH: Containerized'
+    type: boolean
+    value: false
+  - name: 'TECH: Deployment Location'
+    type: text
+    value: jax-cluster
+  - name: 'TECH: Deployment OS'
+    type: text
+    value: null
+  - name: 'TECH: Open Source Code'
+    type: boolean
+    value: true
+  - name: 'TECH: Other'
+    type: text
+    value: null
+  - name: 'TECH: Point of Contact'
+    type: text
+    value: null
+  - name: 'TECH: Public Domain Name'
+    type: boolean
+    value: false
+  - name: 'TECH: Stack'
+    type: text
+    value: 'python, fastapi'
