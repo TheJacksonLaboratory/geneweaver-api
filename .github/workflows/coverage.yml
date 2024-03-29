@@ -6,6 +6,7 @@ on:
 jobs:
   check-coverage:
     uses: ./.github/workflows/_check-coverage-action.yml
+    secrets: inherit
     permissions:
       pull-requests: write
     with:
