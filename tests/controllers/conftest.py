@@ -1,4 +1,5 @@
 """Fixtures for the controller tests."""
+
 from unittest.mock import Mock
 
 import psycopg

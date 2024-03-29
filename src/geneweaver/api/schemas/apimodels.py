@@ -1,4 +1,5 @@
 """Models for API requests."""
+
 from typing import Iterable, List, Optional
 
 from geneweaver.core.enum import GeneIdentifier, Species

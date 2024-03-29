@@ -1,4 +1,5 @@
 """Pytest fixtures for the batch parsing service tests."""
+
 from unittest.mock import AsyncMock
 
 import pytest

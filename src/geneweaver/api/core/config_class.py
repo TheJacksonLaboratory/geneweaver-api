@@ -1,4 +1,5 @@
 """Namespace for the config class for the Geneweaver API."""
+
 from typing import Any, Dict, List, Optional
 
 from geneweaver.db.core.settings_class import Settings as DBSettings

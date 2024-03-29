@@ -1,4 +1,5 @@
 """Tests for species API."""
+
 from unittest.mock import patch
 
 from tests.data import test_species_data

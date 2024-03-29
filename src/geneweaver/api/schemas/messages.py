@@ -1,4 +1,5 @@
 """Namespace for defining schemas related to messaging."""
+
 import enum
 from typing import List, Optional
 

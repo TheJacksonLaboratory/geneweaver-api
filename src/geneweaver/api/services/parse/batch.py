@@ -4,6 +4,7 @@ Most of the functionality for processing batch files is contained in the
 geneweaver.core module. This module contains functions for reading the contents
 of a file and passing those contents to the core module for processing.
 """
+
 from typing import List, Tuple
 
 from fastapi import UploadFile

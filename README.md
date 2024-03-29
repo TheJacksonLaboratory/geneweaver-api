@@ -1,5 +1,9 @@
 # Geneweaver 3 API
 
+[![GitHub deployments](https://img.shields.io/github/deployments/thejacksonlaboratory/geneweaver-api/jax-cluster-prod-10--prod?style=for-the-badge&label=Deployment%20Status)](https://geneweaver.jax.org/aon/api/docs)
+[![Website](https://img.shields.io/website?url=https%3A%2F%2Fgeneweaver.jax.org%2Fapi%2Fdocs&up_message=available&down_message=down&style=for-the-badge&logo=swagger&label=Swagger%20Page&link=https%3A%2F%2Fgeneweaver.jax.org%2Fapi%2Fdocs)](https://geneweaver.jax.org/api/docs)
+[![Website](https://img.shields.io/website?url=https%3A%2F%2Fthejacksonlaboratory.github.io%2Fgeneweaver-docs%2F&up_message=AVAILABLE&style=for-the-badge&logo=materialformkdocs&label=Documentation)](https://thejacksonlaboratory.github.io/geneweaver-docs/)
+
 Description: The API for the Geneweaver v3 application ecosystem.
 
 ## Setup

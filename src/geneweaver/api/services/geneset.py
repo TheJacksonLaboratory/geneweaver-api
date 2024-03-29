@@ -1,4 +1,5 @@
 """Service functions for dealing with genesets."""
+
 from typing import Iterable
 
 from fastapi.logger import logger

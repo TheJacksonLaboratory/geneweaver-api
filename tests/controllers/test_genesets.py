@@ -1,4 +1,5 @@
 """Tests for geneset API."""
+
 from unittest.mock import patch
 
 import pytest
