@@ -1,9 +1,11 @@
 """Service functions for dealing with batch files."""
+
 from typing import List, Tuple
 
 from fastapi import UploadFile
 from geneweaver.api.schemas.messages import SystemMessage, UserMessage
 from geneweaver.core.parse import batch
+from geneweaver.db.batch import add_batch_genesets
 
 
 async def process_batch_file(
@@ -32,6 +34,10 @@ async def process_batch_file(
     # TODO: Remove this print statement.
     for geneset in genesets:
         print(geneset, "\n")
+
+    geneset_added, user_messages, system_messages = add_batch_genesets(
+        db, genesets, user_id
+    )
 
     # TODO: Return the correct values.
     return [10], [], []

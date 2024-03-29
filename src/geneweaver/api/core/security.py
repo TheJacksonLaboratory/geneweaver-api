@@ -1,4 +1,5 @@
 """Code to authenticate a user to the API."""
+
 # ruff: noqa: B008
 import urllib.parse
 from typing import Dict, Optional, Type, Union

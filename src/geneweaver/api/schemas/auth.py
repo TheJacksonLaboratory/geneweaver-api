@@ -1,4 +1,5 @@
 """Authentication Related Schemas."""
+
 from enum import Enum
 from typing import List, Optional
 

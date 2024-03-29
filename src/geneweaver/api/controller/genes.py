@@ -1,4 +1,5 @@
 """Endpoints related to genes."""
+
 from typing import Optional
 
 from fastapi import APIRouter, Depends, Path, Query

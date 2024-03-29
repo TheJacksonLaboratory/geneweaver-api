@@ -1,4 +1,5 @@
 """Dependency injection capabilities for the GeneWeaver API."""
+
 # ruff: noqa: B008
 import logging
 from contextlib import asynccontextmanager

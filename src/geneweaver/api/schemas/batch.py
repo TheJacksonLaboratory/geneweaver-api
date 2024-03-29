@@ -1,4 +1,5 @@
 """Module for defining schemas for batch endpoints."""
+
 from typing import List
 
 from geneweaver.api.schemas.messages import MessageResponse

@@ -1,4 +1,5 @@
 """Constants for batch parsing tests."""
+
 # ruff: noqa: E501
 EXAMPLE_BATCH_FILE = """
 # This is an example batch upload file for GeneWeaver.
