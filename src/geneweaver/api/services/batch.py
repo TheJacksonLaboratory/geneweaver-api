@@ -5,7 +5,6 @@ from typing import List, Tuple
 from fastapi import UploadFile
 from geneweaver.api.schemas.messages import SystemMessage, UserMessage
 from geneweaver.core.parse import batch
-from geneweaver.db.batch import add_batch_genesets
 
 
 async def process_batch_file(
