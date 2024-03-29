@@ -34,10 +34,6 @@ async def process_batch_file(
     for geneset in genesets:
         print(geneset, "\n")
 
-    # geneset_added, user_messages, system_messages = add_batch_genesets(
-    #     db, genesets, user_id
-    # )
-
     # TODO: Return the correct values.
     return [10], [], []
 
