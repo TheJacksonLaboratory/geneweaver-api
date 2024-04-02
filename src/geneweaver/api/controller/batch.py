@@ -1,4 +1,5 @@
 """API Controller definition for batch processing."""
+
 from typing import Optional
 
 from fastapi import APIRouter, Security, UploadFile

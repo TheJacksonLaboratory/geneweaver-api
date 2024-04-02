@@ -65,6 +65,32 @@ jobs:
         with:
           name: coverage-report-html
           path: htmlcov
+      - name: Upload coverage to Compass
+        run: |
+          METRIC_VALUE=$(cat coverage_report.txt | grep 'Total coverage:' | awk '{print $NF}' | sed 's/%//')
+          curl --request POST \
+          --url https://jacksonlaboratory.atlassian.net/gateway/api/compass/v1/metrics \
+          --user "${{ vars.ATLASSIAN_COMPASS_EMAIL }}:${{ secrets.ATLASSIAN_COMPASS_KEY }}" \
+          --header "Accept: application/json" \
+          --header "Content-Type: application/json" \
+          --data "{
+            \"metricSourceId\": \"ari:cloud:compass:44257862-6c68-4d47-8211-da38d2bb001b:metric-source/90bb0329-f6c5-429a-abbc-8d174535ad21/f2a60ca2-5065-4c10-ae99-cb844715b5e3\",
+            \"value\": $METRIC_VALUE,
+            \"timestamp\": \"$(date -u +'%Y-%m-%dT%H:%M:%SZ')\"
+          }"
+      - name: Upload complexity to Compass
+        run: |
+          METRIC_VALUE=$(poetry run radon cc src --total-average | grep 'Average complexity:' | awk '{print $NF}' | sed 's/[\(\)]//g')
+          curl --request POST \
+          --url https://jacksonlaboratory.atlassian.net/gateway/api/compass/v1/metrics \
+          --user "${{ vars.ATLASSIAN_COMPASS_EMAIL }}:${{ secrets.ATLASSIAN_COMPASS_KEY }}" \
+          --header "Accept: application/json" \
+          --header "Content-Type: application/json" \
+          --data "{
+            \"metricSourceId\": \"ari:cloud:compass:44257862-6c68-4d47-8211-da38d2bb001b:metric-source/90bb0329-f6c5-429a-abbc-8d174535ad21/480dd6d8-7e86-492f-b929-3cea59711691\",
+            \"value\": $METRIC_VALUE,
+            \"timestamp\": \"$(date -u +'%Y-%m-%dT%H:%M:%SZ')\"
+          }"
   comment-coverage-report:
     needs: [ check_coverage ]
     runs-on: ubuntu-latest

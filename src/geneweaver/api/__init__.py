@@ -1,4 +1,5 @@
 """The Geneweaver API Module."""
+
 try:
     from importlib import metadata
 except ImportError:

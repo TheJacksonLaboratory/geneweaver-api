@@ -1,6 +1,6 @@
 """Service functions for dealing with genesets."""
-from typing import Iterable, Optional
 
+from typing import Iterable, Optional
 from fastapi.logger import logger
 from geneweaver.api.controller import message
 from geneweaver.api.schemas.auth import User

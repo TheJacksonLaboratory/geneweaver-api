@@ -1,4 +1,5 @@
 """Service functions for dealing with batch files."""
+
 from typing import List, Tuple
 
 from fastapi import UploadFile

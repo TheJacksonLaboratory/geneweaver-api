@@ -1,4 +1,5 @@
 """Tests for geneset API."""
+
 import json
 from unittest.mock import patch
 

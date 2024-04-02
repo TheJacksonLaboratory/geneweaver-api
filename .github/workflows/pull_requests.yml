@@ -12,6 +12,7 @@ jobs:
   check-coverage:
     name: "Check Coverage"
     needs: [format-lint]
+    secrets: inherit
     uses: ./.github/workflows/_check-coverage-action.yml
     permissions:
       pull-requests: write

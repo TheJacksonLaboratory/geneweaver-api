@@ -1,4 +1,5 @@
 """Exceptions for the GeneWeaver API."""
+
 from fastapi import HTTPException
 
 

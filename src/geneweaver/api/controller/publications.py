@@ -1,4 +1,5 @@
 """Endpoints related to publications."""
+
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Path

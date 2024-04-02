@@ -2,6 +2,7 @@
 
 NOTE: These schemas might be duplicates of schemas available in geneweaver.core.
 """
+
 from enum import Enum
 from typing import Optional
 
