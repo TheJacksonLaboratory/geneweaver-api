@@ -14,6 +14,8 @@ geneset_w_gene_id_type_json = importlib.resources.read_text(
     "tests.data", "response_geneset_w_gene_id_type.json"
 )
 
+geneset_list_response_json = importlib.resources.read_text("tests.data", "geneset.json")
+
 gene_homologus_ids_json = importlib.resources.read_text(
     "tests.data", "homologus_ids.json"
 )
@@ -39,6 +41,7 @@ test_geneset_data = {
     "geneset_metadata_w_pub_info": json.loads(geneset_response_json).get(
         "geneset_with_publication_info"
     ),
+    "geneset_list_resp": json.loads(geneset_list_response_json),
 }
 
 # Gene homolog ids test data

@@ -1,33 +1,23 @@
 {
   "gene_identifier_type": "ENSEMBLE_GENE",
   "geneset": {
-    "gs_id": 1234,
-    "usr_id": 51,
+    "id": 1234,
+    "user_id": 51,
     "file_id": 1715,
-    "gs_name": "Differential expression in heroin and cocaine abusers-Down-regulated Cocaine, Up-regulated Heroin",
-    "gs_abbreviation": "UpRegHeroinDwnRegCocaine",
-    "pub_id": 6,
-    "res_id": null,
-    "cur_id": 3,
-    "gs_description": "From the initial set of differentially expressed genes in post mortum nucleus accumbens of chronic heroin and cocaine abusers, this set contains genes upregulated in cocaine abusers but downregulated in heroin abusers.",
-    "sp_id": 2,
-    "gs_count": 3,
-    "gs_threshold_type": 3,
-    "gs_threshold": "0.5",
-    "gs_groups": "0",
-    "gs_attribution_old": null,
-    "gs_uri": null,
-    "gs_gene_id_type": -7,
-    "_searchtext": "'abus':8A,34B,42B,47B 'abusers-down-regul':7A 'accumben':28B 'chronic':30B 'cocain':6A,11A,33B,41B 'contain':37B 'differenti':1A,21B 'downregul':44B 'express':2A,22B 'gene':23B,38B 'heroin':4A,15A,31B,46B 'initi':18B 'mortum':26B 'nucleus':27B 'post':25B 'regul':10A,14A 'set':19B,36B 'up-regul':12A 'upregul':39B",
-    "gs_created": "2008-04-22",
-    "admin_flag": null,
-    "gs_updated": "2020-05-06T09:19:44.883323",
-    "gs_status": "normal",
-    "gsv_qual": "{}",
-    "_comments_author": null,
-    "_comments_curator": null,
-    "gs_attribution": null,
-    "gs_is_edgelist": false
+    "curation_id": 3,
+    "species_id": 2,
+    "name": "Differential expression in heroin and cocaine abusers-Down-regulated Cocaine, Up-regulated Heroin",
+    "abbreviation": "UpRegHeroinDwnRegCocaine",
+    "publication_id": 6,
+    "description": "From the initial set of differentially expressed genes in post mortum nucleus accumbens of chronic heroin and cocaine abusers, this set contains genes upregulated in cocaine abusers but downregulated in heroin abusers.",
+    "count": 3,
+    "score_type": 3,
+    "threshold": "0.5",
+    "status": "normal",
+    "gene_id_type": -7,
+    "attribution": null,
+    "created": "2008-04-22",
+    "updated": "2020-05-06T09:19:44.883323"
   },
   "geneset_values": [
     {
@@ -140,4 +130,3 @@
     }
   ]
 }
-

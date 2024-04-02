@@ -1,15 +1,80 @@
 """Service functions for dealing with genesets."""
-from typing import Iterable
+from typing import Iterable, Optional
 
 from fastapi.logger import logger
 from geneweaver.api.controller import message
 from geneweaver.api.schemas.auth import User
-from geneweaver.core.enum import GeneIdentifier
+from geneweaver.core.enum import GeneIdentifier, GenesetTier, Species
 from geneweaver.db import gene as db_gene
 from geneweaver.db import geneset as db_geneset
 from geneweaver.db import geneset_value as db_geneset_value
-from geneweaver.db.geneset import is_readable as db_is_readable
 from psycopg import Cursor
+
+
+def get_visible_genesets(
+    cursor: Cursor,
+    user: User,
+    gs_id: Optional[int] = None,
+    only_my_genesets: Optional[bool] = None,
+    curation_tier: Optional[GenesetTier] = None,
+    species: Optional[Species] = None,
+    name: Optional[str] = None,
+    abbreviation: Optional[str] = None,
+    publication_id: Optional[int] = None,
+    pubmed_id: Optional[int] = None,
+    gene_id_type: Optional[GeneIdentifier] = None,
+    search_text: Optional[str] = None,
+    limit: Optional[int] = None,
+    offset: Optional[int] = None,
+    with_publication_info: bool = True,
+) -> dict:
+    """Get genesets from the database.
+
+    :param cursor: An async database cursor.
+    :param gs_id: Show only results with this geneset ID.
+    :param curation_tier: Show only results of this curation tier.
+    :param species: Show only results associated with this species.
+    :param name: Show only results with this name.
+    :param abbreviation: Show only results with this abbreviation.
+    :param publication_id: Show only results with this publication ID (internal).
+    :param pubmed_id: Show only results with this PubMed ID.
+    :param gene_id_type: Show only results with this gene ID type.
+    :param search_text: Return genesets that match this search text (using PostgreSQL
+                        full-text search).
+    :param limit: Limit the number of results.
+    :param offset: Offset the results.
+    :param with_publication_info: Include publication info in the return.
+    """
+    try:
+        if user is None or user.id is None:
+            return {"error": True, "message": message.ACCESS_FORBIDDEN}
+
+        owner_id = None
+        if only_my_genesets:
+            owner_id = user.id
+
+        results = db_geneset.get(
+            cursor,
+            is_readable_by=user.id,
+            owner_id=owner_id,
+            gs_id=gs_id,
+            curation_tier=curation_tier,
+            species=species,
+            name=name,
+            abbreviation=abbreviation,
+            publication_id=publication_id,
+            pubmed_id=pubmed_id,
+            gene_id_type=gene_id_type,
+            search_text=search_text,
+            with_publication_info=with_publication_info,
+            limit=limit,
+            offset=offset,
+        )
+        return {"geneset": results}
+
+    except Exception as err:
+        logger.error(err)
+        raise err
 
 
 def get_geneset_metadata(
@@ -81,9 +146,6 @@ def get_geneset_w_gene_id_type(
     @return: Dictionary response (geneset identifier, geneset, and genset values).
     """
     try:
-        # if not is_geneset_readable_by_user(cursor, geneset_id, user):
-        #
-
         if user is None or user.id is None:
             return {"error": True, "message": message.ACCESS_FORBIDDEN}
 
@@ -153,21 +215,3 @@ def map_geneset_homology(
     except Exception as err:
         logger.error(err)
         raise err
-
-
-def is_geneset_readable_by_user(cursor: Cursor, geneset_id: int, user: User) -> bool:
-    """Check if the user can read the geneset from DB.
-
-    @param cursor: DB cursor object
-    @param geneset_id: geneset identifier
-    @param user: GW user
-    @return: True if geneset is readable by user.
-    """
-    readable: bool = False
-    try:
-        readable = db_is_readable(cursor, user.id, geneset_id)
-    except Exception as err:
-        logger.error(err)
-        raise err
-
-    return readable
