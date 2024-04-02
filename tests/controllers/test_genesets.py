@@ -29,13 +29,11 @@ def test_get_geneset_errors(mock_get_geneset, client):
     mock_get_geneset.return_value = {"error": True, "message": message.ACCESS_FORBIDDEN}
 
     response = client.get("/api/genesets/1234")
-    print(response)
     assert response.status_code == 403
 
     mock_get_geneset.return_value = {"error": True, "message": "other"}
 
     response = client.get("/api/genesets/1234")
-    print(response)
     assert response.status_code == 500
 
 
@@ -76,13 +74,11 @@ def test_export_geneset_errors(mock_get_geneset, client):
     mock_get_geneset.return_value = {"error": True, "message": message.ACCESS_FORBIDDEN}
 
     response = client.get("/api/genesets/1234/file")
-    print(response)
     assert response.status_code == 403
 
     mock_get_geneset.return_value = {"error": True, "message": "other"}
 
     response = client.get("/api/genesets/1234/file")
-    print(response)
     assert response.status_code == 500
 
 
@@ -105,13 +101,11 @@ def test_get_geneset_metadata_errors(mock_get_geneset_metadata, client):
     }
 
     response = client.get("/api/genesets/1234/metadata")
-    print(response)
     assert response.status_code == 403
 
     mock_get_geneset_metadata.return_value = {"error": True, "message": "other"}
 
     response = client.get("/api/genesets/1234/metadata")
-    print(response)
     assert response.status_code == 500
 
 
@@ -202,11 +196,9 @@ def test_get_visible_geneset_errors(mock_get_visible_genesets, client):
     }
 
     response = client.get("/api/genesets?gs_id=1234")
-    print(response)
     assert response.status_code == 403
 
     mock_get_visible_genesets.return_value = {"error": True, "message": "other"}
 
     response = client.get("/api/genesets?gs_id=1234")
-    print(response)
     assert response.status_code == 500

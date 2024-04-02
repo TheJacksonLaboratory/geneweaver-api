@@ -1,6 +1,7 @@
 """Service functions for dealing with genesets."""
 
 from typing import Iterable, Optional
+
 from fastapi.logger import logger
 from geneweaver.api.controller import message
 from geneweaver.api.schemas.auth import User
@@ -114,8 +115,6 @@ def get_geneset(cursor: Cursor, geneset_id: int, user: User) -> dict:
     @return: dictionary response (geneset and genset values).
     """
     try:
-        # if not is_geneset_readable_by_user(cursor, geneset_id, user):
-
         if user is None or user.id is None:
             return {"error": True, "message": message.ACCESS_FORBIDDEN}
 
