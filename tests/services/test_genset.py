@@ -179,7 +179,7 @@ def test_visible_geneset_response(mock_db_geneset):
     mock_db_geneset.get.return_value = geneset_list_resp.get("geneset_resp_1_list_10")
 
     response = geneset.get_visible_genesets(None, mock_user)
-    assert response.get("geneset") == geneset_list_resp.get("geneset_resp_1_list_10")
+    assert response.get("data") == geneset_list_resp.get("geneset_resp_1_list_10")
 
 
 def test_visible_geneset_no_user():
@@ -215,7 +215,7 @@ def test_visible_geneset_all_expected_parameters(mock_db_geneset):
         with_publication_info=True,
     )
 
-    assert response.get("geneset") == geneset_list_resp.get("geneset_resp_1_list_10")
+    assert response.get("data") == geneset_list_resp.get("geneset_resp_1_list_10")
 
 
 @patch("geneweaver.api.services.geneset.db_geneset")

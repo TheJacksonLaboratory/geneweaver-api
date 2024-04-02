@@ -31,7 +31,7 @@ def get_visible_genesets(
 ) -> dict:
     """Get genesets from the database.
 
-    :param cursor: An async database cursor.
+    :param cursor: A database cursor.
     :param gs_id: Show only results with this geneset ID.
     :param curation_tier: Show only results of this curation tier.
     :param species: Show only results associated with this species.
@@ -71,7 +71,7 @@ def get_visible_genesets(
             limit=limit,
             offset=offset,
         )
-        return {"geneset": results}
+        return {"data": results}
 
     except Exception as err:
         logger.error(err)
