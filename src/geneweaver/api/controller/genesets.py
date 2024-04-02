@@ -6,14 +6,13 @@ import time
 from tempfile import TemporaryDirectory
 from typing import Optional
 
-from fastapi import APIRouter, Depends, HTTPException, Path, Security
+from fastapi import APIRouter, Depends, HTTPException, Path, Query, Security
 from fastapi.responses import FileResponse
 from geneweaver.api import dependencies as deps
 from geneweaver.api.schemas.auth import UserInternal
 from geneweaver.api.services import geneset as genset_service
 from geneweaver.api.services import publications as publication_service
-from geneweaver.core.enum import GeneIdentifier
-from geneweaver.db import geneset as db_geneset
+from geneweaver.core.enum import GeneIdentifier, GenesetTier, Species
 from typing_extensions import Annotated
 
 from . import message as api_message
@@ -25,10 +24,94 @@ router = APIRouter(prefix="/genesets", tags=["genesets"])
 def get_visible_genesets(
     user: UserInternal = Security(deps.full_user),
     cursor: Optional[deps.Cursor] = Depends(deps.cursor),
+    gs_id: Annotated[
+        Optional[int],
+        Query(
+            format="int64",
+            minimum=0,
+            maxiumum=9223372036854775807,
+            description=api_message.GENESET_ID,
+        ),
+    ] = None,
+    only_my_genesets: Annotated[
+        Optional[bool], Query(description=api_message.ONLY_MY_GS)
+    ] = False,
+    curation_tier: Optional[GenesetTier] = None,
+    species: Optional[Species] = None,
+    name: Annotated[Optional[str], Query(description=api_message.NAME)] = None,
+    abbreviation: Annotated[
+        Optional[str], Query(description=api_message.ABBREVIATION)
+    ] = None,
+    publication_id: Annotated[
+        Optional[int],
+        Query(
+            format="int64",
+            minimum=0,
+            maxiumum=9223372036854775807,
+            description=api_message.PUBLICATION_ID,
+        ),
+    ] = None,
+    pubmed_id: Annotated[
+        Optional[int],
+        Query(
+            format="int64",
+            minimum=0,
+            maxiumum=9223372036854775807,
+            description=api_message.PUBMED_ID,
+        ),
+    ] = None,
+    gene_id_type: Optional[GeneIdentifier] = None,
+    search_text: Annotated[
+        Optional[str], Query(description=api_message.SEARCH_TEXT)
+    ] = None,
+    with_publication_info: Annotated[
+        bool, Query(description=api_message.ONLY_MY_GS)
+    ] = True,
+    limit: Annotated[
+        Optional[int],
+        Query(
+            format="int64",
+            minimum=0,
+            maxiumum=1000,
+            description=api_message.LIMIT,
+        ),
+    ] = 10,
+    offset: Annotated[
+        Optional[int],
+        Query(
+            format="int64",
+            minimum=0,
+            maxiumum=9223372036854775807,
+            description=api_message.OFFSET,
+        ),
+    ] = None,
 ) -> dict:
     """Get all visible genesets."""
-    user_genesets = db_geneset.by_owner_id(cursor, user.id)
-    return {"genesets": user_genesets}
+    response = genset_service.get_visible_genesets(
+        cursor=cursor,
+        user=user,
+        gs_id=gs_id,
+        curation_tier=curation_tier,
+        species=species,
+        name=name,
+        abbreviation=abbreviation,
+        publication_id=publication_id,
+        pubmed_id=pubmed_id,
+        gene_id_type=gene_id_type,
+        search_text=search_text,
+        with_publication_info=with_publication_info,
+        only_my_genesets=only_my_genesets,
+        limit=limit,
+        offset=offset,
+    )
+
+    if "error" in response:
+        if response.get("message") == api_message.ACCESS_FORBIDDEN:
+            raise HTTPException(status_code=403, detail=api_message.ACCESS_FORBIDDEN)
+        else:
+            raise HTTPException(status_code=500, detail=api_message.UNEXPECTED_ERROR)
+
+    return response
 
 
 @router.get("/{geneset_id}")
