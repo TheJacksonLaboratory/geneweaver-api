@@ -13,7 +13,6 @@ publication_by_id_resp = test_publication_data.get("publication_by_id")
 
 
 @patch("geneweaver.api.services.geneset.get_geneset")
-# @patch("geneweaver.api.services.geneset.is_geneset_readable_by_user")
 def test_get_geneset_response(mock_get_genenset, client):
     """Test get geneset ID data response."""
     mock_get_genenset.return_value = geneset_by_id_resp.get("geneset")
@@ -158,10 +157,7 @@ def test_publication_not_found_for_geneset(
 
 
 @patch("geneweaver.api.services.geneset.get_geneset_metadata")
-@patch("geneweaver.api.services.publications.get_publication")
-def test_get_publication_errors(
-    mock_pub_service_call, mock_get_geneset_metadata, client
-):
+def test_get_publication_errors(mock_get_geneset_metadata, client):
     """Test get geneset ID data response."""
     mock_get_geneset_metadata.return_value = {
         "error": True,
