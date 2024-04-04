@@ -188,8 +188,7 @@ def test_invalid_param_gene_get_req(mock_gene_call, client):
 def test_valid_get_preferred_gene_req(mock_gene_call, client):
     """Test valid get preferred gene request."""
     mock_gene_call.return_value = gene_preferred_resp_1
-
     response = client.get(url="/api/genes/1000/preferred")
-
+    print(response.json())
     assert response.status_code == 200
     assert response.json() == gene_preferred_resp_1

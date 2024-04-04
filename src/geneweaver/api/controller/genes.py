@@ -9,6 +9,7 @@ from geneweaver.api.schemas.apimodels import (
     GeneIdMappingAonReq,
     GeneIdMappingReq,
     GeneIdMappingResp,
+    GeneReturn,
 )
 from geneweaver.api.services import genes as genes_service
 from geneweaver.core.enum import GeneIdentifier, Species
@@ -48,7 +49,7 @@ def get_genes(
             description=api_message.OFFSET,
         ),
     ] = None,
-) -> dict:
+) -> GeneReturn:
     """Get geneweaver list of genes."""
     if limit is None:
         limit = 100
@@ -65,7 +66,7 @@ def get_gene_preferred(
         int, Path(format="int64", minimum=0, maxiumum=9223372036854775807)
     ],
     cursor: Optional[deps.Cursor] = Depends(deps.cursor),
-) -> dict:
+) -> GeneReturn:
     """Get preferred gene for a given gene ode_id."""
     response = genes_service.get_gene_preferred(cursor, gene_id)
     return response
