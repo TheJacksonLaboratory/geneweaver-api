@@ -32,7 +32,7 @@ def test_gene_id_mapping_response_post_req(mock_gene_id_mapping, client):
     response = client.post(
         url="/api/genes/homologs", data=json.dumps(gene_ids_homolog_req_1)
     )
-    print(response)
+
     assert response.status_code == 200
     assert response.json() == gene_ids_homolog_resp_1
 
@@ -47,7 +47,7 @@ def test_gene_id_mapping_invalid_url(mock_gene_id_mapping, client):
     response = client.post(
         url="/api/genes/homologous-ids", data=json.dumps(gene_ids_homolog_req_1)
     )
-    print(response)
+
     assert response.status_code == 404
 
 
@@ -98,7 +98,7 @@ def test_gene_mapping_valid_post_req(mock_gene_id_mapping, client):
     response = client.post(
         url="/api/genes/mappings", data=json.dumps(gene_id_mapping_req_1)
     )
-    print(response)
+
     assert response.status_code == 200
     assert response.json() == gene_id_mapping_resp_1
 
@@ -113,7 +113,7 @@ def test_gene_mapping_invalid_url(mock_gene_id_mapping, client):
     response = client.post(
         url="/api/genes/mapping", data=json.dumps(gene_id_mapping_req_1)
     )
-    print(response)
+
     assert response.status_code == 404
 
 
@@ -138,7 +138,7 @@ def test_gene_aon_mapping_valid_post_req(mock_gene_id_aon_mapping, client):
     response = client.post(
         url="/api/genes/mappings/aon", data=json.dumps(gene_id_aon_mapping_req_1)
     )
-    print(response)
+
     assert response.status_code == 200
     assert response.json() == gene_id_aon_mapping_resp_1
 
@@ -158,7 +158,6 @@ def test_valid_gene_get_req(mock_gene_call, client):
 
     response = client.get(url="/api/genes")
 
-    print(response)
     assert response.status_code == 200
     assert response.json() == genes_list_10
 
@@ -189,6 +188,6 @@ def test_valid_get_preferred_gene_req(mock_gene_call, client):
     """Test valid get preferred gene request."""
     mock_gene_call.return_value = gene_preferred_resp_1
     response = client.get(url="/api/genes/1000/preferred")
-    print(response.json())
+
     assert response.status_code == 200
     assert response.json() == gene_preferred_resp_1
