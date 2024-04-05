@@ -56,7 +56,7 @@ def get_gene_preferred(cursor: Cursor, gene_id: int) -> dict:
         logger.error(err)
         raise err
 
-    return {"data": gene}
+    return gene
 
 
 def get_homolog_ids(

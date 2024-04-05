@@ -1,6 +1,6 @@
 """Models for API requests."""
 
-from typing import Iterable, List, Optional, Union
+from typing import Iterable, List, Optional
 
 from geneweaver.core.enum import GeneIdentifier, Species
 from geneweaver.core.schema.gene import Gene
@@ -41,4 +41,4 @@ class GeneIdMappingAonReq(BaseModel):
 class GeneReturn(BaseModel):
     """Model for gene endpoint return."""
 
-    data: Union[List[Gene], Gene]
+    data: List[Gene]

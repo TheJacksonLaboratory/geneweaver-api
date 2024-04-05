@@ -231,7 +231,7 @@ def test_get_gene_error(mock_db_gene):
     mock_db_gene.get.side_effect = Exception("ERROR")
 
     with pytest.raises(expected_exception=Exception):
-        genes.get(None)
+        genes.get_genes(None)
 
 
 @patch("geneweaver.api.services.genes.db_gene")
@@ -265,7 +265,7 @@ def test_get_gene_preferred(mock_db_gene):
     response = genes.get_gene_preferred(None, gene_id=1000)
 
     assert response.get("error") is None
-    assert response.get("data") == gene_preferred_resp_1
+    assert response == gene_preferred_resp_1
 
 
 @patch("geneweaver.api.services.genes.db_gene")

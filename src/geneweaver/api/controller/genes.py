@@ -13,6 +13,7 @@ from geneweaver.api.schemas.apimodels import (
 )
 from geneweaver.api.services import genes as genes_service
 from geneweaver.core.enum import GeneIdentifier, Species
+from geneweaver.core.schema.gene import Gene
 from typing_extensions import Annotated
 
 from . import message as api_message
@@ -66,7 +67,7 @@ def get_gene_preferred(
         int, Path(format="int64", minimum=0, maxiumum=9223372036854775807)
     ],
     cursor: Optional[deps.Cursor] = Depends(deps.cursor),
-) -> GeneReturn:
+) -> Gene:
     """Get preferred gene for a given gene ode_id."""
     response = genes_service.get_gene_preferred(cursor, gene_id)
     return response

@@ -84,7 +84,6 @@
     ]
   },
   "gene_preferred_resp_1": {
-    "data": {
       "id": 1000,
       "reference_id": "Il1r2",
       "gene_database": "Gene Symbol",
@@ -92,5 +91,4 @@
       "preferred": true,
       "date": "2020-05-05"
     }
-  }
 }
