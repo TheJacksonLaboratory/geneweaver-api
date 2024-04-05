@@ -3,6 +3,7 @@
 from typing import Iterable, List, Optional
 
 from geneweaver.core.enum import GeneIdentifier, Species
+from geneweaver.core.schema.gene import Gene
 from pydantic import BaseModel
 
 
@@ -35,3 +36,9 @@ class GeneIdMappingAonReq(BaseModel):
 
     source_ids: List[str]
     species: Species
+
+
+class GeneReturn(BaseModel):
+    """Model for gene endpoint return."""
+
+    data: List[Gene]
