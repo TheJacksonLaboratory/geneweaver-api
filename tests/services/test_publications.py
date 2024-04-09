@@ -17,7 +17,7 @@ def test_get_publication_by_id(mock_db_publication):
 
     response = pub_service.get_publication(None, 123)
 
-    assert response.get("publication") == publication_by_id_resp
+    assert response == publication_by_id_resp
 
 
 @patch("geneweaver.api.services.publications.db_publication")
@@ -27,4 +27,4 @@ def test_get_publication_by_pubmed_id(mock_db_publication):
 
     response = pub_service.get_publication_by_pubmed_id(None, "17931734")
 
-    assert response.get("publication") == publication_by_id_resp
+    assert response == publication_by_id_resp

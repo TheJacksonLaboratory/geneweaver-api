@@ -14,11 +14,12 @@ def get_publication(cursor: Cursor, pub_id: int) -> dict:
     """
     try:
         pub = db_publication.by_id(cursor, pub_id)
-        return {"publication": pub}
 
     except Exception as err:
         logger.error(err)
         raise err
+
+    return pub
 
 
 def get_publication_by_pubmed_id(cursor: Cursor, pub_med_id: str) -> dict:
@@ -30,7 +31,7 @@ def get_publication_by_pubmed_id(cursor: Cursor, pub_med_id: str) -> dict:
     """
     try:
         pub = db_publication.by_pubmed_id(cursor, pub_med_id)
-        return {"publication": pub}
+        return pub
 
     except Exception as err:
         logger.error(err)

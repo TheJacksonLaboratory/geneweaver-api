@@ -141,7 +141,7 @@ def test_publication_not_found_for_geneset(
 ):
     """Test get publication for a geneset with not found record."""
     mock_get_genenset_metadata.return_value = geneset_metadata_w_pub_info
-    mock_pub_service_call.return_value = {"publication": None}
+    mock_pub_service_call.return_value = None
 
     response = client.get("/api/genesets/1234/publication")
 
