@@ -1,9 +1,10 @@
 """Endpoints related to species."""
 
-from typing import List, Optional
+from typing import Optional
 
 from fastapi import APIRouter, Depends, Query
 from geneweaver.api import dependencies as deps
+from geneweaver.api.schemas.apimodels import SpeciesReturn
 from geneweaver.api.services import species as species_service
 from geneweaver.core.enum import GeneIdentifier, Species
 from geneweaver.core.schema.species import Species as SpeciesSchema
@@ -19,9 +20,11 @@ def get_species(
         Optional[int], Query(format="int64", minimum=0, maxiumum=9223372036854775807)
     ] = None,
     reference_gene_id_type: Optional[GeneIdentifier] = None,
-) -> List[SpeciesSchema]:
+) -> SpeciesReturn:
     """Get species."""
-    return species_service.get_species(cursor, taxonomy_id, reference_gene_id_type)
+    response = species_service.get_species(cursor, taxonomy_id, reference_gene_id_type)
+
+    return response
 
 
 @router.get("/{species_id}")
@@ -29,4 +32,6 @@ def get_species_by_id(
     species_id: Species, cursor: Optional[deps.Cursor] = Depends(deps.cursor)
 ) -> SpeciesSchema:
     """Get species."""
-    return species_service.get_species_by_id(cursor, species_id)
+    response = species_service.get_species_by_id(cursor, species_id)
+
+    return response

@@ -12,7 +12,7 @@ def get_species(
     cursor: Cursor,
     taxonomy_id: Optional[int] = None,
     reference_gene_id_type: Optional[GeneIdentifier] = None,
-) -> list:
+) -> dict:
     """Get species from DB.
 
     @param cursor: DB cursor
@@ -21,7 +21,8 @@ def get_species(
     @return: dictionary response (species).
     """
     try:
-        return db_species.get(cursor, taxonomy_id, reference_gene_id_type)
+        response = db_species.get(cursor, taxonomy_id, reference_gene_id_type)
+        return {"data": response}
 
     except Exception as err:
         logger.error(err)
@@ -41,10 +42,3 @@ def get_species_by_id(cursor: Cursor, species: Species) -> dict:
     except Exception as err:
         logger.error(err)
         raise err
-
-
-def decode_gene_identifier(species: Species) -> None:
-    """Decode gene identifier from DB to Enum str value."""
-    ref_gene_id_type = species.get("reference_gene_identifier", None)
-    if ref_gene_id_type:
-        species["reference_gene_identifier"] = GeneIdentifier(ref_gene_id_type)

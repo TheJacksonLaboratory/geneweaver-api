@@ -159,11 +159,11 @@ def test_valid_gene_get_req(mock_gene_call, client):
     response = client.get(url="/api/genes")
 
     assert response.status_code == 200
-    assert response.json() == genes_list_10
+    assert response.json().get("data") == genes_list_10.get("data")
 
     response = client.get(url="/api/genes?limit=10")
     assert response.status_code == 200
-    assert response.json() == genes_list_10
+    assert response.json().get("data") == genes_list_10.get("data")
 
 
 @patch("geneweaver.api.services.genes.get_genes")

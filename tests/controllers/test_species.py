@@ -28,13 +28,13 @@ def _validate_species_response(response_item: dict, expected_item: dict) -> None
 def test_valid_species_url_req(mock_species_service_call, client):
     """Test valid url request to get species."""
     mock_species_service_call.return_value = species_no_params
-
+    print(species_no_params)
     response = client.get(url="/api/species")
 
     assert response.status_code == 200
-    assert isinstance(response.json(), list)
-    for idx, item in enumerate(response.json()):
-        _validate_species_response(item, species_no_params[idx])
+    assert isinstance(response.json(), dict)
+    for idx, item in enumerate(response.json().get("data")):
+        _validate_species_response(item, species_no_params.get("data")[idx])
 
 
 @patch("geneweaver.api.services.species.get_species")
@@ -50,13 +50,15 @@ def test_species_url_taxonomy_req(mock_species_service_call, client):
 @patch("geneweaver.api.services.species.get_species")
 def test_valid_species_url_gene_id_type_req(mock_species_service_call, client):
     """Test valid url request to get species."""
-    mock_species_service_call.return_value = [species_by_gene_id_type_flybase]
+    mock_species_service_call.return_value = {"data": [species_by_gene_id_type_flybase]}
 
     response = client.get(url="/api/species?gene_id_type=14")
 
     assert response.status_code == 200
-    assert isinstance(response.json(), list)
-    _validate_species_response(response.json()[0], species_by_gene_id_type_flybase)
+    assert isinstance(response.json(), dict)
+    _validate_species_response(
+        response.json().get("data")[0], species_by_gene_id_type_flybase
+    )
 
 
 @patch("geneweaver.api.services.species.get_species_by_id")
