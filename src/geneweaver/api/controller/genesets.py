@@ -236,7 +236,7 @@ def get_publication_for_geneset(
 
     pub_resp = publication_service.get_publication(cursor, pub_id)
 
-    if pub_resp.get("publication") is None:
+    if pub_resp is None:
         raise HTTPException(status_code=404, detail=api_message.RECORD_NOT_FOUND_ERROR)
 
     return pub_resp

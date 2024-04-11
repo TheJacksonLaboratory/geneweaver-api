@@ -37,7 +37,7 @@ def test_valid_pubmed_url_req(mock_pub_service_call, client):
 @patch("geneweaver.api.services.publications.get_publication")
 def test_pub_record_not_found(mock_pub_service_call, client):
     """Test pub record not found response."""
-    mock_pub_service_call.return_value = {"publication": None}
+    mock_pub_service_call.return_value = None
 
     response = client.get(
         url="/api/publications/456456", params={"as_pubmed_id": False}
@@ -50,7 +50,7 @@ def test_pub_record_not_found(mock_pub_service_call, client):
 @patch("geneweaver.api.services.publications.get_publication_by_pubmed_id")
 def test_pubmed_record_not_found(mock_pub_service_call, client):
     """Test pubmed record not found response."""
-    mock_pub_service_call.return_value = {"publication": None}
+    mock_pub_service_call.return_value = None
 
     response = client.get(url="/api/publications/456456", params={"as_pubmed_id": True})
 

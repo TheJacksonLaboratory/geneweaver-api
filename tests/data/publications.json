@@ -1,30 +1,26 @@
 {
   "publication_by_id": {
-      "publication": {
-        "id": 123,
-        "authors": "Tabakoff B, Bhave SV, Hoffman PL",
-        "title": "Selective breeding, quantitative trait locus analysis, and gene arrays identify candidate genes for complex drug-related behaviors.",
-        "abstract": "Acute functional tolerance to ethanol develops during a single exposure to ethanol; it has been suggested to be a predisposing factor for the development of ethanol dependence. Genetic determinants of acute functional tolerance, as well as of ethanol dependence, have been clearly demonstrated. We describe a novel approach that uses a combination of selective breeding (to segregate genes contributing to the phenotype of interest, i.e., acute functional tolerance to the incoordinating effect of ethanol), quantitative trait locus analysis (to define chromosomal regions associated with acute functional tolerance), and DNA microarray technology (to identify differentially expressed genes in the brains of the selected lines of mice) to identify candidate genes for the complex phenotype of ethanol tolerance. The results indicate the importance of a signal transduction cascade that involves the glutamate receptor delta2 protein, the Ephrin B3 ligand, and the NMDA receptor, as well as a transcriptional regulatory protein that may be induced by activation of the NMDA receptor (zinc finger protein 179) and a protein that can modulate downstream responses to NMDA receptor activation (peroxiredoxin), in mediating acute tolerance to the incoordinating effect of ethanol.",
-        "journal": "The Journal of neuroscience : the official journal of the Society for Neuroscience",
-        "volume": "23",
-        "pages": "4491-8",
-        "month": "Jun",
-        "year": "2003",
-        "pubmed_id": "12805289"
-      }
+      "pubmed_id": 12805289,
+      "authors": "Tabakoff B, Bhave SV, Hoffman PL",
+      "title": "Selective breeding, quantitative trait locus analysis, and gene arrays identify candidate genes for complex drug-related behaviors.",
+      "abstract": "Acute functional tolerance to ethanol develops during a single exposure to ethanol; it has been suggested to be a predisposing factor for the development of ethanol dependence. Genetic determinants of acute functional tolerance, as well as of ethanol dependence, have been clearly demonstrated. We describe a novel approach that uses a combination of selective breeding (to segregate genes contributing to the phenotype of interest, i.e., acute functional tolerance to the incoordinating effect of ethanol), quantitative trait locus analysis (to define chromosomal regions associated with acute functional tolerance), and DNA microarray technology (to identify differentially expressed genes in the brains of the selected lines of mice) to identify candidate genes for the complex phenotype of ethanol tolerance. The results indicate the importance of a signal transduction cascade that involves the glutamate receptor delta2 protein, the Ephrin B3 ligand, and the NMDA receptor, as well as a transcriptional regulatory protein that may be induced by activation of the NMDA receptor (zinc finger protein 179) and a protein that can modulate downstream responses to NMDA receptor activation (peroxiredoxin), in mediating acute tolerance to the incoordinating effect of ethanol.",
+      "journal": "The Journal of neuroscience : the official journal of the Society for Neuroscience",
+      "volume": "23",
+      "pages": "4491-8",
+      "month": "Jun",
+      "year": 2003,
+      "id": 123
   },
   "publication_by_pubmed_id": {
-      "publication": {
-        "id": 1234,
-        "authors": "Kovacs P, Kress R, Rocha J, Kurtz U, Miquel JF, Nervi F, Mndez-Snchez N, Uribe M, Bock HH, Schirin-Sokhan R, Stumvoll M, Mssner J, Lammert F, Wittenburg H",
-        "title": "Variation of the gene encoding the nuclear bile salt receptor FXR and gallstone susceptibility in mice and humans.",
-        "abstract": "From quantitative trait locus mapping in inbred mice, we identified the Nr1h4 gene encoding the nuclear bile salt receptor FXR as a candidate gene for the cholesterol gallstone susceptibility locus Lith7. Here, we investigated further an association of the gene encoding FXR and gallstone susceptibility in mice and humans.The Nr1h4 gene was sequenced in inbred mouse strains with susceptible and resistant Lith7 alleles. Quantitative RT-PCR was employed to determine mRNA expression levels. Gallstone carriers and control subjects of three different populations comprising 1004 individuals were genotyped for polymorphisms of the orthologous human gene detected by sequencing.Expression and sequence analyses in inbred mice were consistent with Nr1h4 underlying Lith7. In the human populations, we identified three frequent haplotypes that accounted for &gt; 95% of all haplotypes observed. In a Mexican population, the most common haplotype NR1H4_1 was associated with gallstone prevalence. In contrast, NR1H4_1 displayed no association with gallstone prevalence in a German population, whereas in a Chilean population we observed a trend towards a protective effect of NR1H4_1.Our study in an inbred mouse model and in three ethnically distinct populations indicates complex interactions of NR1H4 alleles and other risk factors for the development of cholelithiasis.",
-        "journal": "Journal of hepatology",
-        "volume": "48",
-        "pages": "116-24",
-        "month": "Jan",
-        "year": "2008",
-        "pubmed_id": "17931734"
-      }
+      "pubmed_id": 17931734,
+      "authors": "Kovacs P, Kress R, Rocha J, Kurtz U, Miquel JF, Nervi F, Mndez-Snchez N, Uribe M, Bock HH, Schirin-Sokhan R, Stumvoll M, Mssner J, Lammert F, Wittenburg H",
+      "title": "Variation of the gene encoding the nuclear bile salt receptor FXR and gallstone susceptibility in mice and humans.",
+      "abstract": "From quantitative trait locus mapping in inbred mice, we identified the Nr1h4 gene encoding the nuclear bile salt receptor FXR as a candidate gene for the cholesterol gallstone susceptibility locus Lith7. Here, we investigated further an association of the gene encoding FXR and gallstone susceptibility in mice and humans.The Nr1h4 gene was sequenced in inbred mouse strains with susceptible and resistant Lith7 alleles. Quantitative RT-PCR was employed to determine mRNA expression levels. Gallstone carriers and control subjects of three different populations comprising 1004 individuals were genotyped for polymorphisms of the orthologous human gene detected by sequencing.Expression and sequence analyses in inbred mice were consistent with Nr1h4 underlying Lith7. In the human populations, we identified three frequent haplotypes that accounted for &gt; 95% of all haplotypes observed. In a Mexican population, the most common haplotype NR1H4_1 was associated with gallstone prevalence. In contrast, NR1H4_1 displayed no association with gallstone prevalence in a German population, whereas in a Chilean population we observed a trend towards a protective effect of NR1H4_1.Our study in an inbred mouse model and in three ethnically distinct populations indicates complex interactions of NR1H4 alleles and other risk factors for the development of cholelithiasis.",
+      "journal": "Journal of hepatology",
+      "volume": "48",
+      "pages": "116-24",
+      "month": "Jan",
+      "year": 2008,
+      "id": 1234
   }
 }
