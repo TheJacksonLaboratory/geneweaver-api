@@ -4,7 +4,7 @@
 import logging
 from contextlib import asynccontextmanager
 from tempfile import TemporaryDirectory
-from typing import Generator
+from typing import Generator, Optional
 
 import psycopg
 from fastapi import Depends, FastAPI, Request
@@ -56,20 +56,14 @@ def cursor(request: Request) -> Generator:
         with conn.cursor(row_factory=dict_row) as cur:
             yield cur
 
-
-async def full_user(
-    cursor: Cursor = Depends(cursor),
-    user: UserInternal = Depends(auth.get_user_strict),
+def _get_user_details(
+    cursor: Cursor,
+    user: UserInternal
 ) -> UserInternal:
-    """Get the full user object.
+    """Get the user details.
 
-    Since there are external dependencies to wait for,
-    the recommendation is to use async
-    Also, Workaround FASTAPI issue, where logs hide exact place of errors
-    https://github.com/tiangolo/fastapi/discussions/8428
-    Geneweaver issue: G3-96.
-    @param cursor: DB cursor
-    @param user: GW user.
+    :param cursor: The database cursor.
+    :param user: The user object.
     """
     try:
         user.id = db_user.by_sso_id_and_email(cursor, user.sso_id, user.email)[0][
@@ -88,8 +82,43 @@ async def full_user(
             user.id = db_user.create_sso_user(
                 cursor, user.name, user.email, user.sso_id
             )
+    return user
 
-    yield user
+
+async def full_user(
+    cursor: Cursor = Depends(cursor),
+    user: UserInternal = Depends(auth.get_user_strict),
+) -> UserInternal:
+    """Get the full user object.
+
+    Since there are external dependencies to wait for,
+    the recommendation is to use async
+    Also, Workaround FASTAPI issue, where logs hide exact place of errors
+    https://github.com/tiangolo/fastapi/discussions/8428
+    Geneweaver issue: G3-96.
+    @param cursor: DB cursor
+    @param user: GW user.
+    """
+    yield _get_user_details(cursor, user)
+
+
+async def optional_full_user(
+    cursor: Cursor = Depends(cursor),
+    user: Optional[UserInternal] = Depends(auth.get_user),
+) -> Optional[UserInternal]:
+    """Get the full user object, if request is logged in.
+
+    Since there are external dependencies to wait for,
+    the recommendation is to use async
+    Also, Workaround FASTAPI issue, where logs hide exact place of errors
+    https://github.com/tiangolo/fastapi/discussions/8428
+    Geneweaver issue: G3-96.
+    @param cursor: DB cursor
+    @param user: GW user.
+    """
+    if user is not None:
+        yield _get_user_details(cursor, user)
+    yield None
 
 
 async def get_temp_dir() -> TemporaryDirectory:
