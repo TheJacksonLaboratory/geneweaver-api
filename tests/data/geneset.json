@@ -280,5 +280,21 @@
       "publication_year": null,
       "publication_pubmed_id": null
     }
-  ]
+  ],
+  "geneset_genes_values_resp_1": {
+    "data": [
+      {
+        "symbol": "Hs.629744",
+        "value": 1.0
+      },
+      {
+        "symbol": "Hs.517155",
+        "value": 1.0
+      },
+      {
+        "symbol": "Hs.356063",
+        "value": 1.0
+      }
+    ]
+  }
 }

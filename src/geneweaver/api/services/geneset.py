@@ -126,7 +126,36 @@ def get_geneset(cursor: Cursor, geneset_id: int, user: User) -> dict:
         )
         geneset = results[0]
         geneset_values = db_geneset_value.by_geneset_id(cursor, geneset_id)
+
         return {"geneset": geneset, "geneset_values": geneset_values}
+
+    except Exception as err:
+        logger.error(err)
+        raise err
+
+
+def get_geneset_gene_values(cursor: Cursor, geneset_id: int, user: User) -> dict:
+    """Get a gene values for a given geneset ID.
+
+    @param cursor: DB cursor
+    @param geneset_id: geneset identifier
+    @param user: GW user
+    @return: dictionary response (geneset and genset values).
+    """
+    try:
+        if user is None or user.id is None:
+            return {"error": True, "message": message.ACCESS_FORBIDDEN}
+
+        geneset_values = db_geneset_value.by_geneset_id(cursor, geneset_id)
+        if geneset_values is None or len(geneset_values) <= 0:
+            return {"data": None}
+
+        genes_data = []
+        for gsv in geneset_values:
+            gene_value = {"symbol": gsv["ode_ref_id"], "value": float(gsv["gsv_value"])}
+            genes_data.append(gene_value)
+
+        return {"data": genes_data}
 
     except Exception as err:
         logger.error(err)

@@ -4,6 +4,7 @@ from typing import Iterable, List, Optional
 
 from geneweaver.core.enum import GeneIdentifier, Species
 from geneweaver.core.schema.gene import Gene as GeneSchema
+from geneweaver.core.schema.geneset import GeneValue as GeneValueSchema
 from geneweaver.core.schema.species import Species as SpeciesSchema
 from pydantic import AnyUrl, BaseModel
 
@@ -75,3 +76,9 @@ class SpeciesReturn(CollectionResponse):
     """Model for Species endpoint return."""
 
     data: List[SpeciesSchema]
+
+
+class GeneValueReturn(BaseModel):
+    """Model for geneset values endpoint return."""
+
+    data: List[GeneValueSchema]

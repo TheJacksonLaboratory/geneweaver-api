@@ -41,7 +41,12 @@ test_geneset_data = {
     "geneset_metadata_w_pub_info": json.loads(geneset_response_json).get(
         "geneset_with_publication_info"
     ),
-    "geneset_list_resp": json.loads(geneset_list_response_json),
+    "geneset_list_resp": json.loads(geneset_list_response_json).get(
+        "geneset_resp_1_list_10"
+    ),
+    "geneset_genes_values_resp_1": json.loads(geneset_list_response_json).get(
+        "geneset_genes_values_resp_1"
+    ),
 }
 
 # Gene homolog ids test data
