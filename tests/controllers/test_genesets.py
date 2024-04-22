@@ -10,6 +10,7 @@ geneset_by_id_resp = test_geneset_data.get("geneset_by_id_resp")
 geneset_w_gene_id_type_resp = test_geneset_data.get("geneset_w_gene_id_type_resp")
 geneset_metadata_w_pub_info = test_geneset_data.get("geneset_metadata_w_pub_info")
 publication_by_id_resp = test_publication_data.get("publication_by_id")
+geneset_genes_values_resp = test_geneset_data.get("geneset_genes_values_resp_1")
 
 
 @patch("geneweaver.api.services.geneset.get_geneset")
@@ -198,3 +199,32 @@ def test_get_visible_geneset_errors(mock_get_visible_genesets, client):
 
     response = client.get("/api/genesets?gs_id=1234")
     assert response.status_code == 500
+
+
+@patch("geneweaver.api.services.geneset.get_geneset_gene_values")
+def test_get_geneset_gene_values_url_response(mock_get_geneset_gene_values, client):
+    """Test get geneset gene values data response."""
+    mock_get_geneset_gene_values.return_value = geneset_genes_values_resp
+
+    response = client.get("/api/genesets/1234/values")
+    assert response.status_code == 200
+    assert response.json() == geneset_genes_values_resp
+
+
+@patch("geneweaver.api.services.geneset.get_geneset_gene_values")
+def test_get_geneset_gene_values_errors(mock_get_geneset_gene_values, client):
+    """Test get geneset gene values error responses."""
+    mock_get_geneset_gene_values.return_value = {
+        "error": True,
+        "message": message.ACCESS_FORBIDDEN,
+    }
+    response = client.get("/api/genesets/1234/values")
+    assert response.status_code == 403
+
+    mock_get_geneset_gene_values.return_value = {"error": True, "message": "other"}
+    response = client.get("/api/genesets/1234/values")
+    assert response.status_code == 500
+
+    mock_get_geneset_gene_values.return_value = {"data": None}
+    response = client.get("/api/genesets/1234/values")
+    assert response.status_code == 404

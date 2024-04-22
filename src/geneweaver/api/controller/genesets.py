@@ -9,6 +9,7 @@ from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException, Path, Query, Security
 from fastapi.responses import FileResponse
 from geneweaver.api import dependencies as deps
+from geneweaver.api.schemas.apimodels import GeneValueReturn
 from geneweaver.api.schemas.auth import UserInternal
 from geneweaver.api.services import geneset as genset_service
 from geneweaver.api.services import publications as publication_service
@@ -136,6 +137,29 @@ def get_geneset(
             raise HTTPException(status_code=403, detail=api_message.ACCESS_FORBIDDEN)
         else:
             raise HTTPException(status_code=500, detail=api_message.UNEXPECTED_ERROR)
+
+    return response
+
+
+@router.get("/{geneset_id}/values")
+def get_geneset_values(
+    geneset_id: Annotated[
+        int, Path(format="int64", minimum=0, maxiumum=9223372036854775807)
+    ],
+    user: UserInternal = Security(deps.full_user),
+    cursor: Optional[deps.Cursor] = Depends(deps.cursor),
+) -> GeneValueReturn:
+    """Get geneset gene values by geneset ID."""
+    response = genset_service.get_geneset_gene_values(cursor, geneset_id, user)
+
+    if "error" in response:
+        if response.get("message") == api_message.ACCESS_FORBIDDEN:
+            raise HTTPException(status_code=403, detail=api_message.ACCESS_FORBIDDEN)
+        else:
+            raise HTTPException(status_code=500, detail=api_message.UNEXPECTED_ERROR)
+
+    if response.get("data") is None:
+        raise HTTPException(status_code=404, detail=api_message.RECORD_NOT_FOUND_ERROR)
 
     return response
 
