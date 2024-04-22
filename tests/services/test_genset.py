@@ -14,6 +14,7 @@ geneset_by_id_resp = test_geneset_data.get("geneset_by_id_resp")
 geneset_list_resp = test_geneset_data.get("geneset_list_resp")
 geneset_w_gene_id_type_resp = test_geneset_data.get("geneset_w_gene_id_type_resp")
 geneset_metadata_w_pub_info = test_geneset_data.get("geneset_metadata_w_pub_info")
+geneset_genes_values_resp = test_geneset_data.get("geneset_genes_values_resp_1")
 mock_user = User()
 mock_user.id = 1
 
@@ -176,10 +177,10 @@ def test_geneset_metadata_db_call_error(mock_db_geneset):
 @patch("geneweaver.api.services.geneset.db_geneset")
 def test_visible_geneset_response(mock_db_geneset):
     """Test general get geneset data no parameters -- default limit."""
-    mock_db_geneset.get.return_value = geneset_list_resp.get("geneset_resp_1_list_10")
+    mock_db_geneset.get.return_value = geneset_list_resp
 
     response = geneset.get_visible_genesets(None, mock_user)
-    assert response.get("data") == geneset_list_resp.get("geneset_resp_1_list_10")
+    assert response.get("data") == geneset_list_resp
 
 
 def test_visible_geneset_no_user():
@@ -196,7 +197,7 @@ def test_visible_geneset_no_user():
 @patch("geneweaver.api.services.geneset.db_geneset")
 def test_visible_geneset_all_expected_parameters(mock_db_geneset):
     """Test general get geneset data no parameters -- default limit."""
-    mock_db_geneset.get.return_value = geneset_list_resp.get("geneset_resp_1_list_10")
+    mock_db_geneset.get.return_value = geneset_list_resp
 
     response = geneset.get_visible_genesets(
         cursor=None,
@@ -215,7 +216,7 @@ def test_visible_geneset_all_expected_parameters(mock_db_geneset):
         with_publication_info=True,
     )
 
-    assert response.get("data") == geneset_list_resp.get("geneset_resp_1_list_10")
+    assert response.get("data") == geneset_list_resp
 
 
 @patch("geneweaver.api.services.geneset.db_geneset")
@@ -249,3 +250,31 @@ def test_map_geneset_homology_db_call_error(mock_db_gene):
         geneset.map_geneset_homology(
             None, geneset_by_id_resp["geneset_values"], GeneIdentifier(2)
         )
+
+
+@patch("geneweaver.api.services.geneset.db_geneset_value")
+def test_geneset_gene_value_response(mock_db_geneset_value):
+    """Test geneset gene value data response."""
+    mock_db_geneset_value.by_geneset_id.return_value = geneset_by_id_resp.get(
+        "geneset_values"
+    )
+
+    response = geneset.get_geneset_gene_values(None, user=mock_user, geneset_id=1234)
+    assert response == geneset_genes_values_resp
+
+
+@patch("geneweaver.api.services.geneset.db_geneset_value")
+def test_get_geneset_gene_values_db_errors(mock_db_geneset_value):
+    """Test error in get DB call."""
+    mock_db_geneset_value.by_geneset_id.side_effect = Exception("ERROR")
+
+    with pytest.raises(expected_exception=Exception):
+        geneset.get_geneset_gene_values(None, user=mock_user, geneset_id=1234)
+
+
+@patch("geneweaver.api.services.geneset.db_geneset_value")
+def test_get_geneset_gene_values_invalid_user(mock_db_geneset_value):
+    """Test invalid user."""
+    response = geneset.get_geneset_gene_values(None, user=None, geneset_id=1234)
+    assert response.get("error") is True
+    assert response.get("message") == message.ACCESS_FORBIDDEN
