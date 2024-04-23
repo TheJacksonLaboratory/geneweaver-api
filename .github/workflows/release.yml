@@ -92,13 +92,13 @@ jobs:
   build:
     name: "Build"
     needs: [ test, check-coverage, format-lint, version ]
-    if: ${{ needs.version.outputs.should_release == 'true' }}
+    if: needs.version.outputs.should_release == 'true'
     uses: ./.github/workflows/_skaffold-build-k8s.yml
     secrets: inherit
   deploy_sqa:
     name: "Deploy: SQA"
     needs: [build, version]
-    if: ${{ needs.version.outputs.should_release == 'true' }}
+    if: needs.version.outputs.should_release == 'true'
     uses: ./.github/workflows/_skaffold-deploy-k8s.yml
     secrets: inherit
     with:
@@ -106,7 +106,7 @@ jobs:
   deploy_stage:
     name: "Deploy: Stage"
     needs: [ build, version, deploy_sqa]
-    if: ${{ needs.version.outputs.schedule_prod_release == 'true' }}
+    if: needs.version.outputs.schedule_prod_release == 'true'
     uses: ./.github/workflows/_skaffold-deploy-k8s.yml
     secrets: inherit
     with:
@@ -114,7 +114,7 @@ jobs:
   deploy_prod:
     name: "Deploy: Prod"
     needs: [ build, version, deploy_stage]
-    if: ${{ needs.version.outputs.schedule_prod_release == 'true' }}
+    if: needs.version.outputs.schedule_prod_release == 'true'
     uses: ./.github/workflows/_skaffold-deploy-k8s.yml
     secrets: inherit
     with:
@@ -123,7 +123,7 @@ jobs:
     name: "Create Github Release Draft"
     runs-on: ubuntu-latest
     needs: [ deploy_prod ]
-    if: ${{ needs.version.outputs.schedule_prod_release == 'true' }}
+    if: needs.version.outputs.schedule_prod_release == 'true'
     steps:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
