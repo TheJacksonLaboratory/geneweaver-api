@@ -66,10 +66,10 @@ jobs:
         # Check if this version tag already exists
         if git rev-parse "v$version" >/dev/null 2>&1; then
             echo "Version already released"
-            export SHOULD_RELEASE=true
+            export SHOULD_RELEASE=false
         else
             echo "New version detected"
-            export SHOULD_RELEASE=false
+            export SHOULD_RELEASE=true
         fi
 
         if [[ $version =~ [a-zA-Z] ]]; then
