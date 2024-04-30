@@ -6,8 +6,10 @@ from fastapi.logger import logger
 from geneweaver.api.controller import message
 from geneweaver.api.schemas.auth import User
 from geneweaver.core.enum import GeneIdentifier, GenesetTier, Species
+from geneweaver.core.schema.score import GenesetScoreType
 from geneweaver.db import gene as db_gene
 from geneweaver.db import geneset as db_geneset
+from geneweaver.db import threshold as db_threshold
 from geneweaver.db import geneset_value as db_geneset_value
 from psycopg import Cursor
 
@@ -243,3 +245,23 @@ def map_geneset_homology(
     except Exception as err:
         logger.error(err)
         raise err
+
+
+def update_geneset_threshold(
+    cursor: Cursor, geneset_id: int, geneset_score: GenesetScoreType, user: User
+) -> dict:
+    """ set geneset threshold if user is the owner"""
+
+    try:
+        if user is None or user.id is None:
+            return {"error": True, "message": message.ACCESS_FORBIDDEN}
+
+        # if not db_geneset.user_is_owner(cursor=cursor, user_id=user.id, geneset_id=geneset_id):
+        #     return {"error": True, "message": message.ACCESS_FORBIDDEN}
+
+        db_threshold.set_geneset_threshold(cursor=cursor, geneset_id=geneset_id, geneset_score_type=geneset_score)
+
+    except Exception as err:
+        logger.error(err)
+        raise err
+
