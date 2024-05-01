@@ -84,7 +84,7 @@ class GeneValueReturn(BaseModel):
     data: List[GeneValueSchema]
 
 
-class NewPubMedRecord(BaseModel):
+class NewPubmedRecord(BaseModel):
     """Model returned for adding new pubmed info into DB."""
 
     pub_id: int
