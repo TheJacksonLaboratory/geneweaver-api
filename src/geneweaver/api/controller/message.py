@@ -6,6 +6,8 @@ UNEXPECTED_ERROR = "Unexpected Error"
 GENE_IDENTIFIER_TYPE_VALUE_ERROR = "Invalid gene identifier type"
 RECORD_NOT_FOUND_ERROR = "Record not found"
 INVALID_PUBMED_ID_ERROR = "Invalid pubmed id"
+RECORD_EXISTS = "Record already in the system"
+PUBMED_RETRIEVING_ERROR = "Error retrieving publication info from PubMed API"
 
 ##FORM field descriptions
 GENE_REFERENCE = "The reference id to search for"

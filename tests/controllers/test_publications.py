@@ -8,6 +8,8 @@ from tests.data import test_publication_data
 
 publication_by_id_resp = test_publication_data.get("publication_by_id")
 publication_by_pubmed_id_resp = test_publication_data.get("publication_by_pubmed_id")
+add_pubmed_info = test_publication_data.get("add_pubmed_info")
+add_pubmed_resp = test_publication_data.get("add_pubmed_resp")
 
 
 @patch("geneweaver.api.services.publications.get_publication")
@@ -65,3 +67,46 @@ def test_invalid_pub_id_type(mock_pub_service_call, client):
 
     response = client.get(url="/api/publications/werte123")
     assert response.status_code == 422
+
+
+@patch("geneweaver.api.services.publications.add_pubmed_record")
+def test_add_pubmed_valid_url_req(mock_pub_service_call, client):
+    """Test valid url request to add pubmed record."""
+    mock_pub_service_call.return_value = add_pubmed_resp
+
+    response = client.put(url="/api/publications/1234")
+
+    assert response.status_code == 200
+    assert response.json() == add_pubmed_resp
+
+
+@patch("geneweaver.api.services.publications.add_pubmed_record")
+def test_add_pubmed_valid_errors(mock_pub_service_call, client):
+    """Test error codes adding pubmed record."""
+    mock_pub_service_call.return_value = {
+        "error": True,
+        "message": message.ACCESS_FORBIDDEN,
+    }
+    response = client.put(url="/api/publications/1234")
+    assert response.status_code == 403
+
+    mock_pub_service_call.return_value = {
+        "error": True,
+        "message": message.RECORD_EXISTS,
+    }
+    response = client.put(url="/api/publications/1234")
+    assert response.status_code == 412
+
+    mock_pub_service_call.return_value = {
+        "error": True,
+        "message": message.PUBMED_RETRIEVING_ERROR,
+    }
+    response = client.put(url="/api/publications/1234")
+    assert response.status_code == 422
+
+    mock_pub_service_call.return_value = {
+        "error": True,
+        "message": message.UNEXPECTED_ERROR,
+    }
+    response = client.put(url="/api/publications/1234")
+    assert response.status_code == 500
