@@ -4,6 +4,7 @@ from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Path, Security
 from geneweaver.api import dependencies as deps
+from geneweaver.api.schemas.apimodels import NewPubMedRecord
 from geneweaver.api.schemas.auth import UserInternal
 from geneweaver.api.services import publications as publication_service
 from geneweaver.core.schema.publication import Publication
@@ -43,7 +44,7 @@ def add_publication(
     ],
     user: UserInternal = Security(deps.full_user),
     cursor: Optional[deps.Cursor] = Depends(deps.cursor),
-) -> dict:
+) -> NewPubMedRecord:
     """Add pubmed publication endpoint."""
     response = publication_service.add_pubmed_record(
         cursor=cursor, user=user, pubmed_id=publication_id

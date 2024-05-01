@@ -82,3 +82,10 @@ class GeneValueReturn(BaseModel):
     """Model for geneset values endpoint return."""
 
     data: List[GeneValueSchema]
+
+
+class NewPubMedRecord(BaseModel):
+    """Model returned for adding new pubmed info into DB."""
+
+    pub_id: int
+    pubmed_id: int
