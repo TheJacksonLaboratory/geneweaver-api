@@ -1,5 +1,6 @@
 """Tests for geneset API."""
 
+import json
 from unittest.mock import patch
 
 from geneweaver.api.controller import message
@@ -11,6 +12,7 @@ geneset_w_gene_id_type_resp = test_geneset_data.get("geneset_w_gene_id_type_resp
 geneset_metadata_w_pub_info = test_geneset_data.get("geneset_metadata_w_pub_info")
 publication_by_id_resp = test_publication_data.get("publication_by_id")
 geneset_genes_values_resp = test_geneset_data.get("geneset_genes_values_resp_1")
+geneset_threshold_update_req = test_geneset_data.get("geneset_threshold_update_req")
 
 
 @patch("geneweaver.api.services.geneset.get_geneset")
@@ -228,3 +230,29 @@ def test_get_geneset_gene_values_errors(mock_get_geneset_gene_values, client):
     mock_get_geneset_gene_values.return_value = {"data": None}
     response = client.get("/api/genesets/1234/values")
     assert response.status_code == 404
+
+
+@patch("geneweaver.api.services.geneset.update_geneset_threshold")
+def test_set_geneset_endpoint_response(mock_update_geneset_threshold, client):
+    """Test set geneset threshold endpoint."""
+    mock_update_geneset_threshold.return_value = {}
+
+    response = client.put(
+        "/api/genesets/1234/threshold", data=json.dumps(geneset_threshold_update_req)
+    )
+    assert response.status_code == 200
+    assert response.json() == {}
+
+
+@patch("geneweaver.api.services.geneset.update_geneset_threshold")
+def test_set_geneset_endpoint_response_errors(mock_update_geneset_threshold, client):
+    """Test set geneset threshold endpoint errors."""
+    mock_update_geneset_threshold.return_value = {
+        "error": True,
+        "message": message.ACCESS_FORBIDDEN,
+    }
+
+    response = client.put(
+        "/api/genesets/1234/threshold", data=json.dumps(geneset_threshold_update_req)
+    )
+    assert response.status_code == 403

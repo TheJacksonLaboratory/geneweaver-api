@@ -13,8 +13,8 @@ from geneweaver.api.schemas.apimodels import GeneValueReturn
 from geneweaver.api.schemas.auth import UserInternal
 from geneweaver.api.services import geneset as genset_service
 from geneweaver.api.services import publications as publication_service
-from geneweaver.core.schema.score import GenesetScoreType
 from geneweaver.core.enum import GeneIdentifier, GenesetTier, Species
+from geneweaver.core.schema.score import GenesetScoreType
 from typing_extensions import Annotated
 
 from . import message as api_message
@@ -277,13 +277,12 @@ def put_geneset_threshold(
     cursor: Optional[deps.Cursor] = Depends(deps.cursor),
 ) -> dict:
     """Set geneset threshold for geneset owner."""
-    response = genset_service.update_geneset_threshold(cursor, geneset_id, gene_score_type, user)
+    response = genset_service.update_geneset_threshold(
+        cursor, geneset_id, gene_score_type, user
+    )
 
     if "error" in response:
         if response.get("message") == api_message.ACCESS_FORBIDDEN:
             raise HTTPException(status_code=403, detail=api_message.ACCESS_FORBIDDEN)
-        else:
-            raise HTTPException(status_code=500, detail=api_message.UNEXPECTED_ERROR)
 
     return response
-
