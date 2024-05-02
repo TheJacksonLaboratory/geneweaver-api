@@ -22,5 +22,20 @@
       "month": "Jan",
       "year": 2008,
       "id": 1234
+  },
+  "add_pubmed_info": {
+    "pubmed_id": 1234,
+    "authors": "D Nadeau, C Marchand",
+    "title": "Change in the kinetics of sulphacetamide tissue distribution in Walker tumor-bearing rats.",
+    "abstract": "The effect of Walker tumor on sulphacetamide distribution was studied in rats 21 days after tumor implantation in a hind leg. After oral administration of sulphacetamide (5 and 20 min), the concentration of the drug was found to be lower in the plasma and liver of tumor-bearing rats when compared with that of control group. However, 90 min after sulphacetamide administration, the concentration of the drug in these same tissues was found to be higher in tumor-bearing rats than in control animals. Whereas the tumor had no apparent effect on sulphacetamide concentration in the brain, drug concentrations in the fat tissue of tumor-bearing rats were constantly higher than those of control animals. These changes in sulphacentamide disposition kinetics could be explained in part by delay in gastrointestinal absorption of the drug. Contrary to what was observed after oral administration, constantly higher drug concentrations were found in the plasma of tumor-bearing rats after iv injection of sulphacetamide. Furthermore, the half-life of sulphacetamide in these same animals was much higher than in control animals. It is concluded that, in Walker tumor-bearing rats, there are changes in the kinetics of sulphacetamide which are functions of the route of administration of the drug.",
+    "journal": "Drug metabolism and disposition: the biological fate of chemicals",
+    "volume": "3",
+    "pages": "565-76",
+    "month": null,
+    "year": 1975
+  },
+  "add_pubmed_resp": {
+    "pubmed_id": 1234,
+    "pub_id": 79325
   }
 }

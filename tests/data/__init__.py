@@ -99,6 +99,8 @@ test_publication_data = {
     "publication_by_pubmed_id": json.loads(publications_json).get(
         "publication_by_pubmed_id"
     ),
+    "add_pubmed_info": json.loads(publications_json).get("add_pubmed_info"),
+    "add_pubmed_resp": json.loads(publications_json).get("add_pubmed_resp"),
 }
 
 # Json web token keys data
