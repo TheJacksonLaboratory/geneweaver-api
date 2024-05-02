@@ -66,7 +66,7 @@ def add_pubmed_record(cursor: Cursor, user: User, pubmed_id: str) -> dict:
 
         if results is None:
             return {"error": True, "message": message.UNEXPECTED_ERROR}
-        print(results)
+
         return {"pubmed_id": pubmed_id, "pub_id": results.get("pub_id")}
 
     except ExternalAPIError as err:
