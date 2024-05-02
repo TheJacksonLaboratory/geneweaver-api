@@ -57,7 +57,8 @@ def add_pubmed_record(cursor: Cursor, user: User, pubmed_id: str) -> dict:
         # check publication is not already in the DB
         pub = db_publication.by_pubmed_id(cursor, pubmed_id)
         if pub:
-            return {"error": True, "message": message.RECORD_EXISTS}
+            return {"pubmed_id": pubmed_id, "pub_id": pub.get("id")}
+
         # retrieve publication info to be stored
         pub_record = pubmed.get_publication(pubmed_id=pubmed_id)
         # persist publication in DB
@@ -65,7 +66,7 @@ def add_pubmed_record(cursor: Cursor, user: User, pubmed_id: str) -> dict:
 
         if results is None:
             return {"error": True, "message": message.UNEXPECTED_ERROR}
-
+        print(results)
         return {"pubmed_id": pubmed_id, "pub_id": results.get("pub_id")}
 
     except ExternalAPIError as err:

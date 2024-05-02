@@ -60,11 +60,23 @@ def test_add_pubmed_publication(mock_db_publication, mock_pubmed):
     mock_db_publication.by_pubmed_id.return_value = None
     mock_db_publication.add.return_value = {"pub_id": add_pubmed_resp.get("pub_id")}
 
+    # adding pubmed info
     response = pub_service.add_pubmed_record(
         cursor=None, user=mock_user, pubmed_id=1234
     )
-
     assert response == add_pubmed_resp
+
+    # pubmed found in DB
+    mock_db_publication.by_pubmed_id.return_value = publication_by_pubmed_id_resp
+    pubmed_svc_rsp = {
+        "pub_id": publication_by_pubmed_id_resp.get("id"),
+        "pubmed_id": publication_by_pubmed_id_resp.get("pubmed_id"),
+    }
+    response = pub_service.add_pubmed_record(
+        cursor=None, user=mock_user, pubmed_id=17931734
+    )
+    assert response.get("error") is None
+    assert response == pubmed_svc_rsp
 
 
 @patch("geneweaver.api.services.publications.pubmed")
@@ -79,14 +91,6 @@ def test_add_pubmed_publication_errors(mock_db_publication, mock_pubmed):
     response = pub_service.add_pubmed_record(cursor=None, user=None, pubmed_id=1234)
     assert response.get("error") is True
     assert response.get("message") == message.ACCESS_FORBIDDEN
-
-    # pubmed found in DB
-    mock_db_publication.by_pubmed_id.return_value = add_pubmed_info
-    response = pub_service.add_pubmed_record(
-        cursor=None, user=mock_user, pubmed_id=1234
-    )
-    assert response.get("error") is True
-    assert response.get("message") == message.RECORD_EXISTS
 
     # Error retrieving pubmed info
     mock_db_publication.by_pubmed_id.return_value = None
