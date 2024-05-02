@@ -56,10 +56,8 @@ def cursor(request: Request) -> Generator:
         with conn.cursor(row_factory=dict_row) as cur:
             yield cur
 
-def _get_user_details(
-    cursor: Cursor,
-    user: UserInternal
-) -> UserInternal:
+
+def _get_user_details(cursor: Cursor, user: UserInternal) -> UserInternal:
     """Get the user details.
 
     :param cursor: The database cursor.
