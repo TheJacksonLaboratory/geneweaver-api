@@ -47,6 +47,9 @@ test_geneset_data = {
     "geneset_genes_values_resp_1": json.loads(geneset_list_response_json).get(
         "geneset_genes_values_resp_1"
     ),
+    "geneset_threshold_update_req": json.loads(geneset_list_response_json).get(
+        "geneset_threshold_update_req"
+    ),
 }
 
 # Gene homolog ids test data

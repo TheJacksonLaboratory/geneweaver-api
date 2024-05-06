@@ -7,6 +7,7 @@ from geneweaver.api.controller import message
 from geneweaver.api.schemas.auth import User
 from geneweaver.api.services import geneset
 from geneweaver.core.enum import GeneIdentifier, GenesetTier, Species
+from geneweaver.core.schema.score import GenesetScoreType
 
 from tests.data import test_geneset_data
 
@@ -15,6 +16,7 @@ geneset_list_resp = test_geneset_data.get("geneset_list_resp")
 geneset_w_gene_id_type_resp = test_geneset_data.get("geneset_w_gene_id_type_resp")
 geneset_metadata_w_pub_info = test_geneset_data.get("geneset_metadata_w_pub_info")
 geneset_genes_values_resp = test_geneset_data.get("geneset_genes_values_resp_1")
+geneset_threshold_update_req = test_geneset_data.get("geneset_threshold_update_req")
 mock_user = User()
 mock_user.id = 1
 
@@ -278,3 +280,51 @@ def test_get_geneset_gene_values_invalid_user(mock_db_geneset_value):
     response = geneset.get_geneset_gene_values(None, user=None, geneset_id=1234)
     assert response.get("error") is True
     assert response.get("message") == message.ACCESS_FORBIDDEN
+
+
+@patch("geneweaver.api.services.geneset.db_geneset")
+@patch("geneweaver.api.services.geneset.db_threshold")
+def test_geneset_thershold_update(mock_db_threshold, mock_db_geneset):
+    """Test geneset gene value data response."""
+    mock_db_threshold.set_geneset_threshold.return_value = None
+    mock_db_geneset.user_is_owner.return_value = True
+    geneset_threshold = GenesetScoreType(**geneset_threshold_update_req)
+
+    response = geneset.update_geneset_threshold(
+        cursor=None, user=mock_user, geneset_id=1234, geneset_score=geneset_threshold
+    )
+    assert response == {}
+
+
+@patch("geneweaver.api.services.geneset.db_geneset")
+@patch("geneweaver.api.services.geneset.db_threshold")
+def test_geneset_thershold_update_errors(mock_db_threshold, mock_db_geneset):
+    """Test geneset gene value data response."""
+    mock_db_threshold.set_geneset_threshold.return_value = None
+    mock_db_geneset.user_is_owner.return_value = False
+    geneset_threshold = GenesetScoreType(**geneset_threshold_update_req)
+
+    # user is not the geneset owner
+    response = geneset.update_geneset_threshold(
+        cursor=None, user=mock_user, geneset_id=1234, geneset_score=geneset_threshold
+    )
+    assert response.get("error") is True
+    assert response.get("message") == message.ACCESS_FORBIDDEN
+
+    # user is not logged-in
+    response = geneset.update_geneset_threshold(
+        cursor=None, user=None, geneset_id=1234, geneset_score=geneset_threshold
+    )
+    assert response.get("error") is True
+    assert response.get("message") == message.ACCESS_FORBIDDEN
+
+    # db error
+    mock_db_geneset.user_is_owner.return_value = True
+    mock_db_threshold.set_geneset_threshold.side_effect = Exception("ERROR")
+    with pytest.raises(expected_exception=Exception):
+        geneset.update_geneset_threshold(
+            cursor=None,
+            user=mock_user,
+            geneset_id=1234,
+            geneset_score=geneset_threshold,
+        )
