@@ -27,6 +27,7 @@ def get_visible_genesets(
     pubmed_id: Optional[int] = None,
     gene_id_type: Optional[GeneIdentifier] = None,
     search_text: Optional[str] = None,
+    ontology_term: Optional[str] = None,
     limit: Optional[int] = None,
     offset: Optional[int] = None,
     with_publication_info: bool = True,
@@ -34,7 +35,9 @@ def get_visible_genesets(
     """Get genesets from the database.
 
     :param cursor: A database cursor.
+    :param user: The user requesting the genesets.
     :param gs_id: Show only results with this geneset ID.
+    :param only_my_genesets: Show only results owned by the user.
     :param curation_tier: Show only results of this curation tier.
     :param species: Show only results associated with this species.
     :param name: Show only results with this name.
@@ -44,6 +47,7 @@ def get_visible_genesets(
     :param gene_id_type: Show only results with this gene ID type.
     :param search_text: Return genesets that match this search text (using PostgreSQL
                         full-text search).
+    :param ontology_term: Show only results associated with this ontology term.
     :param limit: Limit the number of results.
     :param offset: Offset the results.
     :param with_publication_info: Include publication info in the return.
@@ -70,6 +74,7 @@ def get_visible_genesets(
             gene_id_type=gene_id_type,
             search_text=search_text,
             with_publication_info=with_publication_info,
+            ontology_term=ontology_term,
             limit=limit,
             offset=offset,
         )

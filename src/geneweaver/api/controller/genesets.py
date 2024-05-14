@@ -63,6 +63,7 @@ def get_visible_genesets(
         ),
     ] = None,
     gene_id_type: Optional[GeneIdentifier] = None,
+    ontology_term: Optional[str] = None,
     search_text: Annotated[
         Optional[str], Query(description=api_message.SEARCH_TEXT)
     ] = None,
@@ -102,6 +103,7 @@ def get_visible_genesets(
         gene_id_type=gene_id_type,
         search_text=search_text,
         with_publication_info=with_publication_info,
+        ontology_term=ontology_term,
         only_my_genesets=only_my_genesets,
         limit=limit,
         offset=offset,
