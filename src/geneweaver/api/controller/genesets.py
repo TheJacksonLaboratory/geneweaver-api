@@ -4,7 +4,7 @@ import json
 import os
 import time
 from tempfile import TemporaryDirectory
-from typing import Optional
+from typing import Optional, Set
 
 from fastapi import APIRouter, Depends, HTTPException, Path, Query, Security
 from fastapi.responses import FileResponse
@@ -24,7 +24,7 @@ router = APIRouter(prefix="/genesets", tags=["genesets"])
 
 @router.get("")
 def get_visible_genesets(
-    user: UserInternal = Security(deps.full_user),
+    user: UserInternal = Security(deps.optional_full_user),
     cursor: Optional[deps.Cursor] = Depends(deps.cursor),
     gs_id: Annotated[
         Optional[int],
@@ -38,7 +38,7 @@ def get_visible_genesets(
     only_my_genesets: Annotated[
         Optional[bool], Query(description=api_message.ONLY_MY_GS)
     ] = False,
-    curation_tier: Optional[GenesetTier] = None,
+    curation_tier: Annotated[Optional[Set[GenesetTier]], Query()] = None,
     species: Optional[Species] = None,
     name: Annotated[Optional[str], Query(description=api_message.NAME)] = None,
     abbreviation: Annotated[

@@ -4,6 +4,7 @@ from unittest.mock import patch
 
 import pytest
 from geneweaver.api.controller import message
+from geneweaver.api.core.exceptions import UnauthorizedException
 from geneweaver.api.schemas.auth import User
 from geneweaver.api.services import geneset
 from geneweaver.core.enum import GeneIdentifier, GenesetTier, Species
@@ -185,15 +186,55 @@ def test_visible_geneset_response(mock_db_geneset):
     assert response.get("data") == geneset_list_resp
 
 
-def test_visible_geneset_no_user():
+@pytest.mark.parametrize(
+    "user",
+    [None, User(id=None), User(email="Something"), User(email="None", sso_id="None")],
+)
+@pytest.mark.parametrize(
+    "curation_tier",
+    [
+        None,
+        {GenesetTier("Tier I")},
+        {GenesetTier("Tier II")},
+        {GenesetTier("Tier II"), GenesetTier("Tier III")},
+        {GenesetTier("Tier II"), GenesetTier("Tier III"), GenesetTier("Tier V")},
+        {GenesetTier.TIER1, GenesetTier.TIER5},
+        {GenesetTier.TIER2, GenesetTier.TIER5},
+        {GenesetTier.TIER3, GenesetTier.TIER5},
+        {GenesetTier.TIER4, GenesetTier.TIER5},
+        {
+            GenesetTier.TIER1,
+            GenesetTier.TIER2,
+            GenesetTier.TIER3,
+            GenesetTier.TIER4,
+            GenesetTier.TIER5,
+        },
+        {GenesetTier.TIER5},
+    ],
+)
+@patch("geneweaver.api.services.geneset.db_geneset")
+def test_visible_geneset_no_user(mock_db_geneset, user, curation_tier):
     """Test general get geneset data invalid user."""
-    response = geneset.get_visible_genesets(None, None)
-    assert response.get("error") is True
-    assert response.get("message") == message.ACCESS_FORBIDDEN
+    mock_db_geneset.get.return_value = geneset_list_resp
 
-    response = geneset.get_visible_genesets(None, User(id=None))
-    assert response.get("error") is True
-    assert response.get("message") == message.ACCESS_FORBIDDEN
+    if curation_tier == {GenesetTier.TIER5}:
+        with pytest.raises(expected_exception=UnauthorizedException):
+            _ = geneset.get_visible_genesets(None, user, curation_tier=curation_tier)
+    else:
+        response = geneset.get_visible_genesets(None, user, curation_tier=curation_tier)
+        assert "Error" not in response
+        assert mock_db_geneset.get.called is True
+        assert mock_db_geneset.get.call_count == 1
+        called_args, called_kwargs = mock_db_geneset.get.call_args
+        if curation_tier is None:
+            assert called_kwargs["curation_tier"] == {
+                GenesetTier.TIER1,
+                GenesetTier.TIER2,
+                GenesetTier.TIER3,
+                GenesetTier.TIER4,
+            }
+        else:
+            assert called_kwargs["curation_tier"] == curation_tier - {GenesetTier.TIER5}
 
 
 @patch("geneweaver.api.services.geneset.db_geneset")
@@ -206,7 +247,7 @@ def test_visible_geneset_all_expected_parameters(mock_db_geneset):
         user=mock_user,
         gs_id=1,
         only_my_genesets=False,
-        curation_tier=GenesetTier("Tier I"),
+        curation_tier={GenesetTier("Tier I")},
         species=Species(2),
         name="test Name",
         abbreviation="test",

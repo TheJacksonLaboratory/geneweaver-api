@@ -1,9 +1,10 @@
 """Service functions for dealing with genesets."""
 
-from typing import Iterable, Optional
+from typing import Iterable, Optional, Set
 
 from fastapi.logger import logger
 from geneweaver.api.controller import message
+from geneweaver.api.core.exceptions import UnauthorizedException
 from geneweaver.api.schemas.auth import User
 from geneweaver.core.enum import GeneIdentifier, GenesetTier, Species
 from geneweaver.core.schema.score import GenesetScoreType
@@ -14,12 +15,70 @@ from geneweaver.db import threshold as db_threshold
 from psycopg import Cursor
 
 
+def determine_geneset_access(
+    user: Optional[User] = None,
+    curation_tier: Optional[Set[GenesetTier]] = None,
+    only_my_genesets: Optional[bool] = None,
+) -> tuple:
+    """Determine the geneset access based on the user and requested arguments.
+
+    :param user: The user requesting the genesets.
+    :param curation_tier: The curation tiers requested by the user.
+    :param only_my_genesets: Show only results owned by the user.
+    :return: A tuple containing the curation tier, owner ID, and is readable by.
+    """
+    user_is_none = user is None or user.id is None
+    owner_id = None
+    is_readable_by = None
+
+    if user_is_none:
+        curation_tier = determine_public_geneset_curation_tier(curation_tier)
+        if only_my_genesets:
+            raise UnauthorizedException()
+    else:
+        is_readable_by = user.id
+        if only_my_genesets:
+            owner_id = user.id
+
+    return (
+        curation_tier,
+        owner_id,
+        is_readable_by,
+    )
+
+
+def determine_public_geneset_curation_tier(
+    curation_tier: Optional[Set[GenesetTier]] = None,
+) -> Set[GenesetTier]:
+    """Determine the curation tier for public geneset requests.
+
+    Run this function when the user is None.
+
+    :param curation_tier: The curation tier requested by the user.
+    :return: The curation tier to use.
+    :raises UnauthorizedException: If the user is not allowed to access the tier.
+    """
+    if curation_tier is None:
+        curation_tier = {
+            GenesetTier.TIER1,
+            GenesetTier.TIER2,
+            GenesetTier.TIER3,
+            GenesetTier.TIER4,
+        }
+    elif curation_tier == {GenesetTier.TIER5}:
+        raise UnauthorizedException()
+    else:
+        curation_tier = curation_tier - {GenesetTier.TIER5}
+
+    return curation_tier
+
+
 def get_visible_genesets(
     cursor: Cursor,
-    user: User,
+    user: Optional[User] = None,
     gs_id: Optional[int] = None,
     only_my_genesets: Optional[bool] = None,
-    curation_tier: Optional[GenesetTier] = None,
+    curation_tier: Optional[Set[GenesetTier]] = None,
     species: Optional[Species] = None,
     name: Optional[str] = None,
     abbreviation: Optional[str] = None,
@@ -53,16 +112,13 @@ def get_visible_genesets(
     :param with_publication_info: Include publication info in the return.
     """
     try:
-        if user is None or user.id is None:
-            return {"error": True, "message": message.ACCESS_FORBIDDEN}
-
-        owner_id = None
-        if only_my_genesets:
-            owner_id = user.id
+        curation_tier, owner_id, is_readable_by = determine_geneset_access(
+            user, curation_tier, only_my_genesets
+        )
 
         results = db_geneset.get(
             cursor,
-            is_readable_by=user.id,
+            is_readable_by=is_readable_by,
             owner_id=owner_id,
             gs_id=gs_id,
             curation_tier=curation_tier,
