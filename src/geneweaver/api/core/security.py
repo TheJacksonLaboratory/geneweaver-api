@@ -138,7 +138,7 @@ class Auth0:
         ),
     ) -> UserInternal:
         """Get the user from the token, raise an exception if not found."""
-        return await self.get_user(security_scopes, creds, True)
+        return await self.get_user(security_scopes, creds, True, disallow_public=True)
 
     async def get_user(  # noqa: C901
         self,
@@ -147,7 +147,7 @@ class Auth0:
             Auth0HTTPBearer(auto_error=False)
         ),
         auto_error_auth: Optional[bool] = True,
-        disallow_public: Optional[bool] = True,
+        disallow_public: Optional[bool] = False,
     ) -> Optional[UserInternal]:
         """Get the user from the token, don't error if not found."""
         auto_error_auth = (

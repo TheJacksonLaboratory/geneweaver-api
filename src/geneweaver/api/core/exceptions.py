@@ -25,3 +25,11 @@ class Auth0UnauthorizedException(HTTPException):
     def __init__(self, **kwargs) -> None:  # noqa: ANN003
         """Initialize the exception."""
         super().__init__(403, **kwargs)
+
+
+class UnauthorizedException(HTTPException):
+    """Exception for unauthorized requests."""
+
+    def __init__(self, **kwargs) -> None:  # noqa: ANN003
+        """Initialize the exception."""
+        super().__init__(403, **kwargs)
