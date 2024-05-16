@@ -240,8 +240,7 @@ def test_set_geneset_endpoint_response(mock_update_geneset_threshold, client):
     response = client.put(
         "/api/genesets/1234/threshold", data=json.dumps(geneset_threshold_update_req)
     )
-    assert response.status_code == 200
-    assert response.json() == {}
+    assert response.status_code == 204
 
 
 @patch("geneweaver.api.services.geneset.update_geneset_threshold")

@@ -269,7 +269,7 @@ def get_publication_for_geneset(
     return pub_resp
 
 
-@router.put("/{geneset_id}/threshold")
+@router.put("/{geneset_id}/threshold", status_code=204)
 def put_geneset_threshold(
     geneset_id: Annotated[
         int, Path(format="int64", minimum=0, maxiumum=9223372036854775807)
@@ -277,7 +277,7 @@ def put_geneset_threshold(
     gene_score_type: GenesetScoreType,
     user: UserInternal = Security(deps.full_user),
     cursor: Optional[deps.Cursor] = Depends(deps.cursor),
-) -> dict:
+) -> None:
     """Set geneset threshold for geneset owner."""
     response = genset_service.update_geneset_threshold(
         cursor, geneset_id, gene_score_type, user
@@ -286,5 +286,3 @@ def put_geneset_threshold(
     if "error" in response:
         if response.get("message") == api_message.ACCESS_FORBIDDEN:
             raise HTTPException(status_code=403, detail=api_message.ACCESS_FORBIDDEN)
-
-    return response
