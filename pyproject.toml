@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "geneweaver-api"
-version = "0.6.0a2"
+version = "0.6.0a3"
 description = "The Geneweaver API"
 authors = [
     "Alexander Berger <alexander.berger@jax.org>",
@@ -20,10 +20,11 @@ python = "^3.9"
 geneweaver-core = "^0.9.1"
 fastapi = {extras = ["all"], version = "^0.99.1"}
 uvicorn = {extras = ["standard"], version = "^0.24.0"}
-geneweaver-db = "0.4.0a1"
+geneweaver-db = "0.4.0"
 psycopg-pool = "^3.1.7"
 requests = "^2.31.0"
 python-jose = {extras = ["cryptography"], version = "^3.3.0"}
+psycopg-binary = "3.1.18"
 
 [tool.poetry.group.dev.dependencies]
 geneweaver-testing = "^0.1.2"
