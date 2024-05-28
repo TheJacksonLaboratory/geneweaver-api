@@ -197,19 +197,39 @@ def get_geneset(cursor: Cursor, geneset_id: int, user: User) -> dict:
         raise err
 
 
-def get_geneset_gene_values(cursor: Cursor, geneset_id: int, user: User) -> dict:
+def get_geneset_gene_values(
+    cursor: Cursor, geneset_id: int, user: User, gene_id_type: GeneIdentifier = None
+) -> dict:
     """Get a gene values for a given geneset ID.
 
     @param cursor: DB cursor
     @param geneset_id: geneset identifier
     @param user: GW user
+    @param gene_id_type: gene identifier type object
     @return: dictionary response (geneset and genset values).
     """
     try:
         if user is None or user.id is None:
             return {"error": True, "message": message.ACCESS_FORBIDDEN}
 
-        geneset_values = db_geneset_value.by_geneset_id(cursor, geneset_id)
+        # If gene id type is given, check gene species homology to
+        # construct proper gene species mapping
+        if gene_id_type is not None:
+            results = db_geneset.get(
+                cursor,
+                gs_id=geneset_id,
+                with_publication_info=False,
+            )
+            if len(results) <= 0:
+                return {"data": None}
+
+            geneset = results[0]
+            geneset_values = get_gsv_w_gene_homology_update(
+                cursor=cursor, geneset=geneset, gene_id_type=gene_id_type
+            )
+        else:
+            geneset_values = db_geneset_value.by_geneset_id(cursor, geneset_id)
+
         if geneset_values is None or len(geneset_values) <= 0:
             return {"data": None}
 
@@ -247,25 +267,9 @@ def get_geneset_w_gene_id_type(
             with_publication_info=False,
         )
         geneset = results[0]
-
-        mapping_across_species = False
-        original_gene_id_type = gene_id_type
-        genedb_sp_id = db_gene.gene_database_by_id(cursor, gene_id_type)[0]["sp_id"]
-
-        if genedb_sp_id != 0 and geneset["species_id"] != genedb_sp_id:
-            mapping_across_species = True
-            gene_id_type = GeneIdentifier(7)
-
-        geneset_values = db_geneset_value.by_geneset_id(
-            cursor, geneset_id, gene_id_type
+        geneset_values = get_gsv_w_gene_homology_update(
+            cursor=cursor, geneset=geneset, gene_id_type=gene_id_type
         )
-
-        if mapping_across_species:
-            geneset_values = map_geneset_homology(
-                cursor, geneset_values, original_gene_id_type
-            )
-
-            gene_id_type = original_gene_id_type
 
         return {
             "gene_identifier_type": gene_id_type.name,
@@ -276,6 +280,35 @@ def get_geneset_w_gene_id_type(
     except Exception as err:
         logger.error(err)
         raise err
+
+
+def get_gsv_w_gene_homology_update(
+    cursor: Cursor, geneset: dict, gene_id_type: GeneIdentifier
+) -> Iterable[dict]:
+    """Check gene homology mapping and update it.
+
+    @param cursor: DB cursor
+    @param gene_id_type: geneset identifier
+    @return: geneset value
+    """
+    mapping_across_species = False
+    original_gene_id_type = gene_id_type
+    genedb_sp_id = db_gene.gene_database_by_id(cursor, gene_id_type)[0]["sp_id"]
+
+    if genedb_sp_id != 0 and geneset["species_id"] != genedb_sp_id:
+        mapping_across_species = True
+        gene_id_type = GeneIdentifier(7)
+
+    geneset_values = db_geneset_value.by_geneset_id(
+        cursor, geneset.get("id"), gene_id_type
+    )
+
+    if mapping_across_species:
+        geneset_values = map_geneset_homology(
+            cursor, geneset_values, original_gene_id_type
+        )
+
+    return geneset_values
 
 
 def map_geneset_homology(

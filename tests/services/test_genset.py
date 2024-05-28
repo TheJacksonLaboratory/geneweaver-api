@@ -302,7 +302,9 @@ def test_geneset_gene_value_response(mock_db_geneset_value):
         "geneset_values"
     )
 
-    response = geneset.get_geneset_gene_values(None, user=mock_user, geneset_id=1234)
+    response = geneset.get_geneset_gene_values(
+        None, user=mock_user, geneset_id=1234, gene_id_type=None
+    )
     assert response == geneset_genes_values_resp
 
 
@@ -312,13 +314,17 @@ def test_get_geneset_gene_values_db_errors(mock_db_geneset_value):
     mock_db_geneset_value.by_geneset_id.side_effect = Exception("ERROR")
 
     with pytest.raises(expected_exception=Exception):
-        geneset.get_geneset_gene_values(None, user=mock_user, geneset_id=1234)
+        geneset.get_geneset_gene_values(
+            None, user=mock_user, geneset_id=1234, gene_id_type=None
+        )
 
 
 @patch("geneweaver.api.services.geneset.db_geneset_value")
 def test_get_geneset_gene_values_invalid_user(mock_db_geneset_value):
     """Test invalid user."""
-    response = geneset.get_geneset_gene_values(None, user=None, geneset_id=1234)
+    response = geneset.get_geneset_gene_values(
+        None, user=None, geneset_id=1234, gene_id_type=None
+    )
     assert response.get("error") is True
     assert response.get("message") == message.ACCESS_FORBIDDEN
 
@@ -369,3 +375,49 @@ def test_geneset_thershold_update_errors(mock_db_threshold, mock_db_geneset):
             geneset_id=1234,
             geneset_score=geneset_threshold,
         )
+
+
+@patch("geneweaver.api.services.geneset.db_geneset")
+@patch("geneweaver.api.services.geneset.db_gene")
+@patch("geneweaver.api.services.geneset.db_geneset_value")
+def test_geneset_gene_value_w_gene_id_type(
+    mock_db_geneset_value, mock_db_gene, mock_db_geneset
+):
+    """Test geneset gene value data response."""
+    mock_db_geneset.get.return_value = [geneset_by_id_resp.get("geneset")]
+    mock_db_gene.gene_database_by_id.return_value = [{"sp_id": 0}]
+    mock_db_geneset_value.by_geneset_id.return_value = geneset_by_id_resp.get(
+        "geneset_values"
+    )
+
+    response = geneset.get_geneset_gene_values(
+        None, user=mock_user, geneset_id=1234, gene_id_type=GeneIdentifier(2)
+    )
+    assert response == geneset_genes_values_resp
+
+
+@patch("geneweaver.api.services.geneset.db_geneset")
+@patch("geneweaver.api.services.geneset.db_gene")
+@patch("geneweaver.api.services.geneset.db_geneset_value")
+def test_geneset_gene_value_w_gene_id_type_none_resp(
+    mock_db_geneset_value, mock_db_gene, mock_db_geneset
+):
+    """Test geneset gene value data empty response."""
+    mock_db_geneset.get.return_value = [geneset_by_id_resp.get("geneset")]
+    mock_db_gene.gene_database_by_id.return_value = [{"sp_id": 0}]
+    mock_db_geneset_value.by_geneset_id.return_value = None
+    response = geneset.get_geneset_gene_values(
+        None, user=mock_user, geneset_id=1234, gene_id_type=GeneIdentifier(2)
+    )
+    assert response == {"data": None}
+
+
+@patch("geneweaver.api.services.geneset.db_geneset")
+def test_geneset_gene_value_w_gene_id_type_none_resp2(mock_db_geneset):
+    """Test geneset gene value data empty response."""
+    mock_db_geneset.get.return_value = []
+
+    response = geneset.get_geneset_gene_values(
+        None, user=mock_user, geneset_id=1234, gene_id_type=GeneIdentifier(2)
+    )
+    assert response == {"data": None}
