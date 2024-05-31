@@ -232,6 +232,16 @@ def test_get_geneset_gene_values_errors(mock_get_geneset_gene_values, client):
     assert response.status_code == 404
 
 
+@patch("geneweaver.api.services.geneset.get_geneset_gene_values")
+def test_get_geneset_gene_values_w_gs_id_type(mock_get_geneset_gene_values, client):
+    """Test get geneset gene values data response."""
+    mock_get_geneset_gene_values.return_value = geneset_genes_values_resp
+
+    response = client.get("/api/genesets/1234/values?gene_id_type=2")
+    assert response.status_code == 200
+    assert response.json() == geneset_genes_values_resp
+
+
 @patch("geneweaver.api.services.geneset.update_geneset_threshold")
 def test_set_geneset_endpoint_response(mock_update_geneset_threshold, client):
     """Test set geneset threshold endpoint."""
