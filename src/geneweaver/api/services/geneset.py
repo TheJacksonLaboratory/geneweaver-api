@@ -198,7 +198,11 @@ def get_geneset(cursor: Cursor, geneset_id: int, user: User) -> dict:
 
 
 def get_geneset_gene_values(
-    cursor: Cursor, geneset_id: int, user: User, gene_id_type: GeneIdentifier = None
+    cursor: Cursor,
+    geneset_id: int,
+    user: User,
+    gene_id_type: GeneIdentifier = None,
+    in_threshold: Optional[bool] = False,
 ) -> dict:
     """Get a gene values for a given geneset ID.
 
@@ -206,6 +210,7 @@ def get_geneset_gene_values(
     @param geneset_id: geneset identifier
     @param user: GW user
     @param gene_id_type: gene identifier type object
+    @param in_threshold: geneset’s threshold filter
     @return: dictionary response (geneset and genset values).
     """
     try:
@@ -225,10 +230,15 @@ def get_geneset_gene_values(
 
             geneset = results[0]
             geneset_values = get_gsv_w_gene_homology_update(
-                cursor=cursor, geneset=geneset, gene_id_type=gene_id_type
+                cursor=cursor,
+                geneset=geneset,
+                gene_id_type=gene_id_type,
+                in_threshold=in_threshold,
             )
         else:
-            geneset_values = db_geneset_value.by_geneset_id(cursor, geneset_id)
+            geneset_values = db_geneset_value.by_geneset_id(
+                cursor, geneset_id, gsv_in_threshold=in_threshold
+            )
 
         if geneset_values is None or len(geneset_values) <= 0:
             return {"data": None}
@@ -246,7 +256,11 @@ def get_geneset_gene_values(
 
 
 def get_geneset_w_gene_id_type(
-    cursor: Cursor, geneset_id: int, user: User, gene_id_type: GeneIdentifier
+    cursor: Cursor,
+    geneset_id: int,
+    user: User,
+    gene_id_type: GeneIdentifier,
+    in_threshold: Optional[bool] = False,
 ) -> dict:
     """Get a geneset by ID and filter with gene identifier type.
 
@@ -254,6 +268,7 @@ def get_geneset_w_gene_id_type(
     @param geneset_id: geneset identifier
     @param user: GW user
     @param gene_id_type: gene identifier type object
+    @param in_threshold: geneset’s threshold filter
     @return: Dictionary response (geneset identifier, geneset, and genset values).
     """
     try:
@@ -268,7 +283,10 @@ def get_geneset_w_gene_id_type(
         )
         geneset = results[0]
         geneset_values = get_gsv_w_gene_homology_update(
-            cursor=cursor, geneset=geneset, gene_id_type=gene_id_type
+            cursor=cursor,
+            geneset=geneset,
+            gene_id_type=gene_id_type,
+            in_threshold=in_threshold,
         )
 
         return {
@@ -283,12 +301,16 @@ def get_geneset_w_gene_id_type(
 
 
 def get_gsv_w_gene_homology_update(
-    cursor: Cursor, geneset: dict, gene_id_type: GeneIdentifier
+    cursor: Cursor,
+    geneset: dict,
+    gene_id_type: GeneIdentifier,
+    in_threshold: Optional[bool] = False,
 ) -> Iterable[dict]:
     """Check gene homology mapping and update it.
 
     @param cursor: DB cursor
     @param gene_id_type: geneset identifier
+    @param in_threshold: geneset’s threshold filter
     @return: geneset value
     """
     mapping_across_species = False
@@ -300,7 +322,7 @@ def get_gsv_w_gene_homology_update(
         gene_id_type = GeneIdentifier(7)
 
     geneset_values = db_geneset_value.by_geneset_id(
-        cursor, geneset.get("id"), gene_id_type
+        cursor, geneset.get("id"), gene_id_type, gsv_in_threshold=in_threshold
     )
 
     if mapping_across_species:

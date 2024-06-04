@@ -299,7 +299,6 @@
   },
   "geneset_threshold_update_req": {
     "score_type": "p-value",
-    "threshold_low": 0,
     "threshold": 0.05
   }
 }

@@ -152,10 +152,15 @@ def get_geneset_values(
     user: UserInternal = Security(deps.full_user),
     cursor: Optional[deps.Cursor] = Depends(deps.cursor),
     gene_id_type: Optional[GeneIdentifier] = None,
+    in_threshold: Optional[bool] = None,
 ) -> GeneValueReturn:
     """Get geneset gene values by geneset ID."""
     response = genset_service.get_geneset_gene_values(
-        cursor=cursor, geneset_id=geneset_id, user=user, gene_id_type=gene_id_type
+        cursor=cursor,
+        geneset_id=geneset_id,
+        user=user,
+        gene_id_type=gene_id_type,
+        in_threshold=in_threshold,
     )
 
     if "error" in response:

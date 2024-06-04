@@ -308,6 +308,31 @@ def test_geneset_gene_value_response(mock_db_geneset_value):
     assert response == geneset_genes_values_resp
 
 
+@pytest.mark.parametrize("gsv_in_threshold", [None, True, False])
+@pytest.mark.parametrize("identifier", [None, GeneIdentifier.ENSEMBLE_GENE])
+@patch("geneweaver.api.services.geneset.db_geneset")
+@patch("geneweaver.api.services.geneset.db_gene")
+@patch("geneweaver.api.services.geneset.db_geneset_value")
+def test_geneset_gene_value_within_threshold(
+    mock_db_geneset_value, mock_db_gene, mock_db_geneset, gsv_in_threshold, identifier
+):
+    """Test geneset gene value data response with in threshold filter."""
+    mock_db_gene.gene_database_by_id.return_value = [{"sp_id": 0}]
+    mock_db_geneset.get.return_value = [geneset_by_id_resp.get("geneset")]
+    mock_db_geneset_value.by_geneset_id.return_value = geneset_by_id_resp.get(
+        "geneset_values"
+    )
+
+    response = geneset.get_geneset_gene_values(
+        None,
+        user=mock_user,
+        geneset_id=1234,
+        gene_id_type=identifier,
+        in_threshold=gsv_in_threshold,
+    )
+    assert response == geneset_genes_values_resp
+
+
 @patch("geneweaver.api.services.geneset.db_geneset_value")
 def test_get_geneset_gene_values_db_errors(mock_db_geneset_value):
     """Test error in get DB call."""
