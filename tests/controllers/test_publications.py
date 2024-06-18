@@ -10,6 +10,7 @@ publication_by_id_resp = test_publication_data.get("publication_by_id")
 publication_by_pubmed_id_resp = test_publication_data.get("publication_by_pubmed_id")
 add_pubmed_info = test_publication_data.get("add_pubmed_info")
 add_pubmed_resp = test_publication_data.get("add_pubmed_resp")
+get_publications = test_publication_data.get("get_publications")
 
 
 @patch("geneweaver.api.services.publications.get_publication")
@@ -110,3 +111,29 @@ def test_add_pubmed_valid_errors(mock_pub_service_call, client):
     }
     response = client.put(url="/api/publications/1234")
     assert response.status_code == 500
+
+
+@patch("geneweaver.api.services.publications.get")
+def test_get_req(mock_pub_service_call, client):
+    """Test valid url request to get publication by id."""
+    mock_pub_service_call.return_value = get_publications
+
+    response = client.get(
+        url="/api/publications/",
+        params={
+            "pub_id": 1,
+            "authors": "Author1, Author2",
+            "title": "Title1",
+            "abstract": "Abstract1",
+            "journal": "Journal1",
+            "volume": "Volume1",
+            "pages": "Pages1",
+            "month": "Month1",
+            "year": "Year1",
+            "pubmed": "123456",
+            "search_text": "something",
+        },
+    )
+
+    assert response.status_code == 200
+    assert response.json() == get_publications

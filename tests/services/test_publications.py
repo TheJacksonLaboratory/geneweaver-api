@@ -14,6 +14,7 @@ publication_by_id_resp = test_publication_data.get("publication_by_id")
 publication_by_pubmed_id_resp = test_publication_data.get("publication_by_pubmed_id")
 add_pubmed_info = test_publication_data.get("add_pubmed_info")
 add_pubmed_resp = test_publication_data.get("add_pubmed_resp")
+get_publications = test_publication_data.get("get_publications")
 mock_user = User()
 mock_user.id = 1
 
@@ -117,4 +118,49 @@ def test_add_pubmed_publication_errors(mock_db_publication, mock_pubmed):
     with pytest.raises(expected_exception=Exception):
         response = pub_service.add_pubmed_record(
             cursor=None, user=mock_user, pubmed_id=1234
+        )
+
+
+@patch("geneweaver.api.services.publications.db_publication")
+def test_get_publications(mock_db_publication):
+    """Test get publication by ID data response structure."""
+    mock_db_publication.get.return_value = get_publications.get("data")
+
+    response = pub_service.get(
+        cursor=None,
+        pub_id=1,
+        authors="Author1, Author2",
+        title="Title1",
+        abstract="Abstract1",
+        journal="Journal1",
+        volume="Volume1",
+        pages="Pages1",
+        month="Month1",
+        year="Year1",
+        pubmed="123456",
+        search_text="something",
+    )
+
+    assert response.get("data") == get_publications.get("data")
+
+
+@patch("geneweaver.api.services.publications.db_publication")
+def test_get_publications_w_filter_errors(mock_db_publication):
+    """Test get publication errors."""
+    # unexpected error
+    mock_db_publication.get.side_effect = Exception()
+    with pytest.raises(expected_exception=Exception):
+        pub_service.get(
+            cursor=None,
+            pub_id=1,
+            authors="Author1, Author2",
+            title="Title1",
+            abstract="Abstract1",
+            journal="Journal1",
+            volume="Volume1",
+            pages="Pages1",
+            month="Month1",
+            year="Year1",
+            pubmed="123456",
+            search_text="something",
         )

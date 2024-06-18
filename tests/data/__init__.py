@@ -104,7 +104,9 @@ test_publication_data = {
     ),
     "add_pubmed_info": json.loads(publications_json).get("add_pubmed_info"),
     "add_pubmed_resp": json.loads(publications_json).get("add_pubmed_resp"),
+    "get_publications": json.loads(publications_json).get("get_publications"),
 }
+
 
 # Json web token keys data
 test_jwt_keys_data = {

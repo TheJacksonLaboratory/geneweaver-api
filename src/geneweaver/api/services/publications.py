@@ -1,5 +1,7 @@
 """Service functions for publications."""
 
+from typing import Optional
+
 from fastapi.logger import logger
 from geneweaver.api.controller import message
 from geneweaver.api.schemas.auth import User
@@ -76,3 +78,62 @@ def add_pubmed_record(cursor: Cursor, user: User, pubmed_id: str) -> dict:
     except Exception as err:
         logger.error(err)
         raise err
+
+
+def get(
+    cursor: Cursor,
+    pub_id: Optional[int] = None,
+    authors: Optional[str] = None,
+    title: Optional[str] = None,
+    abstract: Optional[str] = None,
+    journal: Optional[str] = None,
+    volume: Optional[str] = None,
+    pages: Optional[str] = None,
+    month: Optional[str] = None,
+    year: Optional[str] = None,
+    pubmed: Optional[str] = None,
+    search_text: Optional[str] = None,
+    limit: Optional[int] = None,
+    offset: Optional[int] = None,
+) -> dict:
+    """Get publications by some criteria.
+
+    :param cursor: A database cursor.
+    :param pub_id: Show only results with this publication id
+    :param authors: Show only results with these authors
+    :param title: Show only results with this title
+    :param abstract: Show only results with this abstract
+    :param journal: Show only results with this journal
+    :param volume: Show only results with volume
+    :param pages: Show only results with these pages
+    :param month: Show only results with this publication month
+    :param year: Show only results with publication year
+    :param pubmed: Show only results with pubmed id
+    :param search_text: Show only results that match this search text (using PostgreSQL
+                        full-text search).
+    :param limit: Limit the number of results.
+    :param offset: Offset the results.
+    """
+    try:
+        results = db_publication.get(
+            cursor=cursor,
+            pub_id=pub_id,
+            authors=authors,
+            title=title,
+            abstract=abstract,
+            journal=journal,
+            volume=volume,
+            pages=pages,
+            month=month,
+            year=year,
+            pubmed=pubmed,
+            search_text=search_text,
+            limit=limit,
+            offset=offset,
+        )
+
+    except Exception as err:
+        logger.error(err)
+        raise err
+
+    return {"data": results}

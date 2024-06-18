@@ -2,7 +2,7 @@
 
 from typing import Optional
 
-from fastapi import APIRouter, Depends, HTTPException, Path, Security
+from fastapi import APIRouter, Depends, HTTPException, Path, Query, Security
 from geneweaver.api import dependencies as deps
 from geneweaver.api.schemas.apimodels import NewPubmedRecord
 from geneweaver.api.schemas.auth import UserInternal
@@ -13,6 +13,72 @@ from typing_extensions import Annotated
 from . import message as api_message
 
 router = APIRouter(prefix="/publications", tags=["publications"])
+
+
+@router.get("")
+def get_publication(
+    cursor: Optional[deps.Cursor] = Depends(deps.cursor),
+    publication_id: Annotated[
+        int, Query(format="int64", minimum=0, maxiumum=9223372036854775807)
+    ] = None,
+    authors: Optional[str] = None,
+    title: Optional[str] = None,
+    abstract: Optional[str] = None,
+    journal: Optional[str] = None,
+    volume: Optional[str] = None,
+    pages: Optional[str] = None,
+    month: Optional[str] = None,
+    year: Optional[str] = None,
+    pubmed_id: Annotated[
+        Optional[int],
+        Query(
+            format="int64",
+            minimum=0,
+            maxiumum=9223372036854775807,
+            description=api_message.PUBMED_ID,
+        ),
+    ] = None,
+    search_text: Annotated[
+        Optional[str], Query(description=api_message.SEARCH_TEXT)
+    ] = None,
+    limit: Annotated[
+        Optional[int],
+        Query(
+            format="int64",
+            minimum=0,
+            maxiumum=1000,
+            description=api_message.LIMIT,
+        ),
+    ] = 10,
+    offset: Annotated[
+        Optional[int],
+        Query(
+            format="int64",
+            minimum=0,
+            maxiumum=9223372036854775807,
+            description=api_message.OFFSET,
+        ),
+    ] = None,
+) -> dict:
+    """Get all publication publications with optional filters."""
+    response = publication_service.get(
+        cursor,
+        pub_id=publication_id,
+        authors=authors,
+        title=title,
+        abstract=abstract,
+        journal=journal,
+        volume=volume,
+        pages=pages,
+        month=month,
+        year=year,
+        pubmed=pubmed_id,
+        search_text=search_text,
+        limit=limit,
+        offset=offset,
+    )
+
+    return response
 
 
 @router.get("/{publication_id}")
