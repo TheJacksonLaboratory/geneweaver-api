@@ -1,5 +1,6 @@
 """Models for API requests."""
 
+from enum import Enum
 from typing import Iterable, List, Optional
 
 from geneweaver.core.enum import GeneIdentifier, Species
@@ -89,3 +90,16 @@ class NewPubmedRecord(BaseModel):
 
     pub_id: int
     pubmed_id: int
+
+
+class GsPubSearchType(str, Enum):
+    """Enum model for genesets and publication search types."""
+
+    GENESETS = "genesets"
+    PUBLICATIONS = "publications"
+
+
+class SeachResponse(CollectionResponse):
+    """Model for search response endpoint."""
+
+    data: dict

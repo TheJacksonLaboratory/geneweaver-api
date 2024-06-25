@@ -22,3 +22,7 @@ PUBLICATION_ID = "Show only results with this publication ID"
 PUBMED_ID = "Show only results with this PubMed ID"
 SEARCH_TEXT = "Return genesets that match this search text"
 WITH_PUBLICATION = "Include publication info in the return"
+GS_PUB_SEARCH_ENTITIES = "Entites to search, genesets and/or publications"
+GS_PUB_SEARCH_TEXT = (
+    "Gensets and/or publications search types ('genesets', 'publications') "
+)
