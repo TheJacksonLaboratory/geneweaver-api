@@ -32,6 +32,8 @@ species_json = importlib.resources.read_text("tests.data", "species.json")
 
 genes_json = importlib.resources.read_text("tests.data", "genes.json")
 
+monitors_json = importlib.resources.read_text("tests.data", "monitors.json")
+
 ## laod and returns JSON string as a dictionary
 
 # geneset test data
@@ -131,6 +133,12 @@ test_species_data = {
 test_genes_data = {
     "genes_list_10": json.loads(genes_json).get("genes_list_10"),
     "gene_preferred_resp_1": json.loads(genes_json).get("gene_preferred_resp_1"),
+}
+
+
+## monitors test data
+test_monitors_data = {
+    "db_health_status": json.loads(monitors_json).get("db_health_status"),
 }
 
 
