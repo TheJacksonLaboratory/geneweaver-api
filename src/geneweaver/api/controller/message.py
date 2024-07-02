@@ -26,3 +26,4 @@ GS_PUB_SEARCH_ENTITIES = "Entites to search, genesets and/or publications"
 GS_PUB_SEARCH_TEXT = (
     "Gensets and/or publications search types ('genesets', 'publications') "
 )
+CHECK_DB_HEALTH = "Check DB health flag"
