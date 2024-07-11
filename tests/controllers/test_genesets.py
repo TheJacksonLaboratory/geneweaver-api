@@ -26,6 +26,16 @@ def test_get_geneset_response(mock_get_genenset, client):
 
 
 @patch("geneweaver.api.services.geneset.get_geneset")
+def test_get_geneset_in_threshold_response(mock_get_genenset, client):
+    """Test get geneset ID data with threshold parameter request."""
+    mock_get_genenset.return_value = geneset_by_id_resp.get("geneset")
+
+    response = client.get("/api/genesets/1234?in_threshold=True")
+    assert response.status_code == 200
+    assert response.json() == geneset_by_id_resp.get("geneset")
+
+
+@patch("geneweaver.api.services.geneset.get_geneset")
 def test_get_geneset_errors(mock_get_geneset, client):
     """Test get geneset ID data response."""
     mock_get_geneset.return_value = {"error": True, "message": message.ACCESS_FORBIDDEN}

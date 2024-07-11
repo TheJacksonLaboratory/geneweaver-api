@@ -170,12 +170,15 @@ def get_geneset_metadata(
         raise err
 
 
-def get_geneset(cursor: Cursor, geneset_id: int, user: User) -> dict:
+def get_geneset(
+    cursor: Cursor, geneset_id: int, user: User, in_threshold: Optional[bool] = False
+) -> dict:
     """Get a geneset by ID.
 
-    @param cursor: DB cursor
-    @param geneset_id: geneset identifier
-    @param user: GW user
+    :param cursor: DB cursor
+    :param geneset_id: geneset identifier
+    :param user: GW user
+    :in_threshold: Optional[bool] = False,
     @return: dictionary response (geneset and genset values).
     """
     try:
@@ -189,7 +192,9 @@ def get_geneset(cursor: Cursor, geneset_id: int, user: User) -> dict:
             with_publication_info=False,
         )
         geneset = results[0]
-        geneset_values = db_geneset_value.by_geneset_id(cursor, geneset_id)
+        geneset_values = db_geneset_value.by_geneset_id(
+            cursor=cursor, geneset_id=geneset_id, gsv_in_threshold=in_threshold
+        )
 
         return {"geneset": geneset, "geneset_values": geneset_values}
 
@@ -207,12 +212,12 @@ def get_geneset_gene_values(
 ) -> dict:
     """Get a gene values for a given geneset ID.
 
-    @param cursor: DB cursor
-    @param geneset_id: geneset identifier
-    @param user: GW user
-    @param gene_id_type: gene identifier type object
-    @param in_threshold: geneset’s threshold filter
-    @return: dictionary response (geneset and genset values).
+    :param cursor: DB cursor
+    :param geneset_id: geneset identifier
+    :param user: GW user
+    :param gene_id_type: gene identifier type object
+    :param in_threshold: geneset’s threshold filter
+    :return: dictionary response (geneset and genset values).
     """
     try:
         if user is None or user.id is None:
