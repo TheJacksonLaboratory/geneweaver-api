@@ -5,7 +5,7 @@ from unittest.mock import patch
 
 from geneweaver.api.controller import message
 
-from tests.data import test_geneset_data, test_publication_data
+from tests.data import test_geneset_data, test_ontology_data, test_publication_data
 
 geneset_by_id_resp = test_geneset_data.get("geneset_by_id_resp")
 geneset_w_gene_id_type_resp = test_geneset_data.get("geneset_w_gene_id_type_resp")
@@ -276,4 +276,28 @@ def test_set_geneset_endpoint_response_errors(mock_update_geneset_threshold, cli
     response = client.put(
         "/api/genesets/1234/threshold", data=json.dumps(geneset_threshold_update_req)
     )
+    assert response.status_code == 403
+
+
+@patch("geneweaver.api.services.geneset.get_geneset_ontology_terms")
+def test_get_geneset_ontology_terms_response(mock_get_genenset_onto_terms, client):
+    """Test get geneset ontology terms response."""
+    mock_resp = test_ontology_data.get("geneset_ontology_terms")
+    mock_get_genenset_onto_terms.return_value = mock_resp
+
+    response = client.get("/api/genesets/1234/ontologies")
+    assert response.status_code == 200
+    assert response.json() == mock_resp
+
+
+@patch("geneweaver.api.services.geneset.get_geneset_ontology_terms")
+def test_get_geneset_ontology_terms_errors(mock_get_genenset_onto_terms, client):
+    """Test get geneset ontology terms errors."""
+    mock_resp = {
+        "error": True,
+        "message": message.ACCESS_FORBIDDEN,
+    }
+    mock_get_genenset_onto_terms.return_value = mock_resp
+
+    response = client.get("/api/genesets/1234/ontologies")
     assert response.status_code == 403

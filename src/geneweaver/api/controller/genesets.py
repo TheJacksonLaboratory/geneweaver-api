@@ -294,3 +294,41 @@ def put_geneset_threshold(
     if "error" in response:
         if response.get("message") == api_message.ACCESS_FORBIDDEN:
             raise HTTPException(status_code=403, detail=api_message.ACCESS_FORBIDDEN)
+
+
+@router.get("/{geneset_id}/ontologies")
+def get_geneset_ontology_terms(
+    geneset_id: Annotated[
+        int, Path(format="int64", minimum=0, maxiumum=9223372036854775807)
+    ],
+    user: UserInternal = Security(deps.full_user),
+    cursor: Optional[deps.Cursor] = Depends(deps.cursor),
+    limit: Annotated[
+        Optional[int],
+        Query(
+            format="int64",
+            minimum=0,
+            maxiumum=1000,
+            description=api_message.LIMIT,
+        ),
+    ] = 10,
+    offset: Annotated[
+        Optional[int],
+        Query(
+            format="int64",
+            minimum=0,
+            maxiumum=9223372036854775807,
+            description=api_message.OFFSET,
+        ),
+    ] = None,
+) -> dict:
+    """Get the publication associated with the geneset."""
+    terms_resp = genset_service.get_geneset_ontology_terms(
+        cursor, geneset_id, user, limit, offset
+    )
+
+    if "error" in terms_resp:
+        if terms_resp.get("message") == api_message.ACCESS_FORBIDDEN:
+            raise HTTPException(status_code=403, detail=api_message.ACCESS_FORBIDDEN)
+
+    return terms_resp

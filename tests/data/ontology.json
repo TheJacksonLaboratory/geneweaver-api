@@ -1,0 +1,27 @@
+{
+  "geneset_ontology_terms": {
+      "data": [
+        {
+          "geneset_id": 1234,
+          "ontology_term_id": "D001921",
+          "name": "Brain",
+          "description": "The part of CENTRAL NERVOUS SYSTEM that is contained within the skull (CRANIUM). Arising from the NEURAL TUBE, the embryonic brain is comprised of three major parts including PROSENCEPHALON (the forebrain); MESENCEPHALON (the midbrain); and RHOMBENCEPHALON (the hindbrain). The developed brain consists of CEREBRUM; CEREBELLUM; and other structures in the  BRAIN STEM.",
+          "source_ontology": "Mesh Terms"
+        },
+        {
+          "geneset_id": 1234,
+          "ontology_term_id": "D006801",
+          "name": "Humans",
+          "description": "Members of the species Homo sapiens.",
+          "source_ontology": "Mesh Terms"
+        },
+        {
+          "geneset_id": 1234,
+          "ontology_term_id": "D006801",
+          "name": "Humans",
+          "description": "Members of the species Homo sapiens.",
+          "source_ontology": "Mesh Terms"
+        }
+      ]
+  }
+}
