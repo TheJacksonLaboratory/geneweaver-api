@@ -11,6 +11,7 @@ from geneweaver.core.schema.score import GenesetScoreType
 from geneweaver.db import gene as db_gene
 from geneweaver.db import geneset as db_geneset
 from geneweaver.db import geneset_value as db_geneset_value
+from geneweaver.db import ontology as db_ontology
 from geneweaver.db import threshold as db_threshold
 from psycopg import Cursor
 
@@ -169,12 +170,15 @@ def get_geneset_metadata(
         raise err
 
 
-def get_geneset(cursor: Cursor, geneset_id: int, user: User) -> dict:
+def get_geneset(
+    cursor: Cursor, geneset_id: int, user: User, in_threshold: Optional[bool] = False
+) -> dict:
     """Get a geneset by ID.
 
-    @param cursor: DB cursor
-    @param geneset_id: geneset identifier
-    @param user: GW user
+    :param cursor: DB cursor
+    :param geneset_id: geneset identifier
+    :param user: GW user
+    :in_threshold: Optional[bool] = False,
     @return: dictionary response (geneset and genset values).
     """
     try:
@@ -188,7 +192,9 @@ def get_geneset(cursor: Cursor, geneset_id: int, user: User) -> dict:
             with_publication_info=False,
         )
         geneset = results[0]
-        geneset_values = db_geneset_value.by_geneset_id(cursor, geneset_id)
+        geneset_values = db_geneset_value.by_geneset_id(
+            cursor=cursor, geneset_id=geneset_id, gsv_in_threshold=in_threshold
+        )
 
         return {"geneset": geneset, "geneset_values": geneset_values}
 
@@ -206,12 +212,12 @@ def get_geneset_gene_values(
 ) -> dict:
     """Get a gene values for a given geneset ID.
 
-    @param cursor: DB cursor
-    @param geneset_id: geneset identifier
-    @param user: GW user
-    @param gene_id_type: gene identifier type object
-    @param in_threshold: geneset’s threshold filter
-    @return: dictionary response (geneset and genset values).
+    :param cursor: DB cursor
+    :param geneset_id: geneset identifier
+    :param user: GW user
+    :param gene_id_type: gene identifier type object
+    :param in_threshold: geneset’s threshold filter
+    :return: dictionary response (geneset and genset values).
     """
     try:
         if user is None or user.id is None:
@@ -380,6 +386,45 @@ def update_geneset_threshold(
             cursor=cursor, geneset_id=geneset_id, geneset_score_type=geneset_score
         )
         return {}
+
+    except Exception as err:
+        logger.error(err)
+        raise err
+
+
+def get_geneset_ontology_terms(
+    cursor: Cursor,
+    geneset_id: int,
+    user: User,
+    limit: Optional[int] = None,
+    offset: Optional[int] = None,
+) -> dict:
+    """Get geneset ontology terms by geneset id.
+
+    :param cursor: DB cursor
+    :param geneset_id: geneset identifier
+    :param user: GW user
+    :param limit: Limit the number of results.
+    :param offset: Offset the results.
+    @return: dictionary response (ontology terms).
+    """
+    try:
+        if user is None or user.id is None:
+            return {"error": True, "message": message.ACCESS_FORBIDDEN}
+
+        is_gs_readable = db_geneset.is_readable(
+            cursor=cursor, user_id=user.id, geneset_id=geneset_id
+        )
+        if is_gs_readable is False:
+            return {"error": True, "message": message.INACCESSIBLE_OR_FORBIDDEN}
+
+        results = db_ontology.by_geneset(
+            cursor=cursor,
+            geneset_id=geneset_id,
+            limit=limit,
+            offset=offset,
+        )
+        return {"data": results}
 
     except Exception as err:
         logger.error(err)

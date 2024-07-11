@@ -34,6 +34,8 @@ genes_json = importlib.resources.read_text("tests.data", "genes.json")
 
 monitors_json = importlib.resources.read_text("tests.data", "monitors.json")
 
+ontology_json = importlib.resources.read_text("tests.data", "ontology.json")
+
 ## laod and returns JSON string as a dictionary
 
 # geneset test data
@@ -139,6 +141,12 @@ test_genes_data = {
 ## monitors test data
 test_monitors_data = {
     "db_health_status": json.loads(monitors_json).get("db_health_status"),
+}
+
+
+## ontology test data
+test_ontology_data = {
+    "geneset_ontology_terms": json.loads(ontology_json).get("geneset_ontology_terms"),
 }
 
 
