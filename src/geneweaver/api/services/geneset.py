@@ -394,7 +394,7 @@ def get_geneset_ontology_terms(
     limit: Optional[int] = None,
     offset: Optional[int] = None,
 ) -> dict:
-    """Get a geneset metadata by geneset id.
+    """Get geneset ontology terms by geneset id.
 
     :param cursor: DB cursor
     :param geneset_id: geneset identifier

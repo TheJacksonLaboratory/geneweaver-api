@@ -322,7 +322,7 @@ def get_geneset_ontology_terms(
         ),
     ] = None,
 ) -> dict:
-    """Get the publication associated with the geneset."""
+    """Get geneset ontology terms."""
     terms_resp = genset_service.get_geneset_ontology_terms(
         cursor, geneset_id, user, limit, offset
     )
