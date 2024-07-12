@@ -191,6 +191,9 @@ def get_geneset(
             gs_id=geneset_id,
             with_publication_info=False,
         )
+        if len(results) <= 0:
+            return {"data": None}
+
         geneset = results[0]
         geneset_values = db_geneset_value.by_geneset_id(
             cursor=cursor, geneset_id=geneset_id, gsv_in_threshold=in_threshold
@@ -223,17 +226,19 @@ def get_geneset_gene_values(
         if user is None or user.id is None:
             return {"error": True, "message": message.ACCESS_FORBIDDEN}
 
+        ## Check genset exists and user can read it
+        results = db_geneset.get(
+            cursor,
+            gs_id=geneset_id,
+            is_readable_by=user.id,
+            with_publication_info=False,
+        )
+        if len(results) <= 0:
+            return {"data": None}
+
         # If gene id type is given, check gene species homology to
         # construct proper gene species mapping
         if gene_id_type is not None:
-            results = db_geneset.get(
-                cursor,
-                gs_id=geneset_id,
-                with_publication_info=False,
-            )
-            if len(results) <= 0:
-                return {"data": None}
-
             geneset = results[0]
             geneset_values = get_gsv_w_gene_homology_update(
                 cursor=cursor,
