@@ -32,11 +32,16 @@ def test_get_geneset(mock_db_geneset, mock_db_genset_value):
     assert response.get("error") is None
 
 
-def test_get_geneset_no_user_access():
+@patch("geneweaver.api.services.geneset.db_geneset")
+def test_get_geneset_no_user_access(mock_db_geneset):
     """Test get geneset by ID with no user access."""
     response = geneset.get_geneset(None, 1234, None)
     assert response.get("error") is True
     assert response.get("message") == message.ACCESS_FORBIDDEN
+
+    mock_db_geneset.get.return_value = []
+    response = geneset.get_geneset(None, 1234, mock_user)
+    assert response.get("data") is None
 
 
 @patch("geneweaver.api.services.geneset.db_geneset")
@@ -296,8 +301,10 @@ def test_map_geneset_homology_db_call_error(mock_db_gene):
 
 
 @patch("geneweaver.api.services.geneset.db_geneset_value")
-def test_geneset_gene_value_response(mock_db_geneset_value):
+@patch("geneweaver.api.services.geneset.db_geneset")
+def test_geneset_gene_value_response(mock_db_geneset, mock_db_geneset_value):
     """Test geneset gene value data response."""
+    mock_db_geneset.get.return_value = [geneset_by_id_resp.get("geneset")]
     mock_db_geneset_value.by_geneset_id.return_value = geneset_by_id_resp.get(
         "geneset_values"
     )

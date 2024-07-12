@@ -173,7 +173,9 @@ def get_geneset_values(
             raise HTTPException(status_code=500, detail=api_message.UNEXPECTED_ERROR)
 
     if response.get("data") is None:
-        raise HTTPException(status_code=404, detail=api_message.RECORD_NOT_FOUND_ERROR)
+        raise HTTPException(
+            status_code=404, detail=api_message.INACCESSIBLE_OR_FORBIDDEN
+        )
 
     return response
 
