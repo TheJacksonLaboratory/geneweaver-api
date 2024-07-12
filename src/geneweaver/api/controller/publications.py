@@ -29,15 +29,7 @@ def get_publication(
     pages: Optional[str] = None,
     month: Optional[str] = None,
     year: Optional[str] = None,
-    pubmed_id: Annotated[
-        Optional[int],
-        Query(
-            format="int64",
-            minimum=0,
-            maxiumum=9223372036854775807,
-            description=api_message.PUBMED_ID,
-        ),
-    ] = None,
+    pubmed_id: Optional[str] = None,
     search_text: Annotated[
         Optional[str], Query(description=api_message.SEARCH_TEXT)
     ] = None,
