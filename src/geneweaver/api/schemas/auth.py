@@ -3,7 +3,7 @@
 from enum import Enum
 from typing import List, Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class AppRoles(str, Enum):
@@ -17,8 +17,8 @@ class AppRoles(str, Enum):
 class User(BaseModel):
     """User model."""
 
-    email: Optional[str]
-    name: Optional[str]
+    email: Optional[str] = None
+    name: Optional[str] = None
     sso_id: str = Field(None, alias="sub")
     id: int = Field(None, alias="gw_id")  # noqa: A003
     role: Optional[AppRoles] = AppRoles.user
@@ -29,9 +29,6 @@ class UserInternal(User):
 
     auth_header: dict = {}
     token: str
-    permissions: Optional[List[str]]
+    permissions: Optional[List[str]] = None
 
-    class Config:
-        """Pydantic config."""
-
-        allow_population_by_field_name = True
+    model_config = ConfigDict(populate_by_name=True)

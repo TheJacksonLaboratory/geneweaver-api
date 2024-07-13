@@ -1,9 +1,11 @@
 """Namespace for the config class for the Geneweaver API."""
 
-from typing import Any, Dict, List, Optional
+from typing import List, Optional
 
 from geneweaver.db.core.settings_class import Settings as DBSettings
-from pydantic import BaseSettings, validator
+from pydantic import model_validator
+from pydantic_settings import BaseSettings, SettingsConfigDict
+from typing_extensions import Self
 
 
 class GeneweaverAPIConfig(BaseSettings):
@@ -20,33 +22,31 @@ class GeneweaverAPIConfig(BaseSettings):
     DB_PORT: int = 5432
     DB: Optional[DBSettings] = None
 
-    @validator("DB", pre=True)
-    def assemble_db_settings(
-        cls, v: Optional[DBSettings], values: Dict[str, Any]  # noqa: N805
-    ) -> DBSettings:
+    @model_validator(mode="after")
+    def assemble_db_settings(self) -> Self:
         """Build the database settings."""
-        if isinstance(v, DBSettings):
-            return v
-        return DBSettings(
-            SERVER=values.get("DB_HOST"),
-            NAME=values.get("DB_NAME"),
-            USERNAME=values.get("DB_USERNAME"),
-            PASSWORD=values.get("DB_PASSWORD"),
-            PORT=values.get("DB_PORT"),
-        )
+        if not isinstance(self.DB, DBSettings):
+            self.DB = DBSettings(
+                SERVER=self.DB_HOST,
+                NAME=self.DB_NAME,
+                USERNAME=self.DB_USERNAME,
+                PASSWORD=self.DB_PASSWORD,
+                PORT=self.DB_PORT,
+            )
+        return self
 
     AUTH_DOMAIN: str = "geneweaver.auth0.com"
     AUTH_AUDIENCE: str = "https://api.geneweaver.org"
     AUTH_ALGORITHMS: List[str] = ["RS256"]
     AUTH_EMAIL_NAMESPACE: str = AUTH_AUDIENCE
-    AUTH_SCOPES = {
+    AUTH_SCOPES: dict = {
         "openid profile email": "read",
     }
     JWT_PERMISSION_PREFIX: str = "approle"
     AUTH_CLIENT_ID: str = "T7bj6wlmtVcAN2O6kzDRwPVFyIj4UQNs"
 
-    class Config:
-        """Configuration for the BaseSettings class."""
-
-        env_file = ".env"
-        case_sensitive = True
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        case_sensitive=False,
+        extra="ignore",
+    )

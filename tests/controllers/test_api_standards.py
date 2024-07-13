@@ -17,6 +17,7 @@ def get_openapi_json():
     from unittest.mock import patch
 
     config = GeneweaverAPIConfig(
+        _env_file=None,
         DB_HOST="localhost",
         DB_USERNAME="postgres",
         DB_PASSWORD="postgres",
