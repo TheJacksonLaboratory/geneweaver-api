@@ -1,6 +1,8 @@
 {
   "db_health_status": {
     "status": "UP",
+    "details": "All systems normal.",
+    "datetime": "2024-07-15T18:50:37.318238",
     "DB_status": {
       "gene_identifier_last_update": {
         "gi_date": "2024-06-24T01:54:48.023015+00:00"

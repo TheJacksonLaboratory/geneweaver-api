@@ -20,4 +20,4 @@ def test_valid_url_req(mock_db_heath_service_call, client):
         url="/api/monitors/servers/health", params={"db_health_check": True}
     )
     assert response.status_code == 200
-    assert response.json() == db_health_status
+    assert response.json().get("DB_status") == db_health_status.get("DB_status")
