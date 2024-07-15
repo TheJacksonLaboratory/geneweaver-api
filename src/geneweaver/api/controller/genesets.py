@@ -23,8 +23,8 @@ router = APIRouter(prefix="/genesets", tags=["genesets"])
 
 @router.get("")
 def get_visible_genesets(
-    user: UserInternal = Security(deps.optional_full_user),
-    cursor: Optional[deps.Cursor] = Depends(deps.cursor),
+    cursor: deps.CursorDep,
+    user: deps.OptionalFullUserDep,
     gs_id: Annotated[
         Optional[int],
         Query(

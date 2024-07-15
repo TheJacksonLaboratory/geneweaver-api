@@ -4,7 +4,7 @@
 import logging
 from contextlib import asynccontextmanager
 from tempfile import TemporaryDirectory
-from typing import Generator, Optional
+from typing import Annotated, Optional
 
 import psycopg
 from fastapi import Depends, FastAPI, Request
@@ -12,7 +12,7 @@ from geneweaver.api.core.config import settings
 from geneweaver.api.core.exceptions import AuthenticationMismatch
 from geneweaver.api.core.security import Auth0, UserInternal
 from geneweaver.db import user as db_user
-from psycopg.rows import dict_row
+from psycopg.rows import DictRow, dict_row
 from psycopg_pool import ConnectionPool
 
 auth = Auth0(
@@ -34,7 +34,11 @@ async def lifespan(app: FastAPI) -> None:
     :param app: The FastAPI application (dependency injection).
     """
     logger.info("Opening DB Connection Pool.")
-    app.pool = ConnectionPool(settings.DB.URI)
+    app.pool = ConnectionPool(
+        settings.DB.URI,
+        connection_class=psycopg.Connection[DictRow],
+        kwargs={"row_factory": dict_row},
+    )
     app.pool.open()
     app.pool.wait()
     with app.pool.connection() as conn:
@@ -50,11 +54,15 @@ async def lifespan(app: FastAPI) -> None:
     app.pool.close()
 
 
-def cursor(request: Request) -> Generator:
+async def cursor(request: Request) -> Cursor:
     """Get a cursor from the connection pool."""
+    logger.debug("Getting cursor from pool.")
     with request.app.pool.connection() as conn:
-        with conn.cursor(row_factory=dict_row) as cur:
+        with conn.cursor() as cur:
             yield cur
+
+
+CursorDep = Annotated[Cursor, Depends(cursor)]
 
 
 def _get_user_details(cursor: Cursor, user: UserInternal) -> UserInternal:
@@ -100,8 +108,11 @@ async def full_user(
     yield _get_user_details(cursor, user)
 
 
+FullUserDep = Annotated[UserInternal, Depends(full_user)]
+
+
 async def optional_full_user(
-    cursor: Cursor = Depends(cursor),
+    cursor: CursorDep,
     user: Optional[UserInternal] = Depends(auth.get_user),
 ) -> Optional[UserInternal]:
     """Get the full user object, if request is logged in.
@@ -115,8 +126,11 @@ async def optional_full_user(
     @param user: GW user.
     """
     if user is not None:
-        yield _get_user_details(cursor, user)
-    yield None
+        return _get_user_details(cursor, user)
+    return None
+
+
+OptionalFullUserDep = Annotated[Optional[UserInternal], Depends(optional_full_user)]
 
 
 async def get_temp_dir() -> TemporaryDirectory:
