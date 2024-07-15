@@ -1,12 +1,13 @@
 """Endpoints related to system health."""
 
+from datetime import datetime
 from typing import Optional
 
 from fastapi import APIRouter, Depends, Query
 from geneweaver.api import dependencies as deps
 from geneweaver.api.services import monitors as monitors_service
 from typing_extensions import Annotated
-from datetime import datetime
+
 from . import message as api_message
 
 router = APIRouter(prefix="/monitors", tags=["monitors"])
@@ -20,10 +21,11 @@ def get_health_check(
     ] = False,
 ) -> dict:
     """Return 200 API response if reachable and optionally check db health."""
-    response = {"status": "UP",
-                "details": "All systems normal.",
-                "datetime": datetime.utcnow(),
-                }
+    response = {
+        "status": "UP",
+        "details": "All systems normal.",
+        "datetime": datetime.utcnow(),
+    }
 
     if db_health_check:
         db_health_response = monitors_service.check_db_health(cursor)
