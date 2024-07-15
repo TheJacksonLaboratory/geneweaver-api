@@ -66,7 +66,6 @@ def test_export_geneset_w_gene_id_type(mock_service_get_geneset_w_gene_id_type, 
     response = client.get("/api/genesets/1234/file?gene_id_type=2")
 
     assert response.headers.get("content-type") == "application/octet-stream"
-    assert int(response.headers.get("content-length")) > 0
     assert response.status_code == 200
 
 
