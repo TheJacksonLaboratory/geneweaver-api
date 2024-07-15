@@ -4,7 +4,7 @@
 import logging
 from contextlib import asynccontextmanager
 from tempfile import TemporaryDirectory
-from typing import Generator, Optional, Annotated
+from typing import Annotated, Optional
 
 import psycopg
 from fastapi import Depends, FastAPI, Request
@@ -36,7 +36,7 @@ async def lifespan(app: FastAPI) -> None:
     logger.info("Opening DB Connection Pool.")
     app.pool = ConnectionPool(
         settings.DB.URI,
-        connection_class = psycopg.Connection[DictRow],
+        connection_class=psycopg.Connection[DictRow],
         kwargs={"row_factory": dict_row},
     )
     app.pool.open()
@@ -106,6 +106,7 @@ async def full_user(
     @param user: GW user.
     """
     yield _get_user_details(cursor, user)
+
 
 FullUserDep = Annotated[UserInternal, Depends(full_user)]
 
