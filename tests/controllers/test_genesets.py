@@ -310,3 +310,40 @@ def test_get_geneset_ontology_terms_errors(mock_get_genenset_onto_terms, client)
 
     response = client.get("/api/genesets/1234/ontologies")
     assert response.status_code == 403
+
+
+@patch("geneweaver.api.services.geneset.add_geneset_ontology_term")
+def test_add_geneset_ontology_term_response(mock_add_genenset_onto_terms, client):
+    """Test add geneset ontology_terms  response."""
+    mock_resp = test_ontology_data.get("geneset_ontology_terms")
+    mock_add_genenset_onto_terms.return_value = mock_resp
+
+    response = client.put("/api/genesets/1234/ontologies?ontology_ref_term_id=D001921")
+    assert response.status_code == 204
+
+
+@patch("geneweaver.api.services.geneset.add_geneset_ontology_term")
+def test_add_geneset_ontology_terms_errors(mock_add_genenset_onto_terms, client):
+    """Test add geneset ontology_terms errors."""
+    mock_resp = {
+        "error": True,
+        "message": message.ACCESS_FORBIDDEN,
+    }
+    mock_add_genenset_onto_terms.return_value = mock_resp
+
+    response = client.put("/api/genesets/1234/ontologies?ontology_ref_term_id=D001921")
+    assert response.status_code == 403
+
+    mock_add_genenset_onto_terms.return_value = {
+        "error": True,
+        "message": message.RECORD_NOT_FOUND_ERROR,
+    }
+    response = client.put("/api/genesets/1234/ontologies?ontology_ref_term_id=QEQWEWE")
+    assert response.status_code == 404
+
+    mock_add_genenset_onto_terms.return_value = {
+        "error": True,
+        "message": message.RECORD_EXISTS,
+    }
+    response = client.put("/api/genesets/1234/ontologies?ontology_ref_term_id=D001921")
+    assert response.status_code == 412
