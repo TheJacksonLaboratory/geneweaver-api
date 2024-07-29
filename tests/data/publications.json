@@ -8,7 +8,7 @@
       "volume": "23",
       "pages": "4491-8",
       "month": "Jun",
-      "year": "2003",
+      "year": 2003,
       "id": 123
   },
   "publication_by_pubmed_id": {
@@ -20,7 +20,7 @@
       "volume": "48",
       "pages": "116-24",
       "month": "Jan",
-      "year": "2008",
+      "year": 2008,
       "id": 1234
   },
   "add_pubmed_info": {
