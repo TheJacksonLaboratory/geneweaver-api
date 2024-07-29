@@ -5,7 +5,7 @@ from typing import Iterable, Optional, Set
 from fastapi.logger import logger
 from geneweaver.api.controller import message
 from geneweaver.api.core.exceptions import UnauthorizedException
-from geneweaver.api.schemas.auth import User
+from geneweaver.api.schemas.auth import AppRoles, User
 from geneweaver.core.enum import GeneIdentifier, GenesetTier, Species
 from geneweaver.core.schema.score import GenesetScoreType
 from geneweaver.db import gene as db_gene
@@ -13,7 +13,9 @@ from geneweaver.db import geneset as db_geneset
 from geneweaver.db import geneset_value as db_geneset_value
 from geneweaver.db import ontology as db_ontology
 from geneweaver.db import threshold as db_threshold
-from psycopg import Cursor
+from psycopg import Cursor, errors
+
+ONTO_GSO_REF_TYPE = "GeneWeaver Primary Annotation"
 
 
 def determine_geneset_access(
@@ -430,6 +432,58 @@ def get_geneset_ontology_terms(
             offset=offset,
         )
         return {"data": results}
+
+    except Exception as err:
+        logger.error(err)
+        raise err
+
+
+def add_geneset_ontology_term(
+    cursor: Cursor,
+    geneset_id: int,
+    ref_term_id: str,
+    user: User,
+    gso_ref_type: str = ONTO_GSO_REF_TYPE,
+) -> dict:
+    """Get geneset ontology terms by geneset id.
+
+    :param cursor: DB cursor
+    :param geneset_id: geneset identifier
+    :param ref_term_id ref term identifier
+    :param user: GW user
+    :param limit: Limit the number of results.
+    :param offset: Offset the results.
+    @return: persisted record  (geneset id, ontology term id).
+    """
+    try:
+        if user is None or user.id is None:
+            return {"error": True, "message": message.ACCESS_FORBIDDEN}
+
+        owner = db_geneset.user_is_owner(
+            cursor=cursor, user_id=user.id, geneset_id=geneset_id
+        )
+        curator = user.role is AppRoles.curator
+
+        if not owner and not curator:
+            return {"error": True, "message": message.ACCESS_FORBIDDEN}
+
+        onto_term = db_ontology.by_ontology_term(
+            cursor=cursor, onto_ref_term_id=ref_term_id
+        )
+
+        if onto_term is None:
+            return {"error": True, "message": message.RECORD_NOT_FOUND_ERROR}
+
+        results = db_ontology.add_ontology_term_to_geneset(
+            cursor=cursor,
+            geneset_id=geneset_id,
+            ontology_term_id=onto_term.get("onto_id"),
+            gso_ref_type=gso_ref_type,
+        )
+        return {"data": results}
+
+    except errors.UniqueViolation:
+        return {"error": True, "message": message.RECORD_EXISTS}
 
     except Exception as err:
         logger.error(err)
