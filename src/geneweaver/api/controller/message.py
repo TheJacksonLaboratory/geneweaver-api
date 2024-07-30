@@ -28,3 +28,4 @@ GS_PUB_SEARCH_TEXT = (
     "Gensets and/or publications search types ('genesets', 'publications') "
 )
 CHECK_DB_HEALTH = "Check DB health flag"
+ONTOLOGY_ID = "Ontology term reference ID"
