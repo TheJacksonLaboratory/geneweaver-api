@@ -370,3 +370,30 @@ def put_geneset_ontology_term(
 
         if response.get("message") == api_message.RECORD_EXISTS:
             raise HTTPException(status_code=412, detail=api_message.RECORD_EXISTS)
+
+
+@router.delete("/{geneset_id}/ontologies", status_code=204)
+def delete_geneset_ontology_term(
+    geneset_id: Annotated[
+        int, Path(format="int64", minimum=0, maxiumum=9223372036854775807)
+    ],
+    ontology_ref_term_id: str,
+    user: UserInternal = Security(deps.full_user),
+    cursor: Optional[deps.Cursor] = Depends(deps.cursor),
+) -> None:
+    """Set geneset threshold for geneset owner."""
+    response = genset_service.delete_geneset_ontology_term(
+        cursor=cursor,
+        geneset_id=geneset_id,
+        ref_term_id=ontology_ref_term_id,
+        user=user,
+    )
+
+    if "error" in response:
+        if response.get("message") == api_message.ACCESS_FORBIDDEN:
+            raise HTTPException(status_code=403, detail=api_message.ACCESS_FORBIDDEN)
+
+        if response.get("message") == api_message.RECORD_NOT_FOUND_ERROR:
+            raise HTTPException(
+                status_code=404, detail=api_message.RECORD_NOT_FOUND_ERROR
+            )

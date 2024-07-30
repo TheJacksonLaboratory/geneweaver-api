@@ -445,7 +445,7 @@ def add_geneset_ontology_term(
     user: User,
     gso_ref_type: str = ONTO_GSO_REF_TYPE,
 ) -> dict:
-    """Get geneset ontology terms by geneset id.
+    """Add ontology term to a geneset.
 
     :param cursor: DB cursor
     :param geneset_id: geneset identifier
@@ -484,6 +484,55 @@ def add_geneset_ontology_term(
 
     except errors.UniqueViolation:
         return {"error": True, "message": message.RECORD_EXISTS}
+
+    except Exception as err:
+        logger.error(err)
+        raise err
+
+
+def delete_geneset_ontology_term(
+    cursor: Cursor,
+    geneset_id: int,
+    ref_term_id: str,
+    user: User,
+    gso_ref_type: str = ONTO_GSO_REF_TYPE,
+) -> dict:
+    """Delete ontology term from a geneset.
+
+    :param cursor: DB cursor
+    :param geneset_id: geneset identifier
+    :param ref_term_id ref term identifier
+    :param user: GW user
+    :param limit: Limit the number of results.
+    :param offset: Offset the results.
+    @return: deleted record  (geneset id, ontology term id).
+    """
+    try:
+        if user is None or user.id is None:
+            return {"error": True, "message": message.ACCESS_FORBIDDEN}
+
+        owner = db_geneset.user_is_owner(
+            cursor=cursor, user_id=user.id, geneset_id=geneset_id
+        )
+        curator = user.role is AppRoles.curator
+
+        if not owner and not curator:
+            return {"error": True, "message": message.ACCESS_FORBIDDEN}
+
+        onto_term = db_ontology.by_ontology_term(
+            cursor=cursor, onto_ref_term_id=ref_term_id
+        )
+
+        if onto_term is None:
+            return {"error": True, "message": message.RECORD_NOT_FOUND_ERROR}
+
+        results = db_ontology.delete_ontology_term_from_geneset(
+            cursor=cursor,
+            geneset_id=geneset_id,
+            ontology_term_id=onto_term.get("onto_id"),
+            gso_ref_type=gso_ref_type,
+        )
+        return {"data": results}
 
     except Exception as err:
         logger.error(err)

@@ -5,7 +5,7 @@ from unittest.mock import patch
 import pytest
 from geneweaver.api.controller import message
 from geneweaver.api.core.exceptions import UnauthorizedException
-from geneweaver.api.schemas.auth import User
+from geneweaver.api.schemas.auth import AppRoles, User
 from geneweaver.api.services import geneset
 from geneweaver.core.enum import GeneIdentifier, GenesetTier, Species
 from geneweaver.core.schema.score import GenesetScoreType
@@ -476,8 +476,8 @@ def test_geneset_gene_value_w_gene_id_type_none_resp2(mock_db_geneset):
 
 @patch("geneweaver.api.services.geneset.db_geneset")
 @patch("geneweaver.api.services.geneset.db_ontology")
-def test_add_genset_ontology_term(mock_db_ontology, mock_db_geneset):
-    """Test geneset gene value data response."""
+def test_add_geneset_ontology_term(mock_db_ontology, mock_db_geneset):
+    """Test add geneset ontology terms response."""
     mock_reponse = {"data": {"gs_id": 1234, "ont_id": 1}}
     mock_db_ontology.by_ontology_term.return_value = {"onto_id": 123123}
     mock_db_geneset.user_is_owner.return_value = True
@@ -490,19 +490,28 @@ def test_add_genset_ontology_term(mock_db_ontology, mock_db_geneset):
     )
     assert response == mock_reponse
 
+    # user is not the geneset owner, but he is a curator
+    mock_db_geneset.user_is_owner.return_value = False
+    mock_user.role = AppRoles.curator
+    response = geneset.add_geneset_ontology_term(
+        cursor=None, user=mock_user, geneset_id=1234, ref_term_id="D001921"
+    )
+    assert response == mock_reponse
+
 
 @patch("geneweaver.api.services.geneset.db_geneset")
 @patch("geneweaver.api.services.geneset.db_ontology")
 def test_add_geneset_ontology_term_errors(mock_db_ontology, mock_db_geneset):
-    """Test geneset gene value data response."""
+    """Test add geneset ontology term errors."""
     mock_reponse = {"data": {"gs_id": 1234, "ont_id": 1}}
     mock_db_ontology.by_ontology_term.return_value = {"onto_id": 123123}
-    mock_db_geneset.user_is_owner.return_value = False
     mock_db_ontology.add_ontology_term_to_geneset.return_value = mock_reponse.get(
         "data"
     )
 
-    # user is not the geneset owner
+    # user is not the geneset owner and he is not a curator
+    mock_db_geneset.user_is_owner.return_value = False
+    mock_user.role = None
     response = geneset.add_geneset_ontology_term(
         cursor=None, user=mock_user, geneset_id=1234, ref_term_id="D001921"
     )
@@ -531,5 +540,75 @@ def test_add_geneset_ontology_term_errors(mock_db_ontology, mock_db_geneset):
     mock_db_ontology.add_ontology_term_to_geneset.side_effect = Exception("ERROR")
     with pytest.raises(expected_exception=Exception):
         geneset.add_geneset_ontology_term(
+            cursor=None, user=mock_user, geneset_id=1234, ref_term_id="D001921"
+        )
+
+
+@patch("geneweaver.api.services.geneset.db_geneset")
+@patch("geneweaver.api.services.geneset.db_ontology")
+def test_delete_geneset_ontology_term(mock_db_ontology, mock_db_geneset):
+    """Test delete geneset ontology term response."""
+    mock_reponse = {"data": {"gs_id": 1234, "ont_id": 1}}
+    mock_db_ontology.by_ontology_term.return_value = {"onto_id": 123123}
+    mock_db_geneset.user_is_owner.return_value = True
+    mock_db_ontology.delete_ontology_term_from_geneset.return_value = mock_reponse.get(
+        "data"
+    )
+
+    response = geneset.delete_geneset_ontology_term(
+        cursor=None, user=mock_user, geneset_id=1234, ref_term_id="D001921"
+    )
+    assert response == mock_reponse
+
+    # user is not the geneset owner, but he is a curator
+    mock_db_geneset.user_is_owner.return_value = False
+    mock_user.role = AppRoles.curator
+    response = geneset.delete_geneset_ontology_term(
+        cursor=None, user=mock_user, geneset_id=1234, ref_term_id="D001921"
+    )
+    assert response == mock_reponse
+
+
+@patch("geneweaver.api.services.geneset.db_geneset")
+@patch("geneweaver.api.services.geneset.db_ontology")
+def test_delete_geneset_ontology_term_errors(mock_db_ontology, mock_db_geneset):
+    """Test delete geneset ontology term errors."""
+    mock_reponse = {"data": {"gs_id": 1234, "ont_id": 1}}
+    mock_db_ontology.by_ontology_term.return_value = {"onto_id": 123123}
+    mock_db_ontology.delete_ontology_term_from_geneset.return_value = mock_reponse.get(
+        "data"
+    )
+
+    # user is not the geneset owner and he is not a curator
+    mock_db_geneset.user_is_owner.return_value = False
+    mock_user.role = None
+    response = geneset.delete_geneset_ontology_term(
+        cursor=None, user=mock_user, geneset_id=1234, ref_term_id="D001921"
+    )
+    assert response.get("error") is True
+    assert response.get("message") == message.ACCESS_FORBIDDEN
+
+    # user is not logged-in
+    response = geneset.delete_geneset_ontology_term(
+        cursor=None, user=None, geneset_id=1234, ref_term_id="D001921"
+    )
+    assert response.get("error") is True
+    assert response.get("message") == message.ACCESS_FORBIDDEN
+
+    # Ontology term is not found
+    mock_db_ontology.by_ontology_term.return_value = None
+    mock_db_geneset.user_is_owner.return_value = True
+    response = geneset.delete_geneset_ontology_term(
+        cursor=None, user=mock_user, geneset_id=1234, ref_term_id="D001921"
+    )
+    assert response.get("error") is True
+    assert response.get("message") == message.RECORD_NOT_FOUND_ERROR
+
+    # db error
+    mock_db_geneset.user_is_owner.return_value = True
+    mock_db_ontology.by_ontology_term.return_value = {"onto_id": 123123}
+    mock_db_ontology.delete_ontology_term_from_geneset.side_effect = Exception("ERROR")
+    with pytest.raises(expected_exception=Exception):
+        geneset.delete_geneset_ontology_term(
             cursor=None, user=mock_user, geneset_id=1234, ref_term_id="D001921"
         )

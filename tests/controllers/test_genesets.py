@@ -347,3 +347,39 @@ def test_add_geneset_ontology_terms_errors(mock_add_genenset_onto_terms, client)
     }
     response = client.put("/api/genesets/1234/ontologies?ontology_ref_term_id=D001921")
     assert response.status_code == 412
+
+
+@patch("geneweaver.api.services.geneset.delete_geneset_ontology_term")
+def test_delete_geneset_ontology_term_response(mock_delete_genenset_onto_terms, client):
+    """Test delete geneset ontology_terms  response."""
+    mock_resp = test_ontology_data.get("geneset_ontology_terms")
+    mock_delete_genenset_onto_terms.return_value = mock_resp
+
+    response = client.delete(
+        "/api/genesets/1234/ontologies?ontology_ref_term_id=D001921"
+    )
+    assert response.status_code == 204
+
+
+@patch("geneweaver.api.services.geneset.delete_geneset_ontology_term")
+def test_delete_geneset_ontology_terms_errors(mock_delete_genenset_onto_terms, client):
+    """Test delete geneset ontology_terms errors."""
+    mock_resp = {
+        "error": True,
+        "message": message.ACCESS_FORBIDDEN,
+    }
+    mock_delete_genenset_onto_terms.return_value = mock_resp
+
+    response = client.delete(
+        "/api/genesets/1234/ontologies?ontology_ref_term_id=D001921"
+    )
+    assert response.status_code == 403
+
+    mock_delete_genenset_onto_terms.return_value = {
+        "error": True,
+        "message": message.RECORD_NOT_FOUND_ERROR,
+    }
+    response = client.delete(
+        "/api/genesets/1234/ontologies?ontology_ref_term_id=QEQWEWE"
+    )
+    assert response.status_code == 404
