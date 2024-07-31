@@ -339,15 +339,26 @@ def get_geneset_ontology_terms(
         if terms_resp.get("message") == api_message.ACCESS_FORBIDDEN:
             raise HTTPException(status_code=403, detail=api_message.ACCESS_FORBIDDEN)
 
+        if terms_resp.get("message") == api_message.INACCESSIBLE_OR_FORBIDDEN:
+            raise HTTPException(
+                status_code=404, detail=api_message.INACCESSIBLE_OR_FORBIDDEN
+            )
+
     return terms_resp
 
 
 @router.put("/{geneset_id}/ontologies", status_code=204)
 def put_geneset_ontology_term(
     geneset_id: Annotated[
-        int, Path(format="int64", minimum=0, maxiumum=9223372036854775807)
+        int,
+        Path(
+            description=api_message.GENESET_ID,
+            format="int64",
+            minimum=0,
+            maxiumum=9223372036854775807,
+        ),
     ],
-    ontology_ref_term_id: str,
+    ontology_id: Annotated[str, Query(description=api_message.ONTOLOGY_ID)],
     user: UserInternal = Security(deps.full_user),
     cursor: Optional[deps.Cursor] = Depends(deps.cursor),
 ) -> None:
@@ -355,7 +366,7 @@ def put_geneset_ontology_term(
     response = genset_service.add_geneset_ontology_term(
         cursor=cursor,
         geneset_id=geneset_id,
-        ref_term_id=ontology_ref_term_id,
+        term_ref_id=ontology_id,
         user=user,
     )
 
@@ -370,3 +381,46 @@ def put_geneset_ontology_term(
 
         if response.get("message") == api_message.RECORD_EXISTS:
             raise HTTPException(status_code=412, detail=api_message.RECORD_EXISTS)
+
+        if response.get("message") == api_message.INACCESSIBLE_OR_FORBIDDEN:
+            raise HTTPException(
+                status_code=404, detail=api_message.INACCESSIBLE_OR_FORBIDDEN
+            )
+
+
+@router.delete("/{geneset_id}/ontologies/{ontology_id}", status_code=204)
+def delete_geneset_ontology_term(
+    geneset_id: Annotated[
+        int,
+        Path(
+            description=api_message.GENESET_ID,
+            format="int64",
+            minimum=0,
+            maxiumum=9223372036854775807,
+        ),
+    ],
+    ontology_id: Annotated[str, Path(description=api_message.ONTOLOGY_ID)],
+    user: UserInternal = Security(deps.full_user),
+    cursor: Optional[deps.Cursor] = Depends(deps.cursor),
+) -> None:
+    """Set geneset threshold for geneset owner."""
+    response = genset_service.delete_geneset_ontology_term(
+        cursor=cursor,
+        geneset_id=geneset_id,
+        term_ref_id=ontology_id,
+        user=user,
+    )
+
+    if "error" in response:
+        if response.get("message") == api_message.ACCESS_FORBIDDEN:
+            raise HTTPException(status_code=403, detail=api_message.ACCESS_FORBIDDEN)
+
+        if response.get("message") == api_message.RECORD_NOT_FOUND_ERROR:
+            raise HTTPException(
+                status_code=404, detail=api_message.RECORD_NOT_FOUND_ERROR
+            )
+
+        if response.get("message") == api_message.INACCESSIBLE_OR_FORBIDDEN:
+            raise HTTPException(
+                status_code=404, detail=api_message.INACCESSIBLE_OR_FORBIDDEN
+            )
