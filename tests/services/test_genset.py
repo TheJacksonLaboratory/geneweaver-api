@@ -1,5 +1,6 @@
 """Tests for geneset Service."""
 
+import datetime
 from unittest.mock import patch
 
 import pytest
@@ -258,7 +259,13 @@ def test_visible_geneset_all_expected_parameters(mock_db_geneset):
         abbreviation="test",
         publication_id=123,
         pubmed_id="p123",
+        lte_count=50,
+        gte_count=5,
         gene_id_type=GeneIdentifier(5),
+        created_before=datetime.datetime(2024, 7, 31),
+        created_after=datetime.datetime(2008, 7, 31),
+        updated_before=datetime.datetime(2024, 7, 31),
+        updated_after=datetime.datetime(2023, 7, 31),
         limit=10,
         offset=0,
         with_publication_info=True,

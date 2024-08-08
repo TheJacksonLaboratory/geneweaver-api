@@ -29,3 +29,6 @@ GS_PUB_SEARCH_TEXT = (
 )
 CHECK_DB_HEALTH = "Check DB health flag"
 ONTOLOGY_ID = "Ontology term reference ID"
+CREATE_DATE = "Create date limit (before or after). E.g. 2024-08-01"
+UPDATE_DATE = "Update date limit (before or after). E.g. 2023-07-01"
+GENESET_SIZE = "Geneset size (Genes count)"
