@@ -13,7 +13,7 @@ from geneweaver.api.schemas.auth import UserInternal
 from geneweaver.api.services import geneset as genset_service
 from geneweaver.api.services import publications as publication_service
 from geneweaver.core.enum import GeneIdentifier, GenesetTier, Species
-from geneweaver.core.schema.score import GenesetScoreType
+from geneweaver.core.schema.score import GenesetScoreType, ScoreType
 from typing_extensions import Annotated
 
 from . import message as api_message
@@ -69,6 +69,7 @@ def get_visible_genesets(
     with_publication_info: Annotated[
         bool, Query(description=api_message.ONLY_MY_GS)
     ] = True,
+    score_type: Optional[ScoreType] = None,
     size_less_than: Annotated[
         Optional[int],
         Query(
@@ -126,6 +127,7 @@ def get_visible_genesets(
         with_publication_info=with_publication_info,
         ontology_term=ontology_term,
         only_my_genesets=only_my_genesets,
+        score_type=score_type,
         lte_count=size_less_than,
         gte_count=size_greater_than,
         created_after=created_after,

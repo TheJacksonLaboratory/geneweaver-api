@@ -9,7 +9,7 @@ from geneweaver.api.core.exceptions import UnauthorizedException
 from geneweaver.api.schemas.auth import AppRoles, User
 from geneweaver.api.services import geneset
 from geneweaver.core.enum import GeneIdentifier, GenesetTier, Species
-from geneweaver.core.schema.score import GenesetScoreType
+from geneweaver.core.schema.score import GenesetScoreType, ScoreType
 
 from tests.data import test_geneset_data
 
@@ -259,6 +259,7 @@ def test_visible_geneset_all_expected_parameters(mock_db_geneset):
         abbreviation="test",
         publication_id=123,
         pubmed_id="p123",
+        score_type=ScoreType("p-value"),
         lte_count=50,
         gte_count=5,
         gene_id_type=GeneIdentifier(5),
