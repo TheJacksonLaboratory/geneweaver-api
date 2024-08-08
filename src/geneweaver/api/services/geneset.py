@@ -1,5 +1,6 @@
 """Service functions for dealing with genesets."""
 
+from datetime import date
 from typing import Iterable, Optional, Set
 
 from fastapi.logger import logger
@@ -7,7 +8,7 @@ from geneweaver.api.controller import message
 from geneweaver.api.core.exceptions import UnauthorizedException
 from geneweaver.api.schemas.auth import AppRoles, User
 from geneweaver.core.enum import GeneIdentifier, GenesetTier, Species
-from geneweaver.core.schema.score import GenesetScoreType
+from geneweaver.core.schema.score import GenesetScoreType, ScoreType
 from geneweaver.db import gene as db_gene
 from geneweaver.db import geneset as db_geneset
 from geneweaver.db import geneset_value as db_geneset_value
@@ -90,9 +91,16 @@ def get_visible_genesets(
     gene_id_type: Optional[GeneIdentifier] = None,
     search_text: Optional[str] = None,
     ontology_term: Optional[str] = None,
+    with_publication_info: bool = True,
+    score_type: Optional[ScoreType] = None,
+    lte_count: Optional[int] = None,
+    gte_count: Optional[int] = None,
+    created_after: Optional[date] = None,
+    created_before: Optional[date] = None,
+    updated_after: Optional[date] = None,
+    updated_before: Optional[date] = None,
     limit: Optional[int] = None,
     offset: Optional[int] = None,
-    with_publication_info: bool = True,
 ) -> dict:
     """Get genesets from the database.
 
@@ -110,6 +118,13 @@ def get_visible_genesets(
     :param search_text: Return genesets that match this search text (using PostgreSQL
                         full-text search).
     :param ontology_term: Show only results associated with this ontology term.
+    :param score_type: Show only results with given score type.
+    :param lte_count: less than or equal geneset count.
+    :param gte_count: greater than or equal geneset count.
+    :param updated_before: Show only results updated before this date.
+    :param updated_after: Show only results updated after this date.
+    :param created_before: Show only results created before this date.
+    :param created_after: Show only results updated before this date.
     :param limit: Limit the number of results.
     :param offset: Offset the results.
     :param with_publication_info: Include publication info in the return.
@@ -134,6 +149,13 @@ def get_visible_genesets(
             search_text=search_text,
             with_publication_info=with_publication_info,
             ontology_term=ontology_term,
+            score_type=score_type,
+            lte_count=lte_count,
+            gte_count=gte_count,
+            created_after=created_after,
+            created_before=created_before,
+            updated_after=updated_after,
+            updated_before=updated_before,
             limit=limit,
             offset=offset,
         )

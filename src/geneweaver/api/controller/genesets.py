@@ -1,7 +1,7 @@
 """Endpoints related to genesets."""
 
 import json
-import time
+from datetime import date, datetime
 from tempfile import TemporaryDirectory
 from typing import Optional, Set
 
@@ -13,7 +13,7 @@ from geneweaver.api.schemas.auth import UserInternal
 from geneweaver.api.services import geneset as genset_service
 from geneweaver.api.services import publications as publication_service
 from geneweaver.core.enum import GeneIdentifier, GenesetTier, Species
-from geneweaver.core.schema.score import GenesetScoreType
+from geneweaver.core.schema.score import GenesetScoreType, ScoreType
 from typing_extensions import Annotated
 
 from . import message as api_message
@@ -69,6 +69,29 @@ def get_visible_genesets(
     with_publication_info: Annotated[
         bool, Query(description=api_message.ONLY_MY_GS)
     ] = True,
+    score_type: Optional[ScoreType] = None,
+    size_less_than: Annotated[
+        Optional[int],
+        Query(
+            format="int64",
+            minimum=0,
+            maxiumum=9223372036854775807,
+            description=api_message.GENESET_SIZE,
+        ),
+    ] = None,
+    size_greater_than: Annotated[
+        Optional[int],
+        Query(
+            format="int64",
+            minimum=0,
+            maxiumum=9223372036854775807,
+            description=api_message.GENESET_SIZE,
+        ),
+    ] = None,
+    created_after: Annotated[date, Query(description=api_message.CREATE_DATE)] = None,
+    created_before: Annotated[date, Query(description=api_message.CREATE_DATE)] = None,
+    updated_after: Annotated[date, Query(description=api_message.UPDATE_DATE)] = None,
+    updated_before: Annotated[date, Query(description=api_message.UPDATE_DATE)] = None,
     limit: Annotated[
         Optional[int],
         Query(
@@ -104,6 +127,13 @@ def get_visible_genesets(
         with_publication_info=with_publication_info,
         ontology_term=ontology_term,
         only_my_genesets=only_my_genesets,
+        score_type=score_type,
+        lte_count=size_less_than,
+        gte_count=size_greater_than,
+        created_after=created_after,
+        created_before=created_before,
+        updated_after=updated_after,
+        updated_before=updated_before,
         limit=limit,
         offset=offset,
     )
@@ -190,7 +220,8 @@ def get_export_geneset_by_id_type(
     gene_id_type: Optional[GeneIdentifier] = None,
 ) -> StreamingResponse:
     """Export geneset into JSON file. Search by ID and optional gene identifier type."""
-    timestr = time.strftime("%Y%m%d-%H%M%S")
+    current_datetime = datetime.now()
+    timestr = current_datetime.strftime("%Y%m%d-%H%M%S")
 
     # Validate gene identifier type
     if gene_id_type:
