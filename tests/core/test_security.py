@@ -60,7 +60,7 @@ def create_test_token(mock_requests, claims=None):
     # claims
     if claims is None:
         to_encode = {
-            f"{test_audience}/claims/email": test_email,
+            f"{test_audience}/email": test_email,
             "iss": f"https://{test_domain}/",
             "aud": test_audience,
             "name": test_name,
@@ -247,7 +247,7 @@ async def test_invalid_claim(
     mock_jwt_unverified_header.return_value = private_key
 
     to_encode = {
-        f"{test_audience}/claims/email": test_email,
+        f"{test_audience}/email": test_email,
         "name": test_name,
         "scope": "openid profile email",
     }
@@ -277,7 +277,7 @@ async def test_missing_claim_email_error_claim(
     mock_jwt_unverified_header.return_value = private_key
 
     to_encode = {
-        f"{test_audience}/claims/email": None,
+        f"{test_audience}/email": None,
         "iss": f"https://{test_domain}/",
         "aud": test_audience,
         "name": test_name,

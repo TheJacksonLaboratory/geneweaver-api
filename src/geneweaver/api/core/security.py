@@ -69,6 +69,7 @@ class Auth0:
         auto_error: bool = True,
         scope_auto_error: bool = True,
         email_auto_error: bool = False,
+        email_claim: str = "email",
         auth0user_model: Type[UserInternal] = UserInternal,
     ) -> None:
         """Initialize the Auth0 class."""
@@ -80,6 +81,7 @@ class Auth0:
         self.auto_error = auto_error
         self.scope_auto_error = scope_auto_error
         self.email_auto_error = email_auto_error
+        self.email_claim = email_claim
 
         self.auth0_user_model = auth0user_model
 
@@ -277,7 +279,7 @@ class Auth0:
         payload["auth_header"] = {"Authorization": f"Bearer {token}"}
 
     def _process_email(self, payload: dict) -> None:
-        payload["email"] = payload.pop(f"{self.audience}/claims/email")
+        payload["email"] = payload.pop(f"{self.audience}/{self.email_claim}")
 
         if payload["email"] is not None:
             payload["email"] = payload["email"].lower()

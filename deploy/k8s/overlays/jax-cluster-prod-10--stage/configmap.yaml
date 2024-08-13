@@ -3,4 +3,4 @@ kind: ConfigMap
 metadata:
   name: geneweaver-config
 data:
-  AUTH_CLIENT_ID: "oVm9omUtLBpVyL7YfJA8gp3hHaHwyVt8"
+  AUTH_CLIENT_ID: "C0PrH88Pmjmba9ObVKaIRUITQeiA1Q4D"

@@ -35,15 +35,15 @@ class GeneweaverAPIConfig(BaseSettings):
             )
         return self
 
-    AUTH_DOMAIN: str = "geneweaver.auth0.com"
-    AUTH_AUDIENCE: str = "https://api.geneweaver.org"
+    AUTH_DOMAIN: str = "thejacksonlaboratory.auth0.com"
+    AUTH_AUDIENCE: str = "https://cube.jax.org"
     AUTH_ALGORITHMS: List[str] = ["RS256"]
-    AUTH_EMAIL_NAMESPACE: str = AUTH_AUDIENCE
+    AUTH_EMAIL_CLAIM: str = "email"
     AUTH_SCOPES: dict = {
         "openid profile email": "read",
     }
     JWT_PERMISSION_PREFIX: str = "approle"
-    AUTH_CLIENT_ID: str = "T7bj6wlmtVcAN2O6kzDRwPVFyIj4UQNs"
+    AUTH_CLIENT_ID: str = "aE6dpT04mGlvPeUXl4RYGSnCjvHEuawd"
 
     model_config = SettingsConfigDict(
         env_file=".env",
