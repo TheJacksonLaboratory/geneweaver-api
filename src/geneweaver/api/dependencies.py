@@ -82,7 +82,8 @@ def _get_user_details(cursor: Cursor, user: UserInternal) -> UserInternal:
                 detail="Email and SSO ID Mismatch. Please contact and administrator."
             ) from e
         elif db_user.email_exists(cursor, user.email):
-            user.id = db_user.link_user_id_with_sso_id(cursor, user.id, user.sso_id)
+            user.id = db_user.by_email(cursor, user.email)[0]["usr_id"]
+            _ = db_user.link_user_id_with_sso_id(cursor, user.id, user.sso_id)
         else:
             if not user.name:
                 user.name = user.email
