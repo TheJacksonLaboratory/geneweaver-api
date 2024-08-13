@@ -19,6 +19,7 @@ auth = Auth0(
     domain=settings.AUTH_DOMAIN,
     api_audience=settings.AUTH_AUDIENCE,
     scopes=settings.AUTH_SCOPES,
+    email_claim=settings.AUTH_EMAIL_CLAIM,
     auto_error=False,
 )
 

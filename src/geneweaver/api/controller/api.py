@@ -24,7 +24,10 @@ app = FastAPI(
     redoc_url=f"{settings.API_PREFIX}/redoc",
     openapi_url=f"{settings.API_PREFIX}/openapi.json",
     swagger_ui_oauth2_redirect_url=f"{settings.API_PREFIX}/docs/oauth2-redirect",
-    swagger_ui_init_oauth={"clientId": settings.AUTH_CLIENT_ID},
+    swagger_ui_init_oauth={
+        "clientId": settings.AUTH_CLIENT_ID,
+        "scopes": list(settings.AUTH_SCOPES.keys()),
+    },
     lifespan=deps.lifespan,
 )
 
