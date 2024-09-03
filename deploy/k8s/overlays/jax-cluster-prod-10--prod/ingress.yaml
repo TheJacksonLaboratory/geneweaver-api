@@ -30,7 +30,7 @@ spec:
             path: "/api"
             backend:
               service:
-                name: geneweaver-legacy
+                name: geneweaver-api
                 port:
                   number: 8000
     - host: "geneweaver.jax.org"
@@ -60,7 +60,7 @@ spec:
             path: "/api"
             backend:
               service:
-                name: geneweaver-legacy
+                name: geneweaver-api
                 port:
                   number: 8000
     - host: "classic.geneweaver.org"
@@ -70,6 +70,6 @@ spec:
             path: "/api"
             backend:
               service:
-                name: geneweaver-legacy
+                name: geneweaver-api
                 port:
                   number: 800
