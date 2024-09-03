@@ -9,6 +9,15 @@ metadata:
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
     nginx.ingress.kubernetes.io/auth-url: "http://oauth2-proxy.oauth2-proxy.svc.cluster.local/oauth2/auth"
     nginx.ingress.kubernetes.io/auth-signin: "https://auth.jax-cluster-prod-10.jax.org/oauth2/start?rd=https://$http_host$escaped_request_uri"
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
+    nginx.ingress.kubernetes.io/cors-allow-methods: "DELETE, GET, HEAD, OPTIONS, PATCH, POST, PUT"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "DNT,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "https://*.jax.org"
+    nginx.ingress.kubernetes.io/auth-snippet: |
+      if ($request_method = "OPTIONS") {
+        return 202;
+      }
 spec:
   ingressClassName: nginx
   tls:
