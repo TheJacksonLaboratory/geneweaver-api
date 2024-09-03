@@ -7,6 +7,11 @@ metadata:
     # so that you don't hit the rate limit for the production issuer.
     # cert-manager.io/cluster-issuer: "letsencrypt-staging"
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
+    nginx.ingress.kubernetes.io/cors-allow-methods: "DELETE, GET, HEAD, OPTIONS, PATCH, POST, PUT"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "DNT,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "https://*.jax.org"
 spec:
   ingressClassName: nginx
   tls:
@@ -25,7 +30,7 @@ spec:
             path: "/api"
             backend:
               service:
-                name: geneweaver-legacy
+                name: geneweaver-api
                 port:
                   number: 8000
     - host: "geneweaver.jax.org"
@@ -55,7 +60,7 @@ spec:
             path: "/api"
             backend:
               service:
-                name: geneweaver-legacy
+                name: geneweaver-api
                 port:
                   number: 8000
     - host: "classic.geneweaver.org"
@@ -65,6 +70,6 @@ spec:
             path: "/api"
             backend:
               service:
-                name: geneweaver-legacy
+                name: geneweaver-api
                 port:
                   number: 800
