@@ -35,6 +35,11 @@ class GeneweaverAPIConfig(BaseSettings):
             )
         return self
 
+    DB_POOL_MIN_SIZE: int = 4
+    DB_POOL_MAX_SIZE: int = 8
+    DB_POOL_MAX_LIFETIME: int = 300
+    DB_POOL_MAX_IDLE: int = 60
+
     AUTH_DOMAIN: str = "thejacksonlaboratory.auth0.com"
     AUTH_AUDIENCE: str = "https://cube.jax.org"
     AUTH_ALGORITHMS: List[str] = ["RS256"]
