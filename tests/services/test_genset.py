@@ -259,7 +259,7 @@ def test_visible_geneset_all_expected_parameters(mock_db_geneset):
         abbreviation="test",
         publication_id=123,
         pubmed_id="p123",
-        score_type=ScoreType("p-value"),
+        score_type={ScoreType("p-value"), ScoreType("q-value")},
         lte_count=50,
         gte_count=5,
         gene_id_type=GeneIdentifier(5),
@@ -636,3 +636,30 @@ def test_delete_geneset_ontology_term_errors(mock_db_ontology, mock_db_geneset):
         geneset.delete_geneset_ontology_term(
             cursor=None, user=mock_user, geneset_id=1234, term_ref_id="D001921"
         )
+
+
+@patch("geneweaver.api.services.geneset.db_geneset")
+@pytest.mark.parametrize(
+    "score_type",
+    [
+        None,
+        {ScoreType.P_VALUE},
+        {ScoreType.P_VALUE, ScoreType.Q_VALUE},
+        {ScoreType.P_VALUE, ScoreType.Q_VALUE, ScoreType.EFFECT},
+        {ScoreType.P_VALUE, ScoreType.Q_VALUE, ScoreType.EFFECT, ScoreType.CORRELATION},
+        {
+            ScoreType.P_VALUE,
+            ScoreType.Q_VALUE,
+            ScoreType.EFFECT,
+            ScoreType.CORRELATION,
+            ScoreType.BINARY,
+        },
+    ],
+)
+def test_get_geneset_by_score_type(mock_db_geneset, score_type):
+    """Test get geneset by score type."""
+    mock_db_geneset.get.return_value = geneset_list_resp
+
+    response = geneset.get_visible_genesets(None, mock_user, score_type=score_type)
+
+    assert response.get("data") == geneset_list_resp

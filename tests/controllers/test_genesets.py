@@ -401,15 +401,43 @@ def test_delete_geneset_ontology_terms_errors(mock_delete_genenset_onto_terms, c
     assert response.status_code == 404
 
 
-@pytest.mark.parametrize("score_type", ["1", "binary"])
+@pytest.mark.parametrize(
+    "score_type",
+    [
+        "score_type=p-value",
+        "score_type=q-value",
+        "score_type=effect",
+        "score_type=correlation",
+        "score_type=binary",
+        "score_type=p-value&score_type=q-value",
+        "score_type=p-value&score_type=q-value&score_type=effect",
+        "score_type=p-value&score_type=q-value&score_type=effect&score_type=correlation",
+        "score_type=p-value&score_type=q-value&score_type=effect&score_type=correlation&score_type=binary",
+    ],
+)
 @patch("geneweaver.api.services.geneset.get_visible_genesets")
 def test_get_geneset_by_score_type(mock_get_visible_genesets, score_type, client):
     """Test get geneset  data response."""
     mock_get_visible_genesets.return_value = geneset_by_id_resp.get("geneset")
 
-    response = client.get("/api/genesets?score_type=" + score_type)
+    response = client.get("/api/genesets?" + score_type)
     assert response.status_code == 200
     assert response.json() == geneset_by_id_resp.get("geneset")
+
+
+@pytest.mark.parametrize(
+    "score_type",
+    ["score_type=1233", "score_type=test", "score_type=p-value&score_type=test"],
+)
+@patch("geneweaver.api.services.geneset.get_visible_genesets")
+def test_get_geneset_by_invalid_score_type(
+    mock_get_visible_genesets, score_type, client
+):
+    """Test get geneset  data response."""
+    mock_get_visible_genesets.return_value = geneset_by_id_resp.get("geneset")
+
+    response = client.get("/api/genesets?" + score_type)
+    assert response.status_code == 422
 
 
 @patch("geneweaver.api.services.geneset.get_visible_genesets")
@@ -434,13 +462,6 @@ def test_get_geneset_by_update_date(mock_get_visible_genesets, client):
     )
     assert response.status_code == 200
     assert response.json() == geneset_by_id_resp.get("geneset")
-
-
-@pytest.mark.parametrize("score_type", ["2342", "test"])
-def test_invalid_score_type(score_type, client):
-    """Test general get geneset data no parameters -- default limit."""
-    response = client.get("/api/genesets?score_type=" + score_type)
-    assert response.status_code == 422
 
 
 @pytest.mark.parametrize("created_before", ["20-23-20", "08-01-2023", "80/01/2022"])

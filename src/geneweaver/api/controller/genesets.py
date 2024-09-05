@@ -69,7 +69,7 @@ def get_visible_genesets(
     with_publication_info: Annotated[
         bool, Query(description=api_message.ONLY_MY_GS)
     ] = True,
-    score_type: Optional[ScoreType] = None,
+    score_type: Annotated[Optional[Set[ScoreType]], Query()] = None,
     size_less_than: Annotated[
         Optional[int],
         Query(

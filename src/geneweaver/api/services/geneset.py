@@ -92,7 +92,7 @@ def get_visible_genesets(
     search_text: Optional[str] = None,
     ontology_term: Optional[str] = None,
     with_publication_info: bool = True,
-    score_type: Optional[ScoreType] = None,
+    score_type: Optional[Set[ScoreType]] = None,
     lte_count: Optional[int] = None,
     gte_count: Optional[int] = None,
     created_after: Optional[date] = None,
@@ -118,7 +118,7 @@ def get_visible_genesets(
     :param search_text: Return genesets that match this search text (using PostgreSQL
                         full-text search).
     :param ontology_term: Show only results associated with this ontology term.
-    :param score_type: Show only results with given score type.
+    :param score_type: Show only results for given score type(s).
     :param lte_count: less than or equal geneset count.
     :param gte_count: greater than or equal geneset count.
     :param updated_before: Show only results updated before this date.
