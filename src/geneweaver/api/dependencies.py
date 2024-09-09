@@ -39,6 +39,10 @@ async def lifespan(app: FastAPI) -> None:
         settings.DB.URI,
         connection_class=psycopg.Connection[DictRow],
         kwargs={"row_factory": dict_row},
+        min_size=settings.DB_POOL_MIN_SIZE,
+        max_size=settings.DB_POOL_MAX_SIZE,
+        max_lifetime=settings.DB_POOL_MAX_LIFETIME,
+        max_idle=settings.DB_POOL_MAX_IDLE,
     )
     app.pool.open()
     app.pool.wait()
