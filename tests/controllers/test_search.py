@@ -23,11 +23,11 @@ def test_pub_search(mock_pub_service_call, client):
     )
 
 
-@patch("geneweaver.api.services.geneset.get_visible_genesets")
-def test_genesets_search_response(mock_get_visible_genesets, client):
+@patch("geneweaver.api.controller.search.db_search.genesets")
+def test_genesets_search_response(mock_geneset_search, client):
     """Test search for geneset data response."""
     mock_data = geneset_by_id_resp.get("geneset")
-    mock_get_visible_genesets.return_value = mock_data
+    mock_geneset_search.return_value = mock_data
 
     response = client.get(
         url="/api/search/", params={"entities": "genesets", "search_text": "gene"}
