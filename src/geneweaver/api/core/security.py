@@ -149,6 +149,7 @@ class Auth0:
             Auth0HTTPBearer(auto_error=False)
         ),
     ) -> Optional[UserInternal]:
+        """Get the user from the token, don't error if not found."""
         return await self._get_user(security_scopes, creds, True, disallow_public=False)
 
     async def _get_user(  # noqa: C901
