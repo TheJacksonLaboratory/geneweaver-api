@@ -1,5 +1,7 @@
 """Models for API requests."""
 
+# ruff: noqa: ANN002, ANN003
+
 from enum import Enum
 from typing import Dict, Generic, Iterable, List, Optional, TypeVar
 
@@ -106,17 +108,26 @@ class SearchResponse(CollectionResponse, Generic[T]):
 
     data: List[T]
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
+        """Initialize the search response model.
+
+        First argument is assigned to `data`.
+        """
         if args:
             kwargs["data"] = args[0]
         super().__init__(**kwargs)
 
 
 class CombinedSearchResponse(BaseModel, Generic[T]):
+    """Model for combined search response endpoint."""
 
     object: Dict[str, List[T]]
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
+        """Initialize the combined search response model.
+
+        First argument is assigned to `object`.
+        """
         if args:
             kwargs["object"] = args[0]
         super().__init__(**kwargs)
