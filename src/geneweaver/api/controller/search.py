@@ -48,7 +48,7 @@ def search(
         genesets = db_search.genesets(
             cursor,
             search_text=search_text,
-            is_readable_by=0 if user is None else user.user_id,
+            is_readable_by=0 if user is None else user.id,
             limit=limit,
             offset=offset,
         )

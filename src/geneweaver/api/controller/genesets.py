@@ -159,7 +159,7 @@ def search(
     return SearchResponse(
         db_search.genesets(
             cursor,
-            is_readable_by=0 if user is None else user.user_id,
+            is_readable_by=0 if user is None else user.id,
             **geneset_search.model_dump(exclude_none=True),
         )
     )
