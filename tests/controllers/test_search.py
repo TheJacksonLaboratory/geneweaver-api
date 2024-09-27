@@ -18,7 +18,7 @@ def test_pub_search(mock_pub_service_call, client):
     )
 
     assert response.status_code == 200
-    assert response.json().get("data").get("publications") == get_publications.get(
+    assert response.json().get("object").get("publications") == get_publications.get(
         "data"
     )
 
@@ -26,11 +26,11 @@ def test_pub_search(mock_pub_service_call, client):
 @patch("geneweaver.api.controller.search.db_search.genesets")
 def test_genesets_search_response(mock_geneset_search, client):
     """Test search for geneset data response."""
-    mock_data = geneset_by_id_resp.get("geneset")
+    mock_data = [geneset_by_id_resp.get("geneset")]
     mock_geneset_search.return_value = mock_data
 
     response = client.get(
         url="/api/search/", params={"entities": "genesets", "search_text": "gene"}
     )
     assert response.status_code == 200
-    assert response.json().get("data").get("genesets") == mock_data.get("data")
+    assert response.json().get("object").get("genesets") == mock_data

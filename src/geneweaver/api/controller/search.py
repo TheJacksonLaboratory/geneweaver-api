@@ -53,7 +53,7 @@ def search(
             offset=offset,
         )
 
-        search_results["geneset"] = genesets
+        search_results["genesets"] = genesets
 
     if "publications" in entities:
         pub_response = publication_service.get(
@@ -64,7 +64,6 @@ def search(
         )
 
         search_results["publications"] = pub_response.get("data")
-
 
     return CombinedSearchResponse(
         object=search_results,
