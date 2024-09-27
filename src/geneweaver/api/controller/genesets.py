@@ -8,12 +8,14 @@ from typing import Optional, Set
 from fastapi import APIRouter, Depends, HTTPException, Path, Query, Security
 from fastapi.responses import FileResponse, StreamingResponse
 from geneweaver.api import dependencies as deps
-from geneweaver.api.schemas.apimodels import GeneValueReturn
+from geneweaver.api.schemas.apimodels import GeneValueReturn, SearchResponse
 from geneweaver.api.schemas.auth import UserInternal
+from geneweaver.api.schemas.search import GenesetSearch
 from geneweaver.api.services import geneset as genset_service
 from geneweaver.api.services import publications as publication_service
 from geneweaver.core.enum import GeneIdentifier, GenesetTier, Species
 from geneweaver.core.schema.score import GenesetScoreType, ScoreType
+from geneweaver.db import search as db_search
 from typing_extensions import Annotated
 
 from . import message as api_message
@@ -145,6 +147,22 @@ def get_visible_genesets(
             raise HTTPException(status_code=500, detail=api_message.UNEXPECTED_ERROR)
 
     return response
+
+
+@router.get("/search")
+def search(
+    geneset_search: Annotated[GenesetSearch, Query()],
+    user: UserInternal = Security(deps.optional_full_user),
+    cursor: Optional[deps.Cursor] = Depends(deps.cursor),
+) -> SearchResponse:
+    """Search genesets."""
+    return SearchResponse(
+        db_search.genesets(
+            cursor,
+            is_readable_by=0 if user is None else user.id,
+            **geneset_search.model_dump(exclude_none=True),
+        )
+    )
 
 
 @router.get("/{geneset_id}")

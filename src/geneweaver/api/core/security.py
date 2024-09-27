@@ -129,7 +129,7 @@ class Auth0:
         auto_error_auth: Optional[bool] = False,
     ) -> Optional[Dict[str, str]]:
         """Get the auth header from the token."""
-        user = await self.get_user(security_scopes, creds, auto_error_auth)
+        user = await self._get_user(security_scopes, creds, auto_error_auth)
         return user.auth_header if user else None
 
     async def get_user_strict(
@@ -140,9 +140,19 @@ class Auth0:
         ),
     ) -> UserInternal:
         """Get the user from the token, raise an exception if not found."""
-        return await self.get_user(security_scopes, creds, True, disallow_public=True)
+        return await self._get_user(security_scopes, creds, True, disallow_public=True)
 
-    async def get_user(  # noqa: C901
+    async def get_user(
+        self,
+        security_scopes: SecurityScopes,
+        creds: Optional[HTTPAuthorizationCredentials] = Depends(
+            Auth0HTTPBearer(auto_error=False)
+        ),
+    ) -> Optional[UserInternal]:
+        """Get the user from the token, don't error if not found."""
+        return await self._get_user(security_scopes, creds, True, disallow_public=False)
+
+    async def _get_user(  # noqa: C901
         self,
         security_scopes: SecurityScopes,
         creds: Optional[HTTPAuthorizationCredentials] = Depends(

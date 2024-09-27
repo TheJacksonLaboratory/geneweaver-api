@@ -4,10 +4,10 @@ from typing import List, Optional
 
 from fastapi import APIRouter, Depends, Query, Security
 from geneweaver.api import dependencies as deps
-from geneweaver.api.schemas.apimodels import GsPubSearchType, SeachResponse
+from geneweaver.api.schemas.apimodels import CombinedSearchResponse, GsPubSearchType
 from geneweaver.api.schemas.auth import UserInternal
-from geneweaver.api.services import geneset as genset_service
 from geneweaver.api.services import publications as publication_service
+from geneweaver.db import search as db_search
 from typing_extensions import Annotated
 
 from . import message as api_message
@@ -41,20 +41,19 @@ def search(
             description=api_message.OFFSET,
         ),
     ] = None,
-) -> SeachResponse:
+) -> CombinedSearchResponse:
     """Search genesets and publications."""
-    data = {}
-    response = SeachResponse(data=data)
+    search_results = {}
     if "genesets" in entities:
-        geneset_response = genset_service.get_visible_genesets(
-            cursor=cursor,
-            user=user,
+        genesets = db_search.genesets(
+            cursor,
             search_text=search_text,
+            is_readable_by=0 if user is None else user.id,
             limit=limit,
             offset=offset,
         )
 
-        data["geneset"] = geneset_response.get("data")
+        search_results["genesets"] = genesets
 
     if "publications" in entities:
         pub_response = publication_service.get(
@@ -64,8 +63,8 @@ def search(
             offset=offset,
         )
 
-        data["publications"] = pub_response.get("data")
+        search_results["publications"] = pub_response.get("data")
 
-    response.data = data
-
-    return response
+    return CombinedSearchResponse(
+        object=search_results,
+    )

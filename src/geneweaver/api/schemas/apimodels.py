@@ -1,13 +1,17 @@
 """Models for API requests."""
 
+# ruff: noqa: ANN002, ANN003
+
 from enum import Enum
-from typing import Iterable, List, Optional
+from typing import Dict, Generic, Iterable, List, Optional, TypeVar
 
 from geneweaver.core.enum import GeneIdentifier, Species
 from geneweaver.core.schema.gene import Gene as GeneSchema
 from geneweaver.core.schema.geneset import GeneValue as GeneValueSchema
 from geneweaver.core.schema.species import Species as SpeciesSchema
 from pydantic import AnyUrl, BaseModel
+
+T = TypeVar("T")
 
 
 class PagingLinks(BaseModel):
@@ -99,7 +103,31 @@ class GsPubSearchType(str, Enum):
     PUBLICATIONS = "publications"
 
 
-class SeachResponse(CollectionResponse):
+class SearchResponse(CollectionResponse, Generic[T]):
     """Model for search response endpoint."""
 
-    data: dict
+    data: List[T]
+
+    def __init__(self, *args, **kwargs) -> None:
+        """Initialize the search response model.
+
+        First argument is assigned to `data`.
+        """
+        if args:
+            kwargs["data"] = args[0]
+        super().__init__(**kwargs)
+
+
+class CombinedSearchResponse(BaseModel, Generic[T]):
+    """Model for combined search response endpoint."""
+
+    object: Dict[str, List[T]]
+
+    def __init__(self, *args, **kwargs) -> None:
+        """Initialize the combined search response model.
+
+        First argument is assigned to `object`.
+        """
+        if args:
+            kwargs["object"] = args[0]
+        super().__init__(**kwargs)

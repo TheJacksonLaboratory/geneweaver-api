@@ -95,7 +95,7 @@ async def test_invalid_token_format(mock_requests, mock_security_scope):
     creds = HTTPAuthorizationCredentials(scheme="", credentials="token")
 
     with pytest.raises(expected_exception=Auth0UnauthenticatedException):
-        await auth.get_user(
+        await auth._get_user(
             security_scopes=mock_security_scope,
             creds=creds,
             auto_error_auth=True,
@@ -118,7 +118,7 @@ async def test_valid_jwt_token(
     token = create_test_token()
     creds = HTTPAuthorizationCredentials(credentials=token, scheme="")
 
-    user: UserInternal = await auth.get_user(
+    user: UserInternal = await auth._get_user(
         security_scopes=mock_security_scope,
         creds=creds,
         auto_error_auth=True,
@@ -228,7 +228,7 @@ async def test_is_user_not_public(
 ):
     """Test user is not public."""
     auth = do_auth()
-    is_public = await auth.get_user(
+    is_public = await auth._get_user(
         security_scopes=mock_security_scope, creds=None, disallow_public=False
     )
 
@@ -257,7 +257,7 @@ async def test_invalid_claim(
     creds = HTTPAuthorizationCredentials(credentials=token, scheme="")
 
     with pytest.raises(expected_exception=Auth0UnauthenticatedException):
-        await auth.get_user(
+        await auth._get_user(
             security_scopes=mock_security_scope,
             creds=creds,
             auto_error_auth=True,
@@ -289,7 +289,7 @@ async def test_missing_claim_email_error_claim(
     creds = HTTPAuthorizationCredentials(credentials=token, scheme="")
 
     with pytest.raises(expected_exception=Auth0UnauthorizedException):
-        await auth.get_user(
+        await auth._get_user(
             security_scopes=mock_security_scope,
             creds=creds,
             auto_error_auth=True,
