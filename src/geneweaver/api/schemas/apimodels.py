@@ -1,13 +1,15 @@
 """Models for API requests."""
 
 from enum import Enum
-from typing import Iterable, List, Optional
+from typing import Dict, Generic, Iterable, List, Optional, TypeVar
 
 from geneweaver.core.enum import GeneIdentifier, Species
 from geneweaver.core.schema.gene import Gene as GeneSchema
 from geneweaver.core.schema.geneset import GeneValue as GeneValueSchema
 from geneweaver.core.schema.species import Species as SpeciesSchema
 from pydantic import AnyUrl, BaseModel
+
+T = TypeVar("T")
 
 
 class PagingLinks(BaseModel):
@@ -99,7 +101,22 @@ class GsPubSearchType(str, Enum):
     PUBLICATIONS = "publications"
 
 
-class SeachResponse(CollectionResponse):
+class SearchResponse(CollectionResponse, Generic[T]):
     """Model for search response endpoint."""
 
-    data: dict
+    data: List[T]
+
+    def __init__(self, *args, **kwargs):
+        if args:
+            kwargs["data"] = args[0]
+        super().__init__(**kwargs)
+
+
+class CombinedSearchResponse(BaseModel, Generic[T]):
+
+    object: Dict[str, List[T]]
+
+    def __init__(self, *args, **kwargs):
+        if args:
+            kwargs["object"] = args[0]
+        super().__init__(**kwargs)
