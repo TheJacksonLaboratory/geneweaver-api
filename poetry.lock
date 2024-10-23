@@ -509,13 +509,13 @@ test = ["pytest (>=6)"]
 
 [[package]]
 name = "fastapi"
-version = "0.115.0"
+version = "0.115.3"
 description = "FastAPI framework, high performance, easy to learn, fast to code, ready for production"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "fastapi-0.115.0-py3-none-any.whl", hash = "sha256:17ea427674467486e997206a5ab25760f6b09e069f099b96f5b55a32fb6f1631"},
-    {file = "fastapi-0.115.0.tar.gz", hash = "sha256:f93b4ca3529a8ebc6fc3fcf710e5efa8de3df9b41570958abf1d97d843138004"},
+    {file = "fastapi-0.115.3-py3-none-any.whl", hash = "sha256:8035e8f9a2b0aa89cea03b6c77721178ed5358e1aea4cd8570d9466895c0638c"},
+    {file = "fastapi-0.115.3.tar.gz", hash = "sha256:c091c6a35599c036d676fa24bd4a6e19fa30058d93d950216cdc672881f6f7db"},
 ]
 
 [package.dependencies]
@@ -530,7 +530,7 @@ pydantic-extra-types = {version = ">=2.0.0", optional = true, markers = "extra =
 pydantic-settings = {version = ">=2.0.0", optional = true, markers = "extra == \"all\""}
 python-multipart = {version = ">=0.0.7", optional = true, markers = "extra == \"all\""}
 pyyaml = {version = ">=5.3.1", optional = true, markers = "extra == \"all\""}
-starlette = ">=0.37.2,<0.39.0"
+starlette = ">=0.40.0,<0.42.0"
 typing-extensions = ">=4.8.0"
 ujson = {version = ">=4.0.1,<4.0.2 || >4.0.2,<4.1.0 || >4.1.0,<4.2.0 || >4.2.0,<4.3.0 || >4.3.0,<5.0.0 || >5.0.0,<5.1.0 || >5.1.0", optional = true, markers = "extra == \"all\""}
 uvicorn = {version = ">=0.12.0", extras = ["standard"], optional = true, markers = "extra == \"all\""}
@@ -578,13 +578,13 @@ requests = ">=2.32.0,<3.0.0"
 
 [[package]]
 name = "geneweaver-db"
-version = "0.5.0"
+version = "0.6.0a0"
 description = "Database Interaction Services for GeneWeaver"
 optional = false
 python-versions = "<4.0,>=3.9"
 files = [
-    {file = "geneweaver_db-0.5.0-py3-none-any.whl", hash = "sha256:7bb40b7a50783a48092ddf6529aca70c49bfb69da6e52420076cc300769db297"},
-    {file = "geneweaver_db-0.5.0.tar.gz", hash = "sha256:170ee8fdc7efe5f3a6989014db0b6e2c02d9da3ff8b085ca218168f3cfcc8d21"},
+    {file = "geneweaver_db-0.6.0a0-py3-none-any.whl", hash = "sha256:7d69abbc26b100337935da9bf7255877a42c6f86a6265b5e70b828140040c1c6"},
+    {file = "geneweaver_db-0.6.0a0.tar.gz", hash = "sha256:5bb7bfce5c3f1556c4d6779090f0e8e46905c740ca510af3d0556660b1038d85"},
 ]
 
 [package.dependencies]
@@ -766,6 +766,23 @@ files = [
     {file = "itsdangerous-2.2.0-py3-none-any.whl", hash = "sha256:c6242fc49e35958c8b15141343aa660db5fc54d4f13a1db01a3f5891b98700ef"},
     {file = "itsdangerous-2.2.0.tar.gz", hash = "sha256:e0050c0b7da1eea53ffaf149c0cfbb5c6e2e2b69c4bef22c81fa6eb73e5f6173"},
 ]
+
+[[package]]
+name = "jax-apiutils"
+version = "0.1.0a6"
+description = "Utilities to simplify API development."
+optional = false
+python-versions = "<4.0,>=3.9"
+files = [
+    {file = "jax_apiutils-0.1.0a6-py3-none-any.whl", hash = "sha256:f8c75ae0fba4fa58cbc25e56fd168fecd0b1ad9fbe6630082a12bd9f23f1dfe1"},
+    {file = "jax_apiutils-0.1.0a6.tar.gz", hash = "sha256:0293166f0deefdf358aac910ccb1cc47729102907f769e4b34a79039000eacb6"},
+]
+
+[package.extras]
+all = ["fastapi (>=0.100.0)", "pydantic (>=2.0.0)", "pyjwt (>=2.9.0,<3.0.0)", "requests (>=2.32.3,<3.0.0)"]
+fastapi = ["fastapi (>=0.100.0)"]
+jwt = ["pyjwt (>=2.9.0,<3.0.0)", "requests (>=2.32.3,<3.0.0)"]
+schemas = ["pydantic (>=2.0.0)"]
 
 [[package]]
 name = "jinja2"
@@ -1509,13 +1526,13 @@ semver = ["semver (>=3.0.2)"]
 
 [[package]]
 name = "pydantic-settings"
-version = "2.5.2"
+version = "2.6.0"
 description = "Settings management using Pydantic"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "pydantic_settings-2.5.2-py3-none-any.whl", hash = "sha256:2c912e55fd5794a59bf8c832b9de832dcfdf4778d79ff79b708744eed499a907"},
-    {file = "pydantic_settings-2.5.2.tar.gz", hash = "sha256:f90b139682bee4d2065273d5185d71d37ea46cfe57e1b5ae184fc6a0b2484ca0"},
+    {file = "pydantic_settings-2.6.0-py3-none-any.whl", hash = "sha256:4a819166f119b74d7f8c765196b165f95cc7487ce58ea27dec8a5a26be0970e0"},
+    {file = "pydantic_settings-2.6.0.tar.gz", hash = "sha256:44a1804abffac9e6a30372bb45f6cafab945ef5af25e66b1c634c01dd39e0188"},
 ]
 
 [package.dependencies]
@@ -1865,13 +1882,13 @@ files = [
 
 [[package]]
 name = "starlette"
-version = "0.38.6"
+version = "0.41.0"
 description = "The little ASGI library that shines."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "starlette-0.38.6-py3-none-any.whl", hash = "sha256:4517a1409e2e73ee4951214ba012052b9e16f60e90d73cfb06192c19203bbb05"},
-    {file = "starlette-0.38.6.tar.gz", hash = "sha256:863a1588f5574e70a821dadefb41e4881ea451a47a3cd1b4df359d4ffefe5ead"},
+    {file = "starlette-0.41.0-py3-none-any.whl", hash = "sha256:a0193a3c413ebc9c78bff1c3546a45bb8c8bcb4a84cae8747d650a65bd37210a"},
+    {file = "starlette-0.41.0.tar.gz", hash = "sha256:39cbd8768b107d68bfe1ff1672b38a2c38b49777de46d2a592841d58e3bf7c2a"},
 ]
 
 [package.dependencies]
@@ -2298,4 +2315,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "f8a520654164fa98985e67286dcb7e2dbeb86807811255902b321f22a1358fbb"
+content-hash = "a809555b03e0e7b6998234f60ac3d533584482b122fd1d7a50ab9eac74ee665d"
