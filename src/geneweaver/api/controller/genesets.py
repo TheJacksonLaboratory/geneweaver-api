@@ -5,7 +5,7 @@ from datetime import date, datetime
 from tempfile import TemporaryDirectory
 from typing import Optional, Set
 
-from fastapi import APIRouter, Depends, HTTPException, Path, Query, Security, Request
+from fastapi import APIRouter, Depends, HTTPException, Path, Query, Request, Security
 from fastapi.responses import FileResponse, StreamingResponse
 from geneweaver.api import dependencies as deps
 from geneweaver.api.schemas.apimodels import GeneValueReturn
@@ -16,9 +16,8 @@ from geneweaver.api.services import publications as publication_service
 from geneweaver.core.enum import GeneIdentifier, GenesetTier, Species
 from geneweaver.core.schema.score import GenesetScoreType, ScoreType
 from geneweaver.db import search as db_search
-from typing_extensions import Annotated
-
 from jax.apiutils import CollectionResponse
+from typing_extensions import Annotated
 
 from . import message as api_message
 

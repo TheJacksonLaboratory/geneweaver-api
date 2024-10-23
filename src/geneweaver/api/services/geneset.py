@@ -19,7 +19,7 @@ from psycopg import Cursor, errors
 ONTO_GSO_REF_TYPE = "GeneWeaver Primary Annotation"
 
 
-def determine_user_id(user: Optional[User] = None):
+def determine_user_id(user: Optional[User] = None) -> int:
     """Determine the user ID from the user object.
 
     :param user: The user object.
@@ -415,7 +415,7 @@ def update_geneset_threshold(
             cursor=cursor,
             user_id=user.id,
             geneset_id=geneset_id,
-            geneset_score_type=geneset_score
+            geneset_score_type=geneset_score,
         )
         return {}
 
