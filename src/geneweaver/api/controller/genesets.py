@@ -5,10 +5,10 @@ from datetime import date, datetime
 from tempfile import TemporaryDirectory
 from typing import Optional, Set
 
-from fastapi import APIRouter, Depends, HTTPException, Path, Query, Security
+from fastapi import APIRouter, Depends, HTTPException, Path, Query, Security, Request
 from fastapi.responses import FileResponse, StreamingResponse
 from geneweaver.api import dependencies as deps
-from geneweaver.api.schemas.apimodels import GeneValueReturn, SearchResponse
+from geneweaver.api.schemas.apimodels import GeneValueReturn
 from geneweaver.api.schemas.auth import UserInternal
 from geneweaver.api.schemas.search import GenesetSearch
 from geneweaver.api.services import geneset as genset_service
@@ -17,6 +17,8 @@ from geneweaver.core.enum import GeneIdentifier, GenesetTier, Species
 from geneweaver.core.schema.score import GenesetScoreType, ScoreType
 from geneweaver.db import search as db_search
 from typing_extensions import Annotated
+
+from jax.apiutils import CollectionResponse
 
 from . import message as api_message
 
@@ -151,17 +153,20 @@ def get_visible_genesets(
 
 @router.get("/search")
 def search(
+    request: Request,
     geneset_search: Annotated[GenesetSearch, Query()],
     user: UserInternal = Security(deps.optional_full_user),
     cursor: Optional[deps.Cursor] = Depends(deps.cursor),
-) -> SearchResponse:
+) -> CollectionResponse:
     """Search genesets."""
-    return SearchResponse(
+    return CollectionResponse(
         db_search.genesets(
             cursor,
             is_readable_by=0 if user is None else user.id,
             **geneset_search.model_dump(exclude_none=True),
-        )
+        ),
+        url=request.url_for("search"),
+        **geneset_search.model_dump(exclude_none=True),
     )
 
 
@@ -170,7 +175,7 @@ def get_geneset(
     geneset_id: Annotated[
         int, Path(format="int64", minimum=0, maxiumum=9223372036854775807)
     ],
-    user: UserInternal = Security(deps.full_user),
+    user: deps.OptionalFullUserDep,
     cursor: Optional[deps.Cursor] = Depends(deps.cursor),
     gene_id_type: Optional[GeneIdentifier] = None,
     in_threshold: Optional[bool] = None,
@@ -199,7 +204,7 @@ def get_geneset_values(
     geneset_id: Annotated[
         int, Path(format="int64", minimum=0, maxiumum=9223372036854775807)
     ],
-    user: UserInternal = Security(deps.full_user),
+    user: deps.OptionalFullUserDep,
     cursor: Optional[deps.Cursor] = Depends(deps.cursor),
     gene_id_type: Optional[GeneIdentifier] = None,
     in_threshold: Optional[bool] = None,
@@ -232,7 +237,7 @@ def get_export_geneset_by_id_type(
     geneset_id: Annotated[
         int, Path(format="int64", minimum=0, maxiumum=9223372036854775807)
     ],
-    user: UserInternal = Security(deps.full_user),
+    user: deps.OptionalFullUserDep,
     cursor: Optional[deps.Cursor] = Depends(deps.cursor),
     temp_dir: TemporaryDirectory = Depends(deps.get_temp_dir),
     gene_id_type: Optional[GeneIdentifier] = None,
@@ -283,7 +288,7 @@ def get_geneset_metadata(
     geneset_id: Annotated[
         int, Path(format="int64", minimum=0, maxiumum=9223372036854775807)
     ],
-    user: UserInternal = Security(deps.full_user),
+    user: deps.OptionalFullUserDep,
     cursor: Optional[deps.Cursor] = Depends(deps.cursor),
     include_pub_info: Optional[bool] = False,
 ) -> dict:
@@ -306,7 +311,7 @@ def get_publication_for_geneset(
     geneset_id: Annotated[
         int, Path(format="int64", minimum=0, maxiumum=9223372036854775807)
     ],
-    user: UserInternal = Security(deps.full_user),
+    user: deps.OptionalFullUserDep,
     cursor: Optional[deps.Cursor] = Depends(deps.cursor),
 ) -> dict:
     """Get the publication associated with the geneset."""
@@ -358,7 +363,7 @@ def get_geneset_ontology_terms(
     geneset_id: Annotated[
         int, Path(format="int64", minimum=0, maxiumum=9223372036854775807)
     ],
-    user: UserInternal = Security(deps.full_user),
+    user: deps.OptionalFullUserDep,
     cursor: Optional[deps.Cursor] = Depends(deps.cursor),
     limit: Annotated[
         Optional[int],
