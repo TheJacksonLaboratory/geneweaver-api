@@ -54,7 +54,7 @@ def test_get_geneset_ontology_terms_no_user(mock_db_geneset, mock_db_ontology):
 
     response = geneset.get_geneset_ontology_terms(None, 1234, None)
 
-    assert response == {"error": True, "message": message.ACCESS_FORBIDDEN}
+    assert response == {"error": True, "message": message.INACCESSIBLE_OR_FORBIDDEN}
 
 
 @patch("geneweaver.api.services.geneset.db_ontology")
