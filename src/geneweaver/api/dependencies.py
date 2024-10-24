@@ -77,16 +77,14 @@ def _get_user_details(cursor: Cursor, user: UserInternal) -> UserInternal:
     :param user: The user object.
     """
     try:
-        user.id = db_user.by_sso_id_and_email(cursor, user.sso_id, user.email)[0][
-            "usr_id"
-        ]
+        user.id = db_user.by_sso_id_and_email(cursor, user.sso_id, user.email).id
     except IndexError as e:
         if db_user.sso_id_exists(cursor, user.sso_id):
             raise AuthenticationMismatch(
                 detail="Email and SSO ID Mismatch. Please contact and administrator."
             ) from e
         elif db_user.email_exists(cursor, user.email):
-            user.id = db_user.by_email(cursor, user.email)[0]["usr_id"]
+            user.id = db_user.by_email(cursor, user.email).id
             _ = db_user.link_user_id_with_sso_id(cursor, user.id, user.sso_id)
         else:
             if not user.name:
