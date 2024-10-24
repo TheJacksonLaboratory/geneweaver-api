@@ -578,13 +578,13 @@ requests = ">=2.32.0,<3.0.0"
 
 [[package]]
 name = "geneweaver-db"
-version = "0.6.0a0"
+version = "0.6.0a1"
 description = "Database Interaction Services for GeneWeaver"
 optional = false
 python-versions = "<4.0,>=3.9"
 files = [
-    {file = "geneweaver_db-0.6.0a0-py3-none-any.whl", hash = "sha256:7d69abbc26b100337935da9bf7255877a42c6f86a6265b5e70b828140040c1c6"},
-    {file = "geneweaver_db-0.6.0a0.tar.gz", hash = "sha256:5bb7bfce5c3f1556c4d6779090f0e8e46905c740ca510af3d0556660b1038d85"},
+    {file = "geneweaver_db-0.6.0a1-py3-none-any.whl", hash = "sha256:af36bf71e0a5b4d2839f0a4aa0ab2f27249d89f0e197f01086abf04880d55f02"},
+    {file = "geneweaver_db-0.6.0a1.tar.gz", hash = "sha256:94fefe7f96807af8d6f0b1206e448b2605edbc77b80b834f0f8e02b0de8cb37b"},
 ]
 
 [package.dependencies]
