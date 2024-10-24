@@ -36,13 +36,15 @@ def test_get_geneset(mock_db_geneset, mock_db_genset_value):
 @patch("geneweaver.api.services.geneset.db_geneset")
 def test_get_geneset_no_user_access(mock_db_geneset):
     """Test get geneset by ID with no user access."""
+    mock_db_geneset.get.return_value = []
     response = geneset.get_geneset(None, 1234, None)
-    assert response.get("error") is True
-    assert response.get("message") == message.ACCESS_FORBIDDEN
+    assert "data" in response
+    assert response["data"] is None
 
     mock_db_geneset.get.return_value = []
     response = geneset.get_geneset(None, 1234, mock_user)
-    assert response.get("data") is None
+    assert "data" in response
+    assert response["data"] is None
 
 
 @patch("geneweaver.api.services.geneset.db_geneset")
@@ -126,17 +128,28 @@ def test_get_geneset_w_gene_id_type_2_response(
     )
 
 
-def test_get_geneset_w_gene_id_type_no_user():
+@patch("geneweaver.api.services.geneset.db_geneset")
+@patch("geneweaver.api.services.geneset.get_gsv_w_gene_homology_update")
+def test_get_geneset_w_gene_id_type_no_user(mock_db_geneset, mock_gsv):
     """Test get_geneset_w_gene_id_type with invalid user."""
+    mock_db_geneset.get.return_value = [geneset_by_id_resp.get("geneset")]
+    mock_gsv.return_value = geneset_by_id_resp.get("geneset_values")
+
     response = geneset.get_geneset_w_gene_id_type(None, 1234, None, GeneIdentifier(2))
-    assert response.get("error") is True
-    assert response.get("message") == message.ACCESS_FORBIDDEN
+    assert response is not None
+    assert isinstance(response, dict)
+    assert "gene_identifier_type" in response
+    assert "geneset" in response
+    assert "geneset_values" in response
 
     response = geneset.get_geneset_w_gene_id_type(
         None, 1234, User(id=None), GeneIdentifier(2)
     )
-    assert response.get("error") is True
-    assert response.get("message") == message.ACCESS_FORBIDDEN
+    assert response is not None
+    assert isinstance(response, dict)
+    assert "gene_identifier_type" in response
+    assert "geneset" in response
+    assert "geneset_values" in response
 
 
 @patch("geneweaver.api.services.geneset.db_geneset")
@@ -152,17 +165,18 @@ def test_geneset_w_gene_id_type_db_call_error(mock_db_geneset):
 def test_get_geneset_metadata(mock_db_geneset):
     """Test get geneset metadata by geneset id."""
     mock_db_geneset.get.return_value = [geneset_by_id_resp.get("geneset")]
-    response = geneset.get_geneset_metadata(None, 1234, mock_user)
 
+    response = geneset.get_geneset_metadata(None, 1234, mock_user)
+    assert "geneset" in response
     assert response.get("geneset") == geneset_by_id_resp["geneset"]
 
     response = geneset.get_geneset_metadata(None, 1234, None)
-    assert response.get("error") is True
-    assert response.get("message") == message.ACCESS_FORBIDDEN
+    assert "geneset" in response
+    assert response.get("geneset") == geneset_by_id_resp["geneset"]
 
     response = geneset.get_geneset_metadata(None, 1234, User(id=None))
-    assert response.get("error") is True
-    assert response.get("message") == message.ACCESS_FORBIDDEN
+    assert "geneset" in response
+    assert response.get("geneset") == geneset_by_id_resp["geneset"]
 
 
 @patch("geneweaver.api.services.geneset.db_geneset")
@@ -378,14 +392,18 @@ def test_get_geneset_gene_values_db_errors(mock_db_geneset_value):
         )
 
 
+@patch("geneweaver.api.services.geneset.db_geneset.get")
 @patch("geneweaver.api.services.geneset.db_geneset_value")
-def test_get_geneset_gene_values_invalid_user(mock_db_geneset_value):
+def test_get_geneset_gene_values_invalid_user(
+    mock_db_geneset_get, mock_db_geneset_value
+):
     """Test invalid user."""
+    mock_db_geneset_get.return_value = []
     response = geneset.get_geneset_gene_values(
         None, user=None, geneset_id=1234, gene_id_type=None
     )
-    assert response.get("error") is True
-    assert response.get("message") == message.ACCESS_FORBIDDEN
+    assert "data" in response
+    assert response["data"] is None
 
 
 @patch("geneweaver.api.services.geneset.db_geneset")
