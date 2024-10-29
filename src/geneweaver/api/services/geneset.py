@@ -406,17 +406,17 @@ def update_geneset_threshold(
         if user is None or user.id is None:
             return {"error": True, "message": message.ACCESS_FORBIDDEN}
 
-        if not db_geneset.user_is_owner(
-            cursor=cursor, user_id=user.id, geneset_id=geneset_id
-        ):
+        try:
+            db_threshold.set_geneset_threshold(
+                cursor=cursor,
+                user_id=user.id,
+                geneset_id=geneset_id,
+                geneset_score_type=geneset_score,
+            )
+
+        except ValueError:
             return {"error": True, "message": message.ACCESS_FORBIDDEN}
 
-        db_threshold.set_geneset_threshold(
-            cursor=cursor,
-            user_id=user.id,
-            geneset_id=geneset_id,
-            geneset_score_type=geneset_score,
-        )
         return {}
 
     except Exception as err:
