@@ -19,6 +19,17 @@ from psycopg import Cursor, errors
 ONTO_GSO_REF_TYPE = "GeneWeaver Primary Annotation"
 
 
+def determine_user_id(user: Optional[User] = None) -> int:
+    """Determine the user ID from the user object.
+
+    :param user: The user object.
+    :return: The user ID.
+    """
+    if user is None or user.id is None:
+        return 0
+    return user.id
+
+
 def determine_geneset_access(
     user: Optional[User] = None,
     curation_tier: Optional[Set[GenesetTier]] = None,
@@ -36,9 +47,10 @@ def determine_geneset_access(
     is_readable_by = None
 
     if user_is_none:
-        curation_tier = determine_public_geneset_curation_tier(curation_tier)
         if only_my_genesets:
             raise UnauthorizedException()
+        curation_tier = determine_public_geneset_curation_tier(curation_tier)
+        is_readable_by = 0
     else:
         is_readable_by = user.id
         if only_my_genesets:
@@ -178,12 +190,9 @@ def get_geneset_metadata(
     @return: dictionary response (geneset).
     """
     try:
-        if user is None or user.id is None:
-            return {"error": True, "message": message.ACCESS_FORBIDDEN}
-
         results = db_geneset.get(
             cursor,
-            is_readable_by=user.id,
+            is_readable_by=determine_user_id(user),
             gs_id=geneset_id,
             with_publication_info=include_pub_info,
         )
@@ -206,12 +215,9 @@ def get_geneset(
     @return: dictionary response (geneset and genset values).
     """
     try:
-        if user is None or user.id is None:
-            return {"error": True, "message": message.ACCESS_FORBIDDEN}
-
         results = db_geneset.get(
             cursor,
-            is_readable_by=user.id,
+            is_readable_by=determine_user_id(user),
             gs_id=geneset_id,
             with_publication_info=False,
         )
@@ -247,14 +253,11 @@ def get_geneset_gene_values(
     :return: dictionary response (geneset and genset values).
     """
     try:
-        if user is None or user.id is None:
-            return {"error": True, "message": message.ACCESS_FORBIDDEN}
-
         ## Check genset exists and user can read it
         results = db_geneset.get(
             cursor,
             gs_id=geneset_id,
-            is_readable_by=user.id,
+            is_readable_by=determine_user_id(user),
             with_publication_info=False,
         )
         if len(results) <= 0:
@@ -307,12 +310,9 @@ def get_geneset_w_gene_id_type(
     @return: Dictionary response (geneset identifier, geneset, and genset values).
     """
     try:
-        if user is None or user.id is None:
-            return {"error": True, "message": message.ACCESS_FORBIDDEN}
-
         results = db_geneset.get(
             cursor,
-            is_readable_by=user.id,
+            is_readable_by=determine_user_id(user),
             gs_id=geneset_id,
             with_publication_info=False,
         )
@@ -406,14 +406,17 @@ def update_geneset_threshold(
         if user is None or user.id is None:
             return {"error": True, "message": message.ACCESS_FORBIDDEN}
 
-        if not db_geneset.user_is_owner(
-            cursor=cursor, user_id=user.id, geneset_id=geneset_id
-        ):
+        try:
+            db_threshold.set_geneset_threshold(
+                cursor=cursor,
+                user_id=user.id,
+                geneset_id=geneset_id,
+                geneset_score_type=geneset_score,
+            )
+
+        except ValueError:
             return {"error": True, "message": message.ACCESS_FORBIDDEN}
 
-        db_threshold.set_geneset_threshold(
-            cursor=cursor, geneset_id=geneset_id, geneset_score_type=geneset_score
-        )
         return {}
 
     except Exception as err:
@@ -438,11 +441,8 @@ def get_geneset_ontology_terms(
     @return: dictionary response (ontology terms).
     """
     try:
-        if user is None or user.id is None:
-            return {"error": True, "message": message.ACCESS_FORBIDDEN}
-
         is_gs_readable = db_geneset.is_readable(
-            cursor=cursor, user_id=user.id, geneset_id=geneset_id
+            cursor=cursor, user_id=determine_user_id(user), geneset_id=geneset_id
         )
         if is_gs_readable is False:
             return {"error": True, "message": message.INACCESSIBLE_OR_FORBIDDEN}
