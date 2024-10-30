@@ -429,6 +429,7 @@ def test_geneset_thershold_update_errors(mock_db_threshold, mock_db_geneset):
     geneset_threshold = GenesetScoreType(**geneset_threshold_update_req)
 
     # user is not the geneset owner
+    mock_db_threshold.set_geneset_threshold.side_effect = ValueError()
     response = geneset.update_geneset_threshold(
         cursor=None, user=mock_user, geneset_id=1234, geneset_score=geneset_threshold
     )
@@ -436,6 +437,7 @@ def test_geneset_thershold_update_errors(mock_db_threshold, mock_db_geneset):
     assert response.get("message") == message.ACCESS_FORBIDDEN
 
     # user is not logged-in
+    mock_db_threshold.set_geneset_threshold.side_effect = ValueError()
     response = geneset.update_geneset_threshold(
         cursor=None, user=None, geneset_id=1234, geneset_score=geneset_threshold
     )
