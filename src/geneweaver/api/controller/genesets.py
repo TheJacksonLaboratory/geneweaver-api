@@ -20,6 +20,7 @@ from jax.apiutils import CollectionResponse
 from typing_extensions import Annotated
 
 from . import message as api_message
+from .utilities import raise_http_error
 
 router = APIRouter(prefix="/genesets", tags=["genesets"])
 
@@ -141,11 +142,7 @@ def get_visible_genesets(
         offset=offset,
     )
 
-    if "error" in response:
-        if response.get("message") == api_message.ACCESS_FORBIDDEN:
-            raise HTTPException(status_code=403, detail=api_message.ACCESS_FORBIDDEN)
-        else:
-            raise HTTPException(status_code=500, detail=api_message.UNEXPECTED_ERROR)
+    raise_http_error(response)
 
     return response
 
@@ -189,11 +186,7 @@ def get_geneset(
             cursor=cursor, geneset_id=geneset_id, user=user, in_threshold=in_threshold
         )
 
-    if "error" in response:
-        if response.get("message") == api_message.ACCESS_FORBIDDEN:
-            raise HTTPException(status_code=403, detail=api_message.ACCESS_FORBIDDEN)
-        else:
-            raise HTTPException(status_code=500, detail=api_message.UNEXPECTED_ERROR)
+    raise_http_error(response)
 
     return response
 
@@ -217,11 +210,7 @@ def get_geneset_values(
         in_threshold=in_threshold,
     )
 
-    if "error" in response:
-        if response.get("message") == api_message.ACCESS_FORBIDDEN:
-            raise HTTPException(status_code=403, detail=api_message.ACCESS_FORBIDDEN)
-        else:
-            raise HTTPException(status_code=500, detail=api_message.UNEXPECTED_ERROR)
+    raise_http_error(response)
 
     if response.get("data") is None:
         raise HTTPException(
@@ -254,10 +243,7 @@ def get_export_geneset_by_id_type(
         response = genset_service.get_geneset(cursor, geneset_id, user)
 
     if "error" in response:
-        if response.get("message") == api_message.ACCESS_FORBIDDEN:
-            raise HTTPException(status_code=403, detail=api_message.ACCESS_FORBIDDEN)
-        else:
-            raise HTTPException(status_code=500, detail=api_message.UNEXPECTED_ERROR)
+        raise_http_error(response)
 
     id_type = response.get("gene_identifier_type")
     if id_type:
@@ -296,11 +282,7 @@ def get_geneset_metadata(
         cursor, geneset_id, user, include_pub_info
     )
 
-    if "error" in response:
-        if response.get("message") == api_message.ACCESS_FORBIDDEN:
-            raise HTTPException(status_code=403, detail=api_message.ACCESS_FORBIDDEN)
-        else:
-            raise HTTPException(status_code=500, detail=api_message.UNEXPECTED_ERROR)
+    raise_http_error(response)
 
     return response
 
@@ -317,10 +299,7 @@ def get_publication_for_geneset(
     geneset_resp = genset_service.get_geneset_metadata(cursor, geneset_id, user, True)
 
     if "error" in geneset_resp:
-        if geneset_resp.get("message") == api_message.ACCESS_FORBIDDEN:
-            raise HTTPException(status_code=403, detail=api_message.ACCESS_FORBIDDEN)
-        else:
-            raise HTTPException(status_code=500, detail=api_message.UNEXPECTED_ERROR)
+        raise_http_error(geneset_resp)
 
     geneset = geneset_resp.get("geneset")
     if geneset is None:
@@ -352,9 +331,7 @@ def put_geneset_threshold(
         cursor, geneset_id, gene_score_type, user
     )
 
-    if "error" in response:
-        if response.get("message") == api_message.ACCESS_FORBIDDEN:
-            raise HTTPException(status_code=403, detail=api_message.ACCESS_FORBIDDEN)
+    raise_http_error(response)
 
 
 @router.get("/{geneset_id}/ontologies")
@@ -388,14 +365,7 @@ def get_geneset_ontology_terms(
         cursor, geneset_id, user, limit, offset
     )
 
-    if "error" in terms_resp:
-        if terms_resp.get("message") == api_message.ACCESS_FORBIDDEN:
-            raise HTTPException(status_code=403, detail=api_message.ACCESS_FORBIDDEN)
-
-        if terms_resp.get("message") == api_message.INACCESSIBLE_OR_FORBIDDEN:
-            raise HTTPException(
-                status_code=404, detail=api_message.INACCESSIBLE_OR_FORBIDDEN
-            )
+    raise_http_error(terms_resp)
 
     return terms_resp
 
@@ -423,22 +393,7 @@ def put_geneset_ontology_term(
         user=user,
     )
 
-    if "error" in response:
-        if response.get("message") == api_message.ACCESS_FORBIDDEN:
-            raise HTTPException(status_code=403, detail=api_message.ACCESS_FORBIDDEN)
-
-        if response.get("message") == api_message.RECORD_NOT_FOUND_ERROR:
-            raise HTTPException(
-                status_code=404, detail=api_message.RECORD_NOT_FOUND_ERROR
-            )
-
-        if response.get("message") == api_message.RECORD_EXISTS:
-            raise HTTPException(status_code=412, detail=api_message.RECORD_EXISTS)
-
-        if response.get("message") == api_message.INACCESSIBLE_OR_FORBIDDEN:
-            raise HTTPException(
-                status_code=404, detail=api_message.INACCESSIBLE_OR_FORBIDDEN
-            )
+    raise_http_error(response)
 
 
 @router.delete("/{geneset_id}/ontologies/{ontology_id}", status_code=204)
@@ -464,16 +419,4 @@ def delete_geneset_ontology_term(
         user=user,
     )
 
-    if "error" in response:
-        if response.get("message") == api_message.ACCESS_FORBIDDEN:
-            raise HTTPException(status_code=403, detail=api_message.ACCESS_FORBIDDEN)
-
-        if response.get("message") == api_message.RECORD_NOT_FOUND_ERROR:
-            raise HTTPException(
-                status_code=404, detail=api_message.RECORD_NOT_FOUND_ERROR
-            )
-
-        if response.get("message") == api_message.INACCESSIBLE_OR_FORBIDDEN:
-            raise HTTPException(
-                status_code=404, detail=api_message.INACCESSIBLE_OR_FORBIDDEN
-            )
+    raise_http_error(response)

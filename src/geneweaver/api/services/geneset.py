@@ -196,6 +196,10 @@ def get_geneset_metadata(
             gs_id=geneset_id,
             with_publication_info=include_pub_info,
         )
+
+        if len(results) <= 0:
+            return {"error": True, "message": message.INACCESSIBLE_OR_FORBIDDEN}
+
         return {"geneset": results[0]}
 
     except Exception as err:
@@ -221,8 +225,9 @@ def get_geneset(
             gs_id=geneset_id,
             with_publication_info=False,
         )
+
         if len(results) <= 0:
-            return {"data": None}
+            return {"error": True, "message": message.INACCESSIBLE_OR_FORBIDDEN}
 
         geneset = results[0]
         geneset_values = db_geneset_value.by_geneset_id(
@@ -260,8 +265,9 @@ def get_geneset_gene_values(
             is_readable_by=determine_user_id(user),
             with_publication_info=False,
         )
+
         if len(results) <= 0:
-            return {"data": None}
+            return {"error": True, "message": message.INACCESSIBLE_OR_FORBIDDEN}
 
         # If gene id type is given, check gene species homology to
         # construct proper gene species mapping
@@ -316,6 +322,10 @@ def get_geneset_w_gene_id_type(
             gs_id=geneset_id,
             with_publication_info=False,
         )
+
+        if len(results) <= 0:
+            return {"error": True, "message": message.INACCESSIBLE_OR_FORBIDDEN}
+
         geneset = results[0]
         geneset_values = get_gsv_w_gene_homology_update(
             cursor=cursor,
@@ -444,6 +454,7 @@ def get_geneset_ontology_terms(
         is_gs_readable = db_geneset.is_readable(
             cursor=cursor, user_id=determine_user_id(user), geneset_id=geneset_id
         )
+
         if is_gs_readable is False:
             return {"error": True, "message": message.INACCESSIBLE_OR_FORBIDDEN}
 
