@@ -200,7 +200,7 @@ def get_geneset_metadata(
         if len(results) <= 0:
             return {"error": True, "message": message.INACCESSIBLE_OR_FORBIDDEN}
 
-        return {"geneset": results[0]}
+        return {"object": results[0]}
 
     except Exception as err:
         logger.error(err)

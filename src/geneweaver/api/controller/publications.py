@@ -8,6 +8,7 @@ from geneweaver.api.schemas.apimodels import NewPubmedRecord
 from geneweaver.api.schemas.auth import UserInternal
 from geneweaver.api.services import publications as publication_service
 from geneweaver.core.schema.publication import Publication
+from jax.apiutils import CollectionResponse, Response
 from typing_extensions import Annotated
 
 from . import message as api_message
@@ -51,7 +52,7 @@ def get_publication(
             description=api_message.OFFSET,
         ),
     ] = None,
-) -> dict:
+) -> CollectionResponse[Publication]:
     """Get all publication publications with optional filters."""
     response = publication_service.get(
         cursor,
@@ -70,7 +71,7 @@ def get_publication(
         offset=offset,
     )
 
-    return response
+    return CollectionResponse(**response)
 
 
 @router.get("/{publication_id}")
@@ -80,11 +81,11 @@ def get_publication_by_id(
     ],
     as_pubmed_id: Optional[bool] = True,
     cursor: Optional[deps.Cursor] = Depends(deps.cursor),
-) -> Publication:
+) -> Response[Publication]:
     """Get a publication by id."""
     if as_pubmed_id:
         response = publication_service.get_publication_by_pubmed_id(
-            cursor, publication_id
+            cursor, str(publication_id)
         )
     else:
         response = publication_service.get_publication(cursor, publication_id)
@@ -92,7 +93,7 @@ def get_publication_by_id(
     if response is None:
         raise HTTPException(status_code=404, detail=api_message.RECORD_NOT_FOUND_ERROR)
 
-    return response
+    return Response(response)
 
 
 @router.put("/{publication_id}")
@@ -102,10 +103,10 @@ def add_publication(
     ],
     user: UserInternal = Security(deps.full_user),
     cursor: Optional[deps.Cursor] = Depends(deps.cursor),
-) -> NewPubmedRecord:
+) -> Response[NewPubmedRecord]:
     """Add pubmed publication endpoint."""
     response = publication_service.add_pubmed_record(
-        cursor=cursor, user=user, pubmed_id=publication_id
+        cursor=cursor, user=user, pubmed_id=str(publication_id)
     )
 
     if "error" in response:
@@ -120,4 +121,4 @@ def add_publication(
         else:
             raise HTTPException(status_code=500, detail=api_message.UNEXPECTED_ERROR)
 
-    return response
+    return Response(response)
