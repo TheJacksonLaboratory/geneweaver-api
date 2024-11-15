@@ -4,10 +4,11 @@ from typing import List, Optional
 
 from fastapi import APIRouter, Depends, Query, Security
 from geneweaver.api import dependencies as deps
-from geneweaver.api.schemas.apimodels import CombinedSearchResponse, GsPubSearchType
+from geneweaver.api.schemas.apimodels import GsPubSearchType
 from geneweaver.api.schemas.auth import UserInternal
 from geneweaver.api.services import publications as publication_service
 from geneweaver.db import search as db_search
+from jax.apiutils import Response
 from typing_extensions import Annotated
 
 from . import message as api_message
@@ -41,7 +42,7 @@ def search(
             description=api_message.OFFSET,
         ),
     ] = None,
-) -> CombinedSearchResponse:
+) -> Response:
     """Search genesets and publications."""
     search_results = {}
     if "genesets" in entities:
@@ -65,6 +66,6 @@ def search(
 
         search_results["publications"] = pub_response.get("data")
 
-    return CombinedSearchResponse(
+    return Response(
         object=search_results,
     )

@@ -8,12 +8,12 @@ from typing import Optional, Set
 from fastapi import APIRouter, Depends, HTTPException, Path, Query, Request, Security
 from fastapi.responses import FileResponse, StreamingResponse
 from geneweaver.api import dependencies as deps
-from geneweaver.api.schemas.apimodels import GeneValueReturn
 from geneweaver.api.schemas.auth import UserInternal
 from geneweaver.api.schemas.search import GenesetSearch
 from geneweaver.api.services import geneset as genset_service
 from geneweaver.api.services import publications as publication_service
 from geneweaver.core.enum import GeneIdentifier, GenesetTier, Species
+from geneweaver.core.schema.geneset import GeneValue
 from geneweaver.core.schema.publication import Publication
 from geneweaver.core.schema.score import GenesetScoreType, ScoreType
 from geneweaver.db import search as db_search
@@ -189,7 +189,7 @@ def get_geneset(
 
     raise_http_error(response)
 
-    return response
+    return Response(response)
 
 
 @router.get("/{geneset_id}/values")
@@ -201,7 +201,7 @@ def get_geneset_values(
     cursor: Optional[deps.Cursor] = Depends(deps.cursor),
     gene_id_type: Optional[GeneIdentifier] = None,
     in_threshold: Optional[bool] = None,
-) -> GeneValueReturn:
+) -> CollectionResponse[GeneValue]:
     """Get geneset gene values by geneset ID."""
     response = genset_service.get_geneset_gene_values(
         cursor=cursor,
@@ -218,7 +218,7 @@ def get_geneset_values(
             status_code=404, detail=api_message.INACCESSIBLE_OR_FORBIDDEN
         )
 
-    return response
+    return CollectionResponse(**response)
 
 
 @router.get("/{geneset_id}/file", response_class=FileResponse)
@@ -361,7 +361,7 @@ def get_geneset_ontology_terms(
             description=api_message.OFFSET,
         ),
     ] = None,
-) -> dict:
+) -> CollectionResponse:
     """Get geneset ontology terms."""
     terms_resp = genset_service.get_geneset_ontology_terms(
         cursor, geneset_id, user, limit, offset
@@ -369,7 +369,7 @@ def get_geneset_ontology_terms(
 
     raise_http_error(terms_resp)
 
-    return terms_resp
+    return CollectionResponse(**terms_resp)
 
 
 @router.put("/{geneset_id}/ontologies", status_code=204)
