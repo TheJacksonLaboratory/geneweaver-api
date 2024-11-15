@@ -171,16 +171,16 @@ def test_get_geneset_metadata(mock_db_geneset):
     mock_db_geneset.get.return_value = [geneset_by_id_resp.get("geneset")]
 
     response = geneset.get_geneset_metadata(None, 1234, mock_user)
-    assert "geneset" in response
-    assert response.get("geneset") == geneset_by_id_resp["geneset"]
+    assert "object" in response
+    assert response.get("object") == geneset_by_id_resp["geneset"]
 
     response = geneset.get_geneset_metadata(None, 1234, None)
-    assert "geneset" in response
-    assert response.get("geneset") == geneset_by_id_resp["geneset"]
+    assert "object" in response
+    assert response.get("object") == geneset_by_id_resp["geneset"]
 
     response = geneset.get_geneset_metadata(None, 1234, User(id=None))
-    assert "geneset" in response
-    assert response.get("geneset") == geneset_by_id_resp["geneset"]
+    assert "object" in response
+    assert response.get("object") == geneset_by_id_resp["geneset"]
 
 
 @patch("geneweaver.api.services.geneset.db_geneset")
@@ -189,7 +189,7 @@ def test_get_geneset_metadata_w_pub_info(mock_db_geneset):
     mock_db_geneset.get.return_value = [geneset_metadata_w_pub_info]
     response = geneset.get_geneset_metadata(None, 1234, mock_user, True)
 
-    assert response.get("geneset") == geneset_metadata_w_pub_info
+    assert response.get("object") == geneset_metadata_w_pub_info
 
 
 @patch("geneweaver.api.services.geneset.db_geneset")

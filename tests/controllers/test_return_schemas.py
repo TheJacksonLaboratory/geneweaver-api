@@ -1,9 +1,11 @@
+"""Test that all GET endpoints return one of the standard responses."""
+
 import asyncio
 from typing import get_args, get_origin, get_type_hints
 
 from fastapi import FastAPI
 from fastapi.routing import APIRoute
-from jax.apiutils import CollectionResponse, StreamingResponse, Response
+from jax.apiutils import CollectionResponse, Response, StreamingResponse
 
 
 def get_return_type(route: APIRoute) -> type:
@@ -22,14 +24,18 @@ def get_return_type(route: APIRoute) -> type:
 
 
 def is_valid_return_type(typ: type) -> bool:
-    """Check if a type is either Response, CollectionResponse, or an Optional/Union containing them.
+    """Check if a type is one of the standard response types.
+
+    Check if a type is either Response, CollectionResponse, StreamingResponse,
+    or an Optional/Union containing them.
+
     Also handles async return types.
     """
     # Handle Optional/Union types
     origin = get_origin(typ)
     if origin is not None:
         # If it's a Union/Optional, check all possible types
-        if origin in (Union, types.UnionType):  # type: ignore
+        if origin in (Union, types.UnionType):  # noqa: F821
             return any(is_valid_return_type(arg) for arg in get_args(typ))
         # Handle async return types
         if asyncio.iscoroutinefunction(origin):
@@ -46,13 +52,7 @@ def is_valid_return_type(typ: type) -> bool:
 
 
 def test_get_endpoint_return_types(app: FastAPI):
-    """Test that all GET endpoints return either Response or CollectionResponse.
-
-    Args:
-    ----
-        app: Your FastAPI application instance
-
-    """
+    """Test that all GET endpoints return either Response or CollectionResponse."""
     invalid_routes = []
 
     for route in app.routes:

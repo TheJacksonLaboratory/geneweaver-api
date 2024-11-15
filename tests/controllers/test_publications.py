@@ -136,4 +136,4 @@ def test_get_req(mock_pub_service_call, client):
     )
 
     assert response.status_code == 200
-    assert response.json().get('data') == get_publications.get('data')
+    assert response.json().get("data") == get_publications.get("data")

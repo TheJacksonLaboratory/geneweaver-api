@@ -23,7 +23,7 @@ def test_get_geneset_response(mock_get_genenset, client):
 
     response = client.get("/api/genesets/1234")
     assert response.status_code == 200
-    assert response.json() == geneset_by_id_resp.get("geneset")
+    assert response.json()["object"] == geneset_by_id_resp.get("geneset")
 
 
 @patch("geneweaver.api.services.geneset.get_geneset")
@@ -33,7 +33,7 @@ def test_get_geneset_in_threshold_response(mock_get_genenset, client):
 
     response = client.get("/api/genesets/1234?in_threshold=True")
     assert response.status_code == 200
-    assert response.json() == geneset_by_id_resp.get("geneset")
+    assert response.json()["object"] == geneset_by_id_resp.get("geneset")
 
 
 @patch("geneweaver.api.services.geneset.get_geneset")
@@ -56,8 +56,8 @@ def test_get_geneset_w_gene_id_type(mock_service_get_geneset_w_gene_id_type, cli
     mock_service_get_geneset_w_gene_id_type.return_value = geneset_w_gene_id_type_resp
     response = client.get("/api/genesets/1234?gene_id_type=2")
 
-    assert response.json() == geneset_w_gene_id_type_resp
     assert response.status_code == 200
+    assert response.json()["object"] == geneset_w_gene_id_type_resp
 
 
 @patch("geneweaver.api.services.geneset.get_geneset_w_gene_id_type")
@@ -97,11 +97,11 @@ def test_export_geneset_errors(mock_get_geneset, client):
 @patch("geneweaver.api.services.geneset.get_geneset_metadata")
 def test_get_geneset_metadata(mock_get_genenset, client):
     """Test get geneset metadata."""
-    mock_get_genenset.return_value = geneset_by_id_resp.get("geneset")
+    mock_get_genenset.return_value = {"object": geneset_by_id_resp.get("geneset")}
     response = client.get("/api/genesets/1234/metadata")
 
     assert response.status_code == 200
-    assert response.json() == geneset_by_id_resp.get("geneset")
+    assert response.json()["object"] == geneset_by_id_resp.get("geneset")
 
 
 @patch("geneweaver.api.services.geneset.get_geneset_metadata")
@@ -124,11 +124,11 @@ def test_get_geneset_metadata_errors(mock_get_geneset_metadata, client):
 @patch("geneweaver.api.services.geneset.get_geneset_metadata")
 def test_get_geneset_metadata_w_publication(mock_get_genenset, client):
     """Test get geneset ID data response."""
-    mock_get_genenset.return_value = geneset_metadata_w_pub_info
+    mock_get_genenset.return_value = {"object": geneset_metadata_w_pub_info["geneset"]}
 
     response = client.get("/api/genesets/1234/metadata?include_pub_info=true")
     assert response.status_code == 200
-    assert response.json() == geneset_metadata_w_pub_info
+    assert response.json()["object"] == geneset_metadata_w_pub_info["geneset"]
 
 
 @patch("geneweaver.api.services.geneset.get_geneset_metadata")
@@ -137,14 +137,16 @@ def test_publication_for_geneset(
     mock_pub_service_call, mock_get_genenset_metadata, client
 ):
     """Test valid url request to get publication for a geneset."""
-    mock_get_genenset_metadata.return_value = geneset_metadata_w_pub_info
+    mock_get_genenset_metadata.return_value = {
+        "object": geneset_metadata_w_pub_info["geneset"]
+    }
 
     mock_pub_service_call.return_value = publication_by_id_resp
 
     response = client.get("/api/genesets/1234/publication")
 
     assert response.status_code == 200
-    assert response.json() == publication_by_id_resp
+    assert response.json()["object"] == publication_by_id_resp
 
 
 @patch("geneweaver.api.services.geneset.get_geneset_metadata")
@@ -189,11 +191,13 @@ def test_get_publication_errors(mock_get_geneset_metadata, client):
 @patch("geneweaver.api.services.geneset.get_visible_genesets")
 def test_get_visible_geneset_response(mock_get_visible_genesets, client):
     """Test get geneset ID data response."""
-    mock_get_visible_genesets.return_value = geneset_by_id_resp.get("geneset")
+    mock_get_visible_genesets.return_value = {
+        "data": [geneset_by_id_resp.get("geneset")]
+    }
 
     response = client.get("/api/genesets?gs_id=1234")
     assert response.status_code == 200
-    assert response.json() == geneset_by_id_resp.get("geneset")
+    assert response.json()["data"][0] == geneset_by_id_resp.get("geneset")
 
 
 @patch("geneweaver.api.services.geneset.get_visible_genesets")
@@ -220,7 +224,7 @@ def test_get_geneset_gene_values_url_response(mock_get_geneset_gene_values, clie
 
     response = client.get("/api/genesets/1234/values")
     assert response.status_code == 200
-    assert response.json() == geneset_genes_values_resp
+    assert response.json()["data"] == geneset_genes_values_resp["data"]
 
 
 @patch("geneweaver.api.services.geneset.get_geneset_gene_values")
@@ -249,7 +253,7 @@ def test_get_geneset_gene_values_w_gs_id_type(mock_get_geneset_gene_values, clie
 
     response = client.get("/api/genesets/1234/values?gene_id_type=2")
     assert response.status_code == 200
-    assert response.json() == geneset_genes_values_resp
+    assert response.json()["data"] == geneset_genes_values_resp["data"]
 
 
 @patch("geneweaver.api.services.geneset.get_geneset_gene_values")
@@ -261,7 +265,7 @@ def test_get_geneset_gene_values_w_gs_id_type_and_in_threshold(
 
     response = client.get("/api/genesets/1234/values?gene_id_type=2&in_threshold=True")
     assert response.status_code == 200
-    assert response.json() == geneset_genes_values_resp
+    assert response.json()["data"] == geneset_genes_values_resp["data"]
 
 
 @patch("geneweaver.api.services.geneset.update_geneset_threshold")
@@ -297,7 +301,7 @@ def test_get_geneset_ontology_terms_response(mock_get_genenset_onto_terms, clien
 
     response = client.get("/api/genesets/1234/ontologies")
     assert response.status_code == 200
-    assert response.json() == mock_resp
+    assert response.json()["data"] == mock_resp["data"]
 
 
 @patch("geneweaver.api.services.geneset.get_geneset_ontology_terms")
@@ -418,11 +422,13 @@ def test_delete_geneset_ontology_terms_errors(mock_delete_genenset_onto_terms, c
 @patch("geneweaver.api.services.geneset.get_visible_genesets")
 def test_get_geneset_by_score_type(mock_get_visible_genesets, score_type, client):
     """Test get geneset  data response."""
-    mock_get_visible_genesets.return_value = geneset_by_id_resp.get("geneset")
+    mock_get_visible_genesets.return_value = {
+        "data": [geneset_by_id_resp.get("geneset")]
+    }
 
     response = client.get("/api/genesets?" + score_type)
     assert response.status_code == 200
-    assert response.json() == geneset_by_id_resp.get("geneset")
+    assert response.json()["data"][0] == geneset_by_id_resp.get("geneset")
 
 
 @pytest.mark.parametrize(
@@ -443,25 +449,29 @@ def test_get_geneset_by_invalid_score_type(
 @patch("geneweaver.api.services.geneset.get_visible_genesets")
 def test_get_geneset_by_create_date(mock_get_visible_genesets, client):
     """Test get geneset  data response."""
-    mock_get_visible_genesets.return_value = geneset_by_id_resp.get("geneset")
+    mock_get_visible_genesets.return_value = {
+        "data": [geneset_by_id_resp.get("geneset")]
+    }
 
     response = client.get(
         "/api/genesets?created_after=2023-08-01&created_before=2024-07-01"
     )
     assert response.status_code == 200
-    assert response.json() == geneset_by_id_resp.get("geneset")
+    assert response.json().get("data")[0] == geneset_by_id_resp.get("geneset")
 
 
 @patch("geneweaver.api.services.geneset.get_visible_genesets")
 def test_get_geneset_by_update_date(mock_get_visible_genesets, client):
     """Test get geneset  data response."""
-    mock_get_visible_genesets.return_value = geneset_by_id_resp.get("geneset")
+    mock_get_visible_genesets.return_value = {
+        "data": [geneset_by_id_resp.get("geneset")]
+    }
 
     response = client.get(
         "/api/genesets?updated_after=2023-08-01&updated_before=2024-07-01"
     )
     assert response.status_code == 200
-    assert response.json() == geneset_by_id_resp.get("geneset")
+    assert response.json().get("data")[0] == geneset_by_id_resp.get("geneset")
 
 
 @pytest.mark.parametrize("created_before", ["20-23-20", "08-01-2023", "80/01/2022"])

@@ -69,4 +69,6 @@ def test_valid_url_species_by_id(mock_species_service_call, client):
     response = client.get(url="/api/species/5")
 
     assert response.status_code == 200
-    _validate_species_response(response.json().get("object"), species_by_gene_id_type_flybase)
+    _validate_species_response(
+        response.json().get("object"), species_by_gene_id_type_flybase
+    )

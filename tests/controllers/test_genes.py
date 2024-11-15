@@ -2,6 +2,7 @@
 
 import json
 from unittest.mock import patch
+
 from jax.apiutils import Response
 
 from tests.data import test_gene_homolog_data, test_gene_mapping_data, test_genes_data
