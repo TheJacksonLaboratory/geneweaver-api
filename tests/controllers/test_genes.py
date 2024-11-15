@@ -2,6 +2,7 @@
 
 import json
 from unittest.mock import patch
+from jax.apiutils import Response
 
 from tests.data import test_gene_homolog_data, test_gene_mapping_data, test_genes_data
 
@@ -190,4 +191,4 @@ def test_valid_get_preferred_gene_req(mock_gene_call, client):
     response = client.get(url="/api/genes/1000/preferred")
 
     assert response.status_code == 200
-    assert response.json() == gene_preferred_resp_1
+    assert response.json() == Response(gene_preferred_resp_1).model_dump()
