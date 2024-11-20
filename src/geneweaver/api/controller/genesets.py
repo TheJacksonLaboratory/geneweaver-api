@@ -8,15 +8,16 @@ from typing import Optional, Set
 from fastapi import APIRouter, Depends, HTTPException, Path, Query, Request, Security
 from fastapi.responses import FileResponse, StreamingResponse
 from geneweaver.api import dependencies as deps
-from geneweaver.api.schemas.apimodels import GeneValueReturn
 from geneweaver.api.schemas.auth import UserInternal
 from geneweaver.api.schemas.search import GenesetSearch
-from geneweaver.api.services import geneset as genset_service
+from geneweaver.api.services import geneset as geneset_service
 from geneweaver.api.services import publications as publication_service
 from geneweaver.core.enum import GeneIdentifier, GenesetTier, Species
+from geneweaver.core.schema.geneset import GeneValue
+from geneweaver.core.schema.publication import Publication
 from geneweaver.core.schema.score import GenesetScoreType, ScoreType
 from geneweaver.db import search as db_search
-from jax.apiutils import CollectionResponse
+from jax.apiutils import CollectionResponse, Response
 from typing_extensions import Annotated
 
 from . import message as api_message
@@ -114,9 +115,9 @@ def get_visible_genesets(
             description=api_message.OFFSET,
         ),
     ] = None,
-) -> dict:
+) -> CollectionResponse:
     """Get all visible genesets."""
-    response = genset_service.get_visible_genesets(
+    response = geneset_service.get_visible_genesets(
         cursor=cursor,
         user=user,
         gs_id=gs_id,
@@ -144,7 +145,7 @@ def get_visible_genesets(
 
     raise_http_error(response)
 
-    return response
+    return CollectionResponse(**response)
 
 
 @router.get("/search")
@@ -175,20 +176,20 @@ def get_geneset(
     cursor: Optional[deps.Cursor] = Depends(deps.cursor),
     gene_id_type: Optional[GeneIdentifier] = None,
     in_threshold: Optional[bool] = None,
-) -> dict:
+) -> Response:
     """Get a geneset by ID. Optional filter results by gene identifier type."""
     if gene_id_type:
-        response = genset_service.get_geneset_w_gene_id_type(
+        response = geneset_service.get_geneset_w_gene_id_type(
             cursor, geneset_id, user, gene_id_type
         )
     else:
-        response = genset_service.get_geneset(
+        response = geneset_service.get_geneset(
             cursor=cursor, geneset_id=geneset_id, user=user, in_threshold=in_threshold
         )
 
     raise_http_error(response)
 
-    return response
+    return Response(response)
 
 
 @router.get("/{geneset_id}/values")
@@ -200,9 +201,9 @@ def get_geneset_values(
     cursor: Optional[deps.Cursor] = Depends(deps.cursor),
     gene_id_type: Optional[GeneIdentifier] = None,
     in_threshold: Optional[bool] = None,
-) -> GeneValueReturn:
+) -> CollectionResponse[GeneValue]:
     """Get geneset gene values by geneset ID."""
-    response = genset_service.get_geneset_gene_values(
+    response = geneset_service.get_geneset_gene_values(
         cursor=cursor,
         geneset_id=geneset_id,
         user=user,
@@ -217,7 +218,7 @@ def get_geneset_values(
             status_code=404, detail=api_message.INACCESSIBLE_OR_FORBIDDEN
         )
 
-    return response
+    return CollectionResponse(**response)
 
 
 @router.get("/{geneset_id}/file", response_class=FileResponse)
@@ -236,11 +237,11 @@ def get_export_geneset_by_id_type(
 
     # Validate gene identifier type
     if gene_id_type:
-        response = genset_service.get_geneset_w_gene_id_type(
+        response = geneset_service.get_geneset_w_gene_id_type(
             cursor, geneset_id, user, gene_id_type
         )
     else:
-        response = genset_service.get_geneset(cursor, geneset_id, user)
+        response = geneset_service.get_geneset(cursor, geneset_id, user)
 
     if "error" in response:
         raise_http_error(response)
@@ -276,15 +277,15 @@ def get_geneset_metadata(
     user: deps.OptionalFullUserDep,
     cursor: Optional[deps.Cursor] = Depends(deps.cursor),
     include_pub_info: Optional[bool] = False,
-) -> dict:
+) -> Response:
     """Get a geneset metadata by geneset id."""
-    response = genset_service.get_geneset_metadata(
+    response = geneset_service.get_geneset_metadata(
         cursor, geneset_id, user, include_pub_info
     )
 
     raise_http_error(response)
 
-    return response
+    return Response(**response)
 
 
 @router.get("/{geneset_id}/publication")
@@ -294,14 +295,15 @@ def get_publication_for_geneset(
     ],
     user: deps.OptionalFullUserDep,
     cursor: Optional[deps.Cursor] = Depends(deps.cursor),
-) -> dict:
+) -> Response[Publication]:
     """Get the publication associated with the geneset."""
-    geneset_resp = genset_service.get_geneset_metadata(cursor, geneset_id, user, True)
+    geneset_resp = geneset_service.get_geneset_metadata(cursor, geneset_id, user, True)
 
     if "error" in geneset_resp:
         raise_http_error(geneset_resp)
 
-    geneset = geneset_resp.get("geneset")
+    geneset = geneset_resp.get("object")
+
     if geneset is None:
         raise HTTPException(status_code=404, detail=api_message.RECORD_NOT_FOUND_ERROR)
 
@@ -314,7 +316,7 @@ def get_publication_for_geneset(
     if pub_resp is None:
         raise HTTPException(status_code=404, detail=api_message.RECORD_NOT_FOUND_ERROR)
 
-    return pub_resp
+    return Response[Publication](pub_resp)
 
 
 @router.put("/{geneset_id}/threshold", status_code=204)
@@ -327,7 +329,7 @@ def put_geneset_threshold(
     cursor: Optional[deps.Cursor] = Depends(deps.cursor),
 ) -> None:
     """Set geneset threshold for geneset owner."""
-    response = genset_service.update_geneset_threshold(
+    response = geneset_service.update_geneset_threshold(
         cursor, geneset_id, gene_score_type, user
     )
 
@@ -359,15 +361,15 @@ def get_geneset_ontology_terms(
             description=api_message.OFFSET,
         ),
     ] = None,
-) -> dict:
+) -> CollectionResponse:
     """Get geneset ontology terms."""
-    terms_resp = genset_service.get_geneset_ontology_terms(
+    terms_resp = geneset_service.get_geneset_ontology_terms(
         cursor, geneset_id, user, limit, offset
     )
 
     raise_http_error(terms_resp)
 
-    return terms_resp
+    return CollectionResponse(**terms_resp)
 
 
 @router.put("/{geneset_id}/ontologies", status_code=204)
@@ -386,7 +388,7 @@ def put_geneset_ontology_term(
     cursor: Optional[deps.Cursor] = Depends(deps.cursor),
 ) -> None:
     """Set geneset threshold for geneset owner."""
-    response = genset_service.add_geneset_ontology_term(
+    response = geneset_service.add_geneset_ontology_term(
         cursor=cursor,
         geneset_id=geneset_id,
         term_ref_id=ontology_id,
@@ -412,7 +414,7 @@ def delete_geneset_ontology_term(
     cursor: Optional[deps.Cursor] = Depends(deps.cursor),
 ) -> None:
     """Set geneset threshold for geneset owner."""
-    response = genset_service.delete_geneset_ontology_term(
+    response = geneset_service.delete_geneset_ontology_term(
         cursor=cursor,
         geneset_id=geneset_id,
         term_ref_id=ontology_id,

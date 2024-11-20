@@ -4,6 +4,7 @@ from unittest.mock import Mock
 
 import psycopg
 import pytest
+from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from geneweaver.api.core.config_class import GeneweaverAPIConfig
 
@@ -42,7 +43,7 @@ def mock_settings(monkeypatch) -> GeneweaverAPIConfig:
 
 
 @pytest.fixture()
-def client(mock_settings) -> TestClient:
+def app(mock_settings) -> FastAPI:
     """Provide a mocked FastAPI application.
 
     returns: A mocked FastAPI application.
@@ -50,8 +51,16 @@ def client(mock_settings) -> TestClient:
     from geneweaver.api.dependencies import cursor, full_user
     from geneweaver.api.main import app
 
-    test_app = TestClient(app)
-
     app.dependency_overrides.update({full_user: mock_full_user, cursor: mock_cursor})
 
-    return test_app
+    return app
+
+
+@pytest.fixture()
+def client(mock_settings, app) -> TestClient:
+    """Provide a mocked FastAPI application.
+
+    returns: A mocked FastAPI application.
+    """
+    test_client = TestClient(app)
+    return test_client

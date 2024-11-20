@@ -6,6 +6,7 @@ from typing import Optional
 from fastapi import APIRouter, Depends, Query
 from geneweaver.api import dependencies as deps
 from geneweaver.api.services import monitors as monitors_service
+from jax.apiutils import Response
 from typing_extensions import Annotated
 
 from . import message as api_message
@@ -19,7 +20,7 @@ def get_health_check(
     db_health_check: Annotated[
         Optional[bool], Query(description=api_message.CHECK_DB_HEALTH)
     ] = False,
-) -> dict:
+) -> Response:
     """Return 200 API response if reachable and optionally check db health."""
     response = {
         "status": "UP",
@@ -31,4 +32,4 @@ def get_health_check(
         db_health_response = monitors_service.check_db_health(cursor)
         response["DB_status"] = db_health_response
 
-    return response
+    return Response(response)

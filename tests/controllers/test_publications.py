@@ -21,7 +21,7 @@ def test_valid_url_req(mock_pub_service_call, client):
     response = client.get(url="/api/publications/123", params={"as_pubmed_id": False})
 
     assert response.status_code == 200
-    assert response.json() == publication_by_id_resp
+    assert response.json().get("object") == publication_by_id_resp
 
 
 @patch("geneweaver.api.services.publications.get_publication_by_pubmed_id")
@@ -34,7 +34,7 @@ def test_valid_pubmed_url_req(mock_pub_service_call, client):
     )
 
     assert response.status_code == 200
-    assert response.json() == publication_by_pubmed_id_resp
+    assert response.json().get("object") == publication_by_pubmed_id_resp
 
 
 @patch("geneweaver.api.services.publications.get_publication")
@@ -78,7 +78,7 @@ def test_add_pubmed_valid_url_req(mock_pub_service_call, client):
     response = client.put(url="/api/publications/1234")
 
     assert response.status_code == 200
-    assert response.json() == add_pubmed_resp
+    assert response.json().get("object") == add_pubmed_resp
 
 
 @patch("geneweaver.api.services.publications.add_pubmed_record")
@@ -136,4 +136,4 @@ def test_get_req(mock_pub_service_call, client):
     )
 
     assert response.status_code == 200
-    assert response.json() == get_publications
+    assert response.json().get("data") == get_publications.get("data")

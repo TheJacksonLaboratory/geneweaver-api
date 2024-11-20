@@ -49,8 +49,8 @@
         "volume": "3",
         "pages": "565-76",
         "month": null,
-        "year": "1975",
-        "pubmed_id": "1234"
+        "year": 1975,
+        "pubmed_id": 1234
       },
       {
         "id": 79323,
@@ -61,8 +61,8 @@
         "volume": "3",
         "pages": "565-76",
         "month": null,
-        "year": "1975",
-        "pubmed_id": "1234"
+        "year": 1975,
+        "pubmed_id": 1234
       },
       {
         "id": 79324,
@@ -73,8 +73,8 @@
         "volume": "3",
         "pages": "565-76",
         "month": null,
-        "year": "1975",
-        "pubmed_id": "1234"
+        "year": 1975,
+        "pubmed_id": 1234
       },
       {
         "id": 79325,
@@ -85,8 +85,8 @@
         "volume": "3",
         "pages": "565-76",
         "month": null,
-        "year": "1975",
-        "pubmed_id": "1234"
+        "year": 1975,
+        "pubmed_id": 1234
       },
       {
         "id": 79327,
@@ -97,8 +97,8 @@
         "volume": "3",
         "pages": "565-76",
         "month": null,
-        "year": "1975",
-        "pubmed_id": "1234"
+        "year": 1975,
+        "pubmed_id": 1234
       }
     ]
   }

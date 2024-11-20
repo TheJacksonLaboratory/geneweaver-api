@@ -9,11 +9,11 @@ from geneweaver.api.schemas.apimodels import (
     GeneIdMappingAonReq,
     GeneIdMappingReq,
     GeneIdMappingResp,
-    GeneReturn,
 )
 from geneweaver.api.services import genes as genes_service
 from geneweaver.core.enum import GeneIdentifier, Species
 from geneweaver.core.schema.gene import Gene
+from jax.apiutils import CollectionResponse, Response
 from typing_extensions import Annotated
 
 from . import message as api_message
@@ -50,7 +50,7 @@ def get_genes(
             description=api_message.OFFSET,
         ),
     ] = None,
-) -> GeneReturn:
+) -> CollectionResponse[Gene]:
     """Get geneweaver list of genes."""
     if limit is None:
         limit = 100
@@ -58,7 +58,7 @@ def get_genes(
     response = genes_service.get_genes(
         cursor, reference_id, gene_database, species, preferred, limit, offset
     )
-    return response
+    return CollectionResponse[Gene](**response)
 
 
 @router.get("/{gene_id}/preferred")
@@ -67,10 +67,10 @@ def get_gene_preferred(
         int, Path(format="int64", minimum=0, maxiumum=9223372036854775807)
     ],
     cursor: Optional[deps.Cursor] = Depends(deps.cursor),
-) -> Gene:
+) -> Response[Gene]:
     """Get preferred gene for a given gene ode_id."""
     response = genes_service.get_gene_preferred(cursor, gene_id)
-    return response
+    return Response[Gene](response)
 
 
 @router.post("/homologs", response_model=GeneIdMappingResp, deprecated=True)
