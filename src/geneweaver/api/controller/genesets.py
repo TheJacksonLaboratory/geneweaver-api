@@ -162,7 +162,7 @@ def search(
             is_readable_by=0 if user is None else user.id,
             **geneset_search.model_dump(exclude_none=True),
         ),
-        url=request.url_for("search"),
+        url=request.url,
         **geneset_search.model_dump(exclude_none=True),
     )
 
