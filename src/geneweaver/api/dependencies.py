@@ -78,7 +78,7 @@ def _get_user_details(cursor: Cursor, user: UserInternal) -> UserInternal:
     """
     try:
         user.id = db_user.by_sso_id_and_email(cursor, user.sso_id, user.email).id
-    except IndexError as e:
+    except (IndexError, AttributeError) as e:
         if db_user.sso_id_exists(cursor, user.sso_id):
             raise AuthenticationMismatch(
                 detail="Email and SSO ID Mismatch. Please contact and administrator."
