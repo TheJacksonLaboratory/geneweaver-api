@@ -99,7 +99,7 @@ jobs:
       pull-requests: write
     steps:
       - name: Download coverage report artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: coverage-report
       - name: Read coverage report
