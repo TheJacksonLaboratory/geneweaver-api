@@ -28,7 +28,7 @@ jobs:
           --default-repo=${{ inputs.default_image_repo }} \
           --file-output=build.json
       - name: Upload Build Artifact Information
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: build-artifact-json
           path: build.json
