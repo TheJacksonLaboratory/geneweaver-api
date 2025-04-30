@@ -17,7 +17,7 @@ packages = [
 
 [tool.poetry.dependencies]
 python = "^3.9"
-geneweaver-core = "^0.10.0a3"
+geneweaver-core = "^0.10.0a5"
 fastapi = {extras = ["all"], version = "^0.115.5"}
 uvicorn = {extras = ["standard"], version = "^0.32.1"}
 geneweaver-db = "^0.6.0a3"

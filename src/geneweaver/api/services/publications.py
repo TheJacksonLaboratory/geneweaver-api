@@ -38,11 +38,6 @@ def get_publication_by_pubmed_id(cursor: Cursor, pubmed_id: int) -> dict:
     print("pubmed_id", pubmed_id)
     try:
         pub = db_publication.by_pubmed_id(cursor, pubmed_id)
-        # This is a hack to convert the year to an int
-        if pub.get("year"):
-            pub["year"] = int(pub["year"])
-        else:
-            pub["year"] = None
         return pub
     except Exception as err:
         logger.error(err)
