@@ -85,7 +85,7 @@ def get_publication_by_id(
     """Get a publication by id."""
     if as_pubmed_id:
         response = publication_service.get_publication_by_pubmed_id(
-            cursor, str(publication_id)
+            cursor, publication_id
         )
     else:
         response = publication_service.get_publication(cursor, publication_id)
