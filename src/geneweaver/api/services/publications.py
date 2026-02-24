@@ -28,17 +28,17 @@ def get_publication(cursor: Cursor, pub_id: int) -> dict:
     return pub
 
 
-def get_publication_by_pubmed_id(cursor: Cursor, pubmed_id: str) -> dict:
+def get_publication_by_pubmed_id(cursor: Cursor, pubmed_id: int) -> dict:
     """Get a publication by Pubmed Id from the DB.
 
     @param cursor: DB cursor
     @param pubmed_id: pub med identifier
     @return: dictionary response (publication).
     """
+    print("pubmed_id", pubmed_id)
     try:
         pub = db_publication.by_pubmed_id(cursor, pubmed_id)
         return pub
-
     except Exception as err:
         logger.error(err)
         raise err
